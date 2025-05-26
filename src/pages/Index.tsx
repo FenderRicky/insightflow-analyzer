@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import ThemeToggle from '@/components/ThemeToggle';
 import AnalysisInput from '@/components/AnalysisInput';
@@ -57,7 +56,7 @@ const Index = () => {
               <div className="w-8 h-8 bg-gradient-to-r from-brand-500 to-neon-purple rounded-lg flex items-center justify-center">
                 <Zap className="h-4 w-4 text-white" />
               </div>
-              <h1 className="text-xl font-bold text-gradient">AnalyzeMe</h1>
+              <h1 className="text-xl font-bold text-gradient">InsightFlow</h1>
             </div>
             <ThemeToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
           </div>
@@ -160,7 +159,7 @@ const Index = () => {
       <footer className="relative z-10 border-t border-white/10 glass mt-20">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center text-sm text-muted-foreground">
-            <p>© 2024 AnalyzeMe. Empowering professionals with intelligent insights.</p>
+            <p>© 2024 InsightFlow. Empowering professionals with intelligent insights.</p>
           </div>
         </div>
       </footer>
