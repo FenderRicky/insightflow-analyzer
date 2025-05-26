@@ -4,7 +4,6 @@ import ThemeToggle from '@/components/ThemeToggle';
 import AnalysisInput from '@/components/AnalysisInput';
 import AnalysisResults from '@/components/AnalysisResults';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { ArrowUp, Sparkles, Zap, Target } from 'lucide-react';
 
 interface AnalysisData {
@@ -59,9 +58,6 @@ const Index = () => {
                 <Zap className="h-4 w-4 text-white" />
               </div>
               <h1 className="text-xl font-bold text-gradient">AnalyzeMe</h1>
-              <Badge variant="secondary" className="glass text-xs">
-                AI-Powered
-              </Badge>
             </div>
             <ThemeToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
           </div>
@@ -76,7 +72,7 @@ const Index = () => {
             <section className="text-center space-y-6 py-12">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 mb-6">
                 <Sparkles className="h-4 w-4 text-neon-purple" />
-                <span className="text-sm text-muted-foreground">Advanced AI Analysis</span>
+                <span className="text-sm text-muted-foreground">Advanced Analysis Platform</span>
               </div>
               
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
@@ -164,7 +160,7 @@ const Index = () => {
       <footer className="relative z-10 border-t border-white/10 glass mt-20">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center text-sm text-muted-foreground">
-            <p>© 2024 AnalyzeMe. Empowering professionals with AI-driven insights.</p>
+            <p>© 2024 AnalyzeMe. Empowering professionals with intelligent insights.</p>
           </div>
         </div>
       </footer>
