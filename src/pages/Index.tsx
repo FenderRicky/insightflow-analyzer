@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import ThemeToggle from '@/components/ThemeToggle';
 import AnalysisInput from '@/components/AnalysisInput';
 import AnalysisResults from '@/components/AnalysisResults';
+import LoadingScreen from '@/components/LoadingScreen';
 import { Button } from '@/components/ui/button';
 import { ArrowUp, Sparkles, Zap, Target } from 'lucide-react';
 
@@ -18,14 +20,15 @@ const Index = () => {
   const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
-    document.documentElement.className = isDark ? 'dark' : 'light';
+    const root = document.documentElement;
+    root.className = isDark ? 'dark' : 'light';
   }, [isDark]);
 
   const handleAnalyze = async (data: AnalysisData) => {
     setIsLoading(true);
     setAnalysisData(data);
     
-    // Simulate API call
+    // Simulate 2-second analysis with our loading screen
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     setIsLoading(false);
@@ -43,6 +46,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Loading Screen */}
+      <LoadingScreen isVisible={isLoading} />
+
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background/80" />
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl animate-pulse" />
@@ -108,21 +114,6 @@ const Index = () => {
             <section>
               <AnalysisInput onAnalyze={handleAnalyze} isLoading={isLoading} />
             </section>
-
-            {/* Loading State */}
-            {isLoading && (
-              <section className="text-center py-12">
-                <div className="glass rounded-2xl p-8 max-w-md mx-auto">
-                  <div className="w-16 h-16 bg-gradient-to-r from-brand-500 to-neon-purple rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse-glow">
-                    <Zap className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">Analyzing Your Content</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Our AI is examining every detail to provide comprehensive insights...
-                  </p>
-                </div>
-              </section>
-            )}
           </div>
         ) : (
           <div className="space-y-6">
