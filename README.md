@@ -1,17 +1,17 @@
-# 🚀 ProfilePulse – Intelligent Portfolio & LinkedIn Analyzer
+# 🌊 InsightFlow – Intelligent Portfolio & LinkedIn Analyzer
 
-**ProfilePulse** is a futuristic web platform designed to analyze and elevate your **portfolio website** and **LinkedIn profile** using real-world references from **tier 1 tech companies** (Google, Meta, Microsoft, Amazon, etc.). Whether you're a student, job seeker, or seasoned professional, ProfilePulse helps you fine-tune your digital presence to meet top-tier industry standards.
+**InsightFlow** is a next-gen web platform built to analyze and elevate your **portfolio website** and **LinkedIn profile** with precision, speed, and intelligence. Using real-world references from **tier 1 tech professionals** (Google, Meta, Microsoft, Amazon, etc.), InsightFlow delivers fast, actionable insights to help you stand out in the competitive tech landscape.
 
 ---
 
 ## 🎯 What It Does
 
-- 🔍 **Portfolio Analyzer**: Paste your code or website URL and get a breakdown on performance, design, structure, and overall presentation.
-- 🔗 **LinkedIn Analyzer**: Drop your LinkedIn profile link to get a tailored review compared to real employee profiles from tier 1 companies.
-- ⚡ **Blazing Fast Results**: Delivers smart analysis and suggestions within **~2 seconds**.
-- 🌗 **Dark/Light Mode Toggle**: Includes a **smooth middle-fade transition** between themes for a clean, ambient UI feel.
-- 🧠 **AI-Powered Recommendations**: Personalized tips to help you upgrade your profile and web presence.
-- 🎨 **Cool Aesthetic**: Ambient design with a modern, minimal vibe and a **crazy cool loading screen** to keep users engaged.
+- 🔍 **Portfolio Analyzer**: Paste your website URL or code to receive a breakdown of performance, design, SEO, and user experience.
+- 🔗 **LinkedIn Analyzer**: Drop your LinkedIn profile link to get a personalized audit compared to high-performing profiles from leading companies.
+- ⚡ **Lightning Fast Results**: Analysis delivered in just **~2 seconds**, so you can upgrade without the wait.
+- 🌗 **Smooth Theme Toggle**: Elegant **middle-fade transition** between dark and light modes for a seamless aesthetic.
+- 🧠 **Smart Suggestions**: Actionable tips and creative ideas to boost your digital presence and align with top-tier standards.
+- 🎨 **Cool, Ambient Vibes**: Minimalist design with an ambient UI and a **crazy cool loading screen** to keep the experience exciting.
 
 ---
 
@@ -20,42 +20,43 @@
 - **Frontend**: Next.js, Tailwind CSS, Framer Motion
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB / PostgreSQL
-- **AI Integration**: Custom model prompts + external reference data from top-tier company profiles
-- **Others**: JWT Auth, SEO Optimization, Accessibility Standards, Custom Branding
+- **AI Integration**: Custom prompt logic + reference scraping from tier 1 company profiles
+- **Extras**: JWT Authentication, SEO Best Practices, Accessibility Compliance, Fully Custom Branding
 
 ---
 
-## 🔐 No AI Traces
+## 🔐 Clean, Custom Experience
 
-ProfilePulse is built to feel **completely custom** — no Lovable AI watermarks, logos, or default icons. Every piece has been personalized to maintain a premium and professional identity.
-
----
-
-## 🚧 Features In Progress
-
-- ✅ Advanced scoring algorithm for more dynamic ranking
-- ✅ Visual report card with charts
-- ⏳ Browser extension for one-click LinkedIn/portfolio checks
-- ⏳ Resume parser and review add-on
-- ⏳ Community leaderboard
+InsightFlow is designed to feel **entirely handcrafted** — with **no Lovable AI traces**, watermarks, or default icons. Every element is uniquely styled to ensure a **premium, professional identity**.
 
 ---
 
-## 💡 Inspiration
+## 🚧 Roadmap
 
-We built ProfilePulse to give people a **mirror into what top-tier hiring managers look for**. It’s your personal brand coach, UI/UX reviewer, and recruiter’s eye — all in one place.
+- ✅ Creative profile & portfolio ranking system
+- ✅ Interactive feedback reports
+- ⏳ Resume and GitHub profile analyzer (coming soon)
+- ⏳ One-click browser plugin
+- ⏳ AI career advisor integration
+- ⏳ Community feature for top profiles
+
+---
+
+## 💡 Why InsightFlow?
+
+We created InsightFlow to serve as a **mirror to your digital presence** — giving you the same lens that recruiters, designers, and engineers at top companies use. It’s your intelligent companion for building a standout tech persona.
 
 ---
 
 ## 🧠 Want to Contribute?
 
-Got ideas or improvements? PRs are welcome! Let’s level up how people showcase their digital selves.
+Got ideas or want to improve InsightFlow? Open a pull request — we’re building this with community creativity in mind.
 
 ---
 
 ## 📄 License
 
-This project is open-sourced under the MIT License.
+This project is open-source under the MIT License.
 
 ---
 
