@@ -1,15 +1,21 @@
+
 import React, { useState, useEffect } from 'react';
 import ThemeToggle from '@/components/ThemeToggle';
-import AnalysisInput from '@/components/AnalysisInput';
-import AnalysisResults from '@/components/AnalysisResults';
+import AdvancedAnalysisInput from '@/components/AdvancedAnalysisInput';
+import EnhancedAnalysisResults from '@/components/EnhancedAnalysisResults';
 import LoadingScreen from '@/components/LoadingScreen';
 import { Button } from '@/components/ui/button';
-import { ArrowUp, Sparkles, Zap, Target } from 'lucide-react';
+import { ArrowUp, Sparkles, Zap, Target, Brain, TrendingUp } from 'lucide-react';
 
 interface AnalysisData {
   type: string;
   input: string;
   inputType: string;
+  careerGoal?: string;
+  experienceLevel?: string;
+  industryFocus?: string;
+  features?: string[];
+  timestamp?: number;
 }
 
 const Index = () => {
@@ -27,8 +33,8 @@ const Index = () => {
     setIsLoading(true);
     setAnalysisData(data);
     
-    // Simulate 2-second analysis with our loading screen
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Simulate advanced analysis processing
+    await new Promise(resolve => setTimeout(resolve, 2500));
     
     setIsLoading(false);
     setShowResults(true);
@@ -48,72 +54,93 @@ const Index = () => {
       {/* Loading Screen */}
       <LoadingScreen isVisible={isLoading} />
 
-      {/* Background Effects with smooth transitions */}
+      {/* Enhanced Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background/80 transition-all duration-600 ease-out" />
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl animate-pulse transition-all duration-600 ease-out" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-neon-purple/10 rounded-full blur-3xl animate-pulse transition-all duration-600 ease-out" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-neon-cyan/5 rounded-full blur-3xl animate-pulse transition-all duration-600 ease-out" style={{ animationDelay: '2s' }} />
       
-      {/* Header with enhanced transitions */}
+      {/* Header */}
       <header className="relative z-10 w-full border-b border-white/10 glass transition-all duration-600 ease-out">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-r from-brand-500 to-neon-purple rounded-lg flex items-center justify-center transition-all duration-600 ease-out">
-                <Zap className="h-4 w-4 text-white transition-all duration-600 ease-out" />
+                <Brain className="h-4 w-4 text-white transition-all duration-600 ease-out" />
               </div>
-              <h1 className="text-xl font-bold text-gradient transition-all duration-600 ease-out">InsightFlow</h1>
+              <h1 className="text-xl font-bold text-gradient transition-all duration-600 ease-out">InsightFlow AI</h1>
             </div>
             <ThemeToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
           </div>
         </div>
       </header>
 
-      {/* Main Content with transition wrapper */}
+      {/* Main Content */}
       <main className="relative z-10 container mx-auto px-4 py-8 transition-all duration-600 ease-out">
         {!showResults ? (
           <div className="space-y-12">
-            {/* Hero Section */}
-            <section className="text-center space-y-6 py-12 transition-all duration-600 ease-out">
+            {/* Enhanced Hero Section */}
+            <section className="text-center space-y-8 py-16 transition-all duration-600 ease-out">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 mb-6 transition-all duration-600 ease-out">
-                <Sparkles className="h-4 w-4 text-neon-purple transition-all duration-600 ease-out" />
-                <span className="text-sm text-muted-foreground transition-all duration-600 ease-out">Advanced Analysis Platform</span>
+                <Brain className="h-4 w-4 text-neon-purple transition-all duration-600 ease-out" />
+                <span className="text-sm text-muted-foreground transition-all duration-600 ease-out">Next-Gen AI Career Intelligence</span>
               </div>
               
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight transition-all duration-600 ease-out">
-                Elevate Your
-                <span className="text-gradient block transition-all duration-600 ease-out">Digital Presence</span>
+              <h1 className="text-4xl md:text-7xl font-bold leading-tight transition-all duration-600 ease-out">
+                Transform Your
+                <span className="text-gradient block transition-all duration-600 ease-out">Career Journey</span>
+                <span className="text-3xl md:text-5xl block mt-2 text-muted-foreground">with AI Intelligence</span>
               </h1>
               
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed transition-all duration-600 ease-out">
-                Get instant, intelligent analysis of your portfolio websites and LinkedIn profiles. 
-                Discover optimization opportunities and compete with industry leaders.
+              <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed transition-all duration-600 ease-out">
+                Get comprehensive AI-driven analysis of your portfolio, LinkedIn, and GitHub. 
+                Receive tier-1 company benchmarking, personalized career progression maps, 
+                and AI-generated content optimizations.
               </p>
 
-              <div className="flex flex-wrap justify-center gap-4 pt-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8">
                 {[
-                  { icon: Target, color: 'text-green-400', label: 'Design Analysis' },
-                  { icon: Target, color: 'text-blue-400', label: 'Code Quality' },
-                  { icon: Target, color: 'text-purple-400', label: 'SEO Optimization' },
-                  { icon: Target, color: 'text-yellow-400', label: 'LinkedIn Insights' }
+                  { icon: Brain, color: 'text-purple-400', label: 'AI Content Generation', desc: 'Smart headlines & summaries' },
+                  { icon: Target, color: 'text-green-400', label: 'Tier-1 Benchmarking', desc: 'Compare to FAANG standards' },
+                  { icon: TrendingUp, color: 'text-blue-400', label: 'Career Progression', desc: 'Personalized growth maps' },
+                  { icon: Sparkles, color: 'text-yellow-400', label: 'Smart Insights', desc: 'Actionable recommendations' }
                 ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-2 px-4 py-2 rounded-lg glass transition-all duration-600 ease-out">
-                    <item.icon className={`h-4 w-4 ${item.color} transition-all duration-600 ease-out`} />
-                    <span className="text-sm transition-all duration-600 ease-out">{item.label}</span>
+                  <div key={index} className="p-4 rounded-xl glass border border-white/10 text-center transition-all duration-600 ease-out hover:border-white/20 group">
+                    <item.icon className={`h-8 w-8 ${item.color} mx-auto mb-3 transition-all duration-300 group-hover:scale-110`} />
+                    <h3 className="font-medium text-sm mb-1">{item.label}</h3>
+                    <p className="text-xs text-muted-foreground">{item.desc}</p>
                   </div>
                 ))}
               </div>
+
+              <div className="flex flex-wrap justify-center gap-3 pt-6">
+                <div className="px-4 py-2 rounded-full glass border border-green-500/30 text-green-300 text-sm">
+                  ✨ AI-Powered Analysis
+                </div>
+                <div className="px-4 py-2 rounded-full glass border border-blue-500/30 text-blue-300 text-sm">
+                  🎯 Tier-1 Standards
+                </div>
+                <div className="px-4 py-2 rounded-full glass border border-purple-500/30 text-purple-300 text-sm">
+                  📊 Real-Time Benchmarking
+                </div>
+                <div className="px-4 py-2 rounded-full glass border border-yellow-500/30 text-yellow-300 text-sm">
+                  🚀 Career Intelligence
+                </div>
+              </div>
             </section>
 
-            {/* Analysis Input */}
+            {/* Advanced Analysis Input */}
             <section className="transition-all duration-600 ease-out">
-              <AnalysisInput onAnalyze={handleAnalyze} isLoading={isLoading} />
+              <AdvancedAnalysisInput onAnalyze={handleAnalyze} isLoading={isLoading} />
             </section>
           </div>
         ) : (
           <div className="space-y-6 transition-all duration-600 ease-out">
             {/* Results Header */}
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gradient transition-all duration-600 ease-out">Analysis Results</h2>
+              <h2 className="text-3xl font-bold text-gradient transition-all duration-600 ease-out">
+                AI Analysis Complete
+              </h2>
               <Button 
                 onClick={resetAnalysis}
                 variant="outline" 
@@ -123,8 +150,8 @@ const Index = () => {
               </Button>
             </div>
 
-            {/* Results */}
-            {analysisData && <AnalysisResults data={analysisData} />}
+            {/* Enhanced Results */}
+            {analysisData && <EnhancedAnalysisResults data={analysisData} />}
 
             {/* Scroll to Top */}
             <div className="fixed bottom-6 right-6 z-50">
@@ -140,11 +167,12 @@ const Index = () => {
         )}
       </main>
 
-      {/* Footer */}
+      {/* Enhanced Footer */}
       <footer className="relative z-10 border-t border-white/10 glass mt-20 transition-all duration-600 ease-out">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center text-sm text-muted-foreground transition-all duration-600 ease-out">
-            <p>© 2024 InsightFlow. Empowering professionals with intelligent insights.</p>
+            <p>© 2024 InsightFlow AI. Empowering careers with intelligent analysis.</p>
+            <p className="mt-1 text-xs">Powered by advanced AI and tier-1 company benchmarking</p>
           </div>
         </div>
       </footer>
