@@ -1,73 +1,61 @@
-# Welcome to your Lovable project
+# 🚀 ProfilePulse – Intelligent Portfolio & LinkedIn Analyzer
 
-## Project info
+**ProfilePulse** is a futuristic web platform designed to analyze and elevate your **portfolio website** and **LinkedIn profile** using real-world references from **tier 1 tech companies** (Google, Meta, Microsoft, Amazon, etc.). Whether you're a student, job seeker, or seasoned professional, ProfilePulse helps you fine-tune your digital presence to meet top-tier industry standards.
 
-**URL**: https://lovable.dev/projects/00b93e6c-ce7f-47bd-922b-4302d5954600
+---
 
-## How can I edit this code?
+## 🎯 What It Does
 
-There are several ways of editing your application.
+- 🔍 **Portfolio Analyzer**: Paste your code or website URL and get a breakdown on performance, design, structure, and overall presentation.
+- 🔗 **LinkedIn Analyzer**: Drop your LinkedIn profile link to get a tailored review compared to real employee profiles from tier 1 companies.
+- ⚡ **Blazing Fast Results**: Delivers smart analysis and suggestions within **~2 seconds**.
+- 🌗 **Dark/Light Mode Toggle**: Includes a **smooth middle-fade transition** between themes for a clean, ambient UI feel.
+- 🧠 **AI-Powered Recommendations**: Personalized tips to help you upgrade your profile and web presence.
+- 🎨 **Cool Aesthetic**: Ambient design with a modern, minimal vibe and a **crazy cool loading screen** to keep users engaged.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/00b93e6c-ce7f-47bd-922b-4302d5954600) and start prompting.
+## 🛠️ Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend**: Next.js, Tailwind CSS, Framer Motion
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB / PostgreSQL
+- **AI Integration**: Custom model prompts + external reference data from top-tier company profiles
+- **Others**: JWT Auth, SEO Optimization, Accessibility Standards, Custom Branding
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🔐 No AI Traces
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+ProfilePulse is built to feel **completely custom** — no Lovable AI watermarks, logos, or default icons. Every piece has been personalized to maintain a premium and professional identity.
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🚧 Features In Progress
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- ✅ Advanced scoring algorithm for more dynamic ranking
+- ✅ Visual report card with charts
+- ⏳ Browser extension for one-click LinkedIn/portfolio checks
+- ⏳ Resume parser and review add-on
+- ⏳ Community leaderboard
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## 💡 Inspiration
 
-**Edit a file directly in GitHub**
+We built ProfilePulse to give people a **mirror into what top-tier hiring managers look for**. It’s your personal brand coach, UI/UX reviewer, and recruiter’s eye — all in one place.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 🧠 Want to Contribute?
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Got ideas or improvements? PRs are welcome! Let’s level up how people showcase their digital selves.
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## 📄 License
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+This project is open-sourced under the MIT License.
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/00b93e6c-ce7f-47bd-922b-4302d5954600) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
