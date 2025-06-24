@@ -1,11 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ThemeToggle from '@/components/ThemeToggle';
 import AdvancedAnalysisInput from '@/components/AdvancedAnalysisInput';
 import EnhancedAnalysisResults from '@/components/EnhancedAnalysisResults';
 import LoadingScreen from '@/components/LoadingScreen';
 import { Button } from '@/components/ui/button';
-import { ArrowUp, Sparkles, Zap, Target, Brain, TrendingUp } from 'lucide-react';
+import { ArrowUp, Sparkles, Zap, Target, Brain, TrendingUp, Palette } from 'lucide-react';
 
 interface AnalysisData {
   type: string;
@@ -70,7 +70,15 @@ const Index = () => {
               </div>
               <h1 className="text-xl font-bold text-gradient transition-all duration-600 ease-out">InsightFlow AI</h1>
             </div>
-            <ThemeToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
+            <div className="flex items-center gap-4">
+              <Link to="/portfolio-presets">
+                <Button variant="outline" size="sm" className="glass hover:bg-white/10 transition-all duration-300">
+                  <Palette className="h-4 w-4 mr-2" />
+                  Portfolio Presets
+                </Button>
+              </Link>
+              <ThemeToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
+            </div>
           </div>
         </div>
       </header>
@@ -126,6 +134,23 @@ const Index = () => {
                 <div className="px-4 py-2 rounded-full glass border border-yellow-500/30 text-yellow-300 text-sm">
                   🚀 Career Intelligence
                 </div>
+              </div>
+
+              {/* Portfolio Presets CTA */}
+              <div className="mt-12 p-6 rounded-xl glass border border-white/10">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <Palette className="h-6 w-6 text-neon-purple" />
+                  <h3 className="text-xl font-bold text-gradient">Need a Portfolio Website?</h3>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Choose from our premium portfolio templates. Customize, edit, and download in minutes.
+                </p>
+                <Link to="/portfolio-presets">
+                  <Button className="glow">
+                    <Palette className="h-4 w-4 mr-2" />
+                    Explore Portfolio Presets
+                  </Button>
+                </Link>
               </div>
             </section>
 
