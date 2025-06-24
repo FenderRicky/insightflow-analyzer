@@ -461,6 +461,13 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
 
   const rankBadge = getRankBadge(results.overallScore);
 
+  // Create mock user profile for AI Content Generator
+  const mockUserProfile = {
+    skills: ['React', 'JavaScript', 'TypeScript', 'Node.js', 'CSS'],
+    experience: 'mid',
+    role: 'frontend-dev'
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6 animate-fade-in">
       {/* Enhanced Overall Score Card with Visual Report Card */}
@@ -706,7 +713,10 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
           <SmartComparisonTool />
           
           {/* AI Content Generator */}
-          <AIContentGenerator analysisData={results} />
+          <AIContentGenerator 
+            userProfile={mockUserProfile}
+            careerGoal="frontend-dev"
+          />
         </div>
       </div>
 
