@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { Star, TrendingUp, AlertCircle, CheckCircle, Zap, Target, Code, Palette, Users, Trophy, Eye, Shield, Gauge, Search, Smartphone, Globe } from 'lucide-react';
+import { Star, TrendingUp, AlertCircle, CheckCircle, Zap, Target, Code, Palette, Users, Trophy, Eye, Shield, Gauge, Search, Smartphone, Globe, GitBranch, Linkedin, FileText, BarChart3 } from 'lucide-react';
 import AIFeedbackChatbot from './AIFeedbackChatbot';
 import SmartComparisonTool from './SmartComparisonTool';
 import AIContentGenerator from './AIContentGenerator';
@@ -21,432 +22,347 @@ interface AnalysisResultsProps {
 const AnalysisResults = ({ data }: AnalysisResultsProps) => {
   const [isChatbotVisible, setIsChatbotVisible] = useState(false);
 
-  // Enhanced analysis with tier-1 company benchmarking and detailed technical evaluation
+  // Enhanced analysis with granular scoring and context-aware feedback
   const getAnalysisResults = () => {
     if (data.type === 'portfolio') {
-      // Detect portfolio type with more sophisticated analysis
       const input = data.input.toLowerCase();
       const isDesignPortfolio = input.includes('design') || input.includes('ux') || input.includes('ui') || 
                                input.includes('figma') || input.includes('dribbble') || input.includes('behance');
       const isDeveloperPortfolio = input.includes('github') || input.includes('dev') || input.includes('code') ||
                                   input.includes('react') || input.includes('javascript') || input.includes('python') ||
                                   data.inputType === 'code';
-      const isDataPortfolio = input.includes('data') || input.includes('analytics') || input.includes('ml') || 
-                             input.includes('scientist') || input.includes('tableau');
 
-      const portfolioType = isDesignPortfolio ? 'design' : isDeveloperPortfolio ? 'developer' : 
-                           isDataPortfolio ? 'data' : 'general';
-
-      if (portfolioType === 'design') {
+      if (isDesignPortfolio) {
         return {
           overallScore: 82,
           rank: 'Design Professional',
           rankColor: 'from-pink-400 to-purple-500',
-          benchmark: 'Benchmarked against Google Design, Airbnb Design, Figma, and Apple HI portfolios',
+          benchmark: 'Benchmarked against Google Design, Airbnb Design, Figma portfolios',
+          scoringBreakdown: {
+            'Visual Hierarchy': { score: 18, max: 20, description: 'Clear typography and spacing patterns' },
+            'Case Study Depth': { score: 14, max: 20, description: 'Missing quantified impact metrics' },
+            'Technical Implementation': { score: 16, max: 20, description: 'Good performance, needs accessibility fixes' },
+            'Professional Positioning': { score: 17, max: 20, description: 'Strong portfolio presence' },
+            'Content Quality': { score: 17, max: 20, description: 'Well-structured project presentations' }
+          },
           sections: [
             {
-              title: 'Visual Design System',
+              title: 'About Section Analysis',
+              score: 76,
+              color: 'bg-blue-500',
+              icon: Users,
+              missing: ['Design process methodology', 'Years of experience', 'Collaboration approach'],
+              present: ['Clear value proposition', 'Contact information'],
+              insights: [
+                'About section lacks specific design methodology (Design Thinking, Lean UX, Human-Centered Design)',
+                'Missing quantified experience: "5+ years" or "Led 12+ product launches"',
+                'No mention of cross-functional collaboration with PM/Engineering teams',
+                'Contact CTA is well-placed but could include calendar booking link'
+              ],
+              concreteImprovements: [
+                'Add: "I follow a human-centered design approach, having led 15+ product launches"',
+                'Include: "Collaborated with 20+ engineers and PMs at [Previous Company]"',
+                'Specify: "Expertise in Figma, Principle, and user research methodologies"'
+              ]
+            },
+            {
+              title: 'Visual Design & Portfolio Structure',
               score: 88,
               color: 'bg-pink-500',
               icon: Palette,
+              missing: ['Design system documentation', 'Interactive prototypes'],
+              present: ['Consistent color palette', 'Good typography hierarchy', 'Mobile responsiveness'],
               insights: [
-                'Typography hierarchy follows modern design principles (matches Stripe\'s 16px/24px base)',
-                'Color palette demonstrates brand sophistication but lacks accessibility contrast ratios',
-                'Missing design tokens documentation (Google Material requires systematic color/spacing)',
-                'Visual consistency score: 85% - improve component standardization like Airbnb\'s design system'
+                'Portfolio includes 4/6 essential design elements (missing design tokens and component library)',
+                'Typography follows 16px/24px base (matches industry standards)',
+                'Color contrast ratios: 3 sections below WCAG 4.5:1 requirement',
+                'Missing interactive prototype examples (standard at Apple/Google Design)'
               ],
-              tierComparison: 'Google Design portfolios score 95+ with comprehensive design system documentation',
-              actionableAdvice: 'Create a design system page showing color tokens (8 shades per primary), typography scale (6 weights), and spacing units (4px base grid)'
+              concreteImprovements: [
+                'Create design system page showing 8 color shades per primary color',
+                'Add interactive Framer/Principle prototypes for top 2 case studies',
+                'Fix contrast ratios in navigation (currently 3.2:1, needs 4.5:1+)'
+              ]
             },
             {
-              title: 'UX Case Study Depth',
-              score: 76,
-              color: 'bg-blue-500',
-              icon: Target,
-              insights: [
-                'Problem definition needs quantifiable user pain points (Meta designers include 3-5 user research quotes)',
-                'Solution process documented but missing A/B test results and iteration cycles',
-                'User journey maps absent - Uber designers showcase complete user flow documentation',
-                'Impact metrics missing: add conversion rates, task completion times, user satisfaction scores'
-              ],
-              tierComparison: 'Netflix designers include comprehensive user research with 10+ user interviews per case study',
-              actionableAdvice: 'Rewrite main case study using: Problem (with data) → Research → Ideation → Prototyping → Testing → Results (with metrics)'
-            },
-            {
-              title: 'Technical Implementation',
-              score: 79,
+              title: 'Case Study Impact Metrics',
+              score: 68,
               color: 'bg-green-500',
-              icon: Code,
+              icon: BarChart3,
+              missing: ['Quantified business impact', 'A/B test results', 'User research data'],
+              present: ['Problem definition', 'Solution process documentation'],
               insights: [
-                'Portfolio loads in 2.1s (Google PageSpeed target: <1.5s for optimal ranking)',
-                'Mobile responsiveness good but tablet breakpoint (768px-1024px) needs optimization',
-                'Missing WCAG 2.1 AA compliance: color contrast ratios below 4.5:1 in 3 sections',
-                'No progressive enhancement detected (Apple portfolios work without JavaScript)'
+                'Case studies include 2/5 key impact metrics (missing conversion rates, user satisfaction, task completion)',
+                'No A/B testing results shown (Meta designers include 3-5 test variations)',
+                'User research mentions 0 specific quotes (Netflix designers average 10+ user interviews)',
+                'Business impact: 0 quantified results (should include revenue/engagement improvements)'
               ],
-              tierComparison: 'Microsoft Design portfolios achieve 95+ Lighthouse scores across all metrics',
-              actionableAdvice: 'Optimize images (WebP format), implement lazy loading, and add keyboard navigation for accessibility'
-            },
-            {
-              title: 'Professional Positioning',
-              score: 84,
-              color: 'bg-purple-500',
-              icon: Trophy,
-              insights: [
-                'Value proposition clear but lacks industry recognition (awards, publications, speaking)',
-                'Missing quantified business impact: "Increased conversion by 34%" (Amazon standard)',
-                'About section needs process methodology explanation (Design thinking, Lean UX, etc.)',
-                'Contact CTA conversion-optimized but missing calendar booking integration'
-              ],
-              tierComparison: 'Figma designers showcase thought leadership through conference talks and medium articles',
-              actionableAdvice: 'Add metrics to each project: user engagement improvements, business KPI impacts, and team collaboration examples'
-            },
-            {
-              title: 'Portfolio SEO & Discoverability',
-              score: 73,
-              color: 'bg-yellow-500',
-              icon: Search,
-              insights: [
-                'Meta descriptions missing for case study pages (Google displays 155-160 characters)',
-                'No structured data markup for portfolio projects (helps Google understand content)',
-                'Missing alt text on 40% of images (critical for accessibility and SEO)',
-                'URL structure not optimized: use /case-studies/project-name format'
-              ],
-              tierComparison: 'Shopify designers\' portfolios rank in top 10 for "UX designer" + location searches',
-              actionableAdvice: 'Add meta descriptions, implement JSON-LD structured data, and optimize all images with descriptive alt text'
+              concreteImprovements: [
+                'Add: "Redesign increased conversion rate from 2.3% to 3.1% (34% improvement)"',
+                'Include: "User task completion improved from 68% to 89% based on usability testing"',
+                'Show: "A/B tested 3 navigation approaches, winning variant reduced bounce rate by 23%"'
+              ]
             }
           ],
-          recommendations: [
-            'Create interactive prototype section using Framer or Principle (standard at Apple Design)',
-            'Document design process with tools used: Figma → Principle → Framer → Analytics',
-            'Add client testimonials with specific impact quotes: "Sarah reduced our checkout abandonment by 28%"',
-            'Include collaboration stories: how you work with PM, Engineering, and Data teams',
-            'Showcase design system with live component library (like Spotify\'s design tokens)'
-          ],
-          improvementAreas: [
-            {
-              priority: 'High',
-              area: 'Case Study Impact Metrics',
-              action: 'Add quantified results to top 3 case studies using before/after data',
-              timeEstimate: '6-8 hours',
-              expectedImprovement: '+15 points'
-            },
-            {
-              priority: 'High',
-              area: 'Performance Optimization',
-              action: 'Implement image optimization and achieve <1.5s load time',
-              timeEstimate: '4-5 hours',
-              expectedImprovement: '+12 points'
-            },
-            {
-              priority: 'Medium',
-              area: 'Design System Documentation',
-              action: 'Create comprehensive design system page with tokens and guidelines',
-              timeEstimate: '8-10 hours',
-              expectedImprovement: '+8 points'
-            }
-          ]
+          keywordAnalysis: {
+            present: ['UX Design', 'UI Design', 'Figma', 'User Research'],
+            missing: ['Design Systems', 'Accessibility', 'A/B Testing', 'Product Strategy', 'Stakeholder Management'],
+            trending: ['Design Tokens', 'Inclusive Design', 'Design Ops', 'Cross-functional Collaboration']
+          }
         };
-      } else if (portfolioType === 'developer') {
+      } else if (isDeveloperPortfolio) {
         return {
           overallScore: 87,
           rank: 'Senior Developer',
           rankColor: 'from-green-400 to-blue-500',
-          benchmark: 'Benchmarked against Meta Engineering L5-L6, Google L4-L5, and Microsoft Senior SWE portfolios',
+          benchmark: 'Benchmarked against Meta L5-L6, Google L4-L5 engineering portfolios',
+          scoringBreakdown: {
+            'Code Quality': { score: 19, max: 20, description: 'Excellent architecture and TypeScript usage' },
+            'Project Depth': { score: 16, max: 20, description: 'Good projects, need more system design examples' },
+            'Technical Communication': { score: 15, max: 20, description: 'Missing blog posts and documentation' },
+            'Performance & Security': { score: 17, max: 20, description: 'Good optimization, needs security headers' },
+            'Professional Presence': { score: 20, max: 20, description: 'Strong GitHub activity and contributions' }
+          },
           sections: [
             {
-              title: 'Code Architecture & Quality',
+              title: 'Technical Skills Assessment',
               score: 92,
               color: 'bg-green-500',
               icon: Code,
+              missing: ['System design documentation', 'Performance monitoring'],
+              present: ['Modern React patterns', 'TypeScript strict mode', 'Clean architecture'],
               insights: [
-                'Clean component architecture with proper separation of concerns (matches React best practices)',
-                'TypeScript implementation excellent - strict mode enabled like Meta\'s codebase standards',
-                'Missing comprehensive unit tests: current coverage ~45% (Google requires 80%+ for production)',
-                'Code documentation good but lacks architectural decision records (ADRs) that senior engineers write'
+                'Code demonstrates 8/10 senior-level patterns (missing microservices and caching examples)',
+                'TypeScript implementation: strict mode enabled with 95% type coverage',
+                'Architecture follows SOLID principles with proper separation of concerns',
+                'Missing comprehensive testing: current coverage ~45% (Google requires 80%+)'
               ],
-              tierComparison: 'Microsoft Senior SWEs showcase 90%+ test coverage with integration tests',
-              actionableAdvice: 'Add Jest/React Testing Library with 80%+ coverage, implement Storybook for component documentation'
+              concreteImprovements: [
+                'Add system architecture diagram for largest project showing data flow',
+                'Implement comprehensive test suite: target 80%+ coverage with Jest/RTL',
+                'Document performance monitoring setup with metrics dashboard'
+              ]
             },
             {
-              title: 'System Design & Scalability',
+              title: 'Project Portfolio Depth',
               score: 83,
               color: 'bg-blue-500',
-              icon: Gauge,
+              icon: Trophy,
+              missing: ['Scalability examples', 'Database design docs', 'DevOps pipeline'],
+              present: ['Multiple tech stacks', 'Production deployments', 'Clean code examples'],
               insights: [
-                'Database design shows understanding of normalization and indexing strategies',
-                'Missing caching layer implementation (Redis/Memcached standard at scale)',
-                'API design follows REST principles but lacks GraphQL implementation for efficiency',
-                'No microservices architecture examples (Amazon interviews focus heavily on distributed systems)'
+                'Portfolio includes 6/10 project types valued by FAANG (missing distributed systems, ML integration)',
+                'Largest project handles estimated 10K users (tier-1 companies expect 1M+ examples)',
+                'Database design: shows normalization understanding but lacks indexing strategy docs',
+                'DevOps: Docker containerization present, missing CI/CD pipeline documentation'
               ],
-              tierComparison: 'Meta engineers demonstrate systems handling 1M+ concurrent users with proper monitoring',
-              actionableAdvice: 'Add system architecture diagrams, implement caching strategy, showcase monitoring/observability setup'
+              concreteImprovements: [
+                'Add project showcasing horizontal scaling with load balancing',
+                'Document database indexing strategy and query optimization for main project',
+                'Create CI/CD pipeline documentation with GitHub Actions workflow examples'
+              ]
             },
             {
-              title: 'Modern Tech Stack & DevOps',
-              score: 89,
+              title: 'Impact Metrics & Results',
+              score: 79,
               color: 'bg-purple-500',
-              icon: Zap,
+              icon: BarChart3,
+              missing: ['Performance benchmarks', 'User growth metrics', 'Business impact data'],
+              present: ['Code quality metrics', 'Project completion'],
               insights: [
-                'Excellent use of modern React patterns: hooks, context, and custom hook abstractions',
-                'Docker containerization implemented with multi-stage builds (industry standard)',
-                'Missing CI/CD pipeline documentation (GitHub Actions/Jenkins standard at tier-1)',
-                'Cloud deployment on AWS/GCP but lacks auto-scaling and load balancing examples'
+                'Projects include 2/6 key impact metrics (missing load times, user engagement, business ROI)',
+                'Performance data: mentions optimization but no specific load time improvements',
+                'User metrics: 0 quantified growth or engagement statistics',
+                'Business impact: no mention of cost savings or revenue impact'
               ],
-              tierComparison: 'Netflix engineers showcase complete DevOps lifecycle with infrastructure as code',
-              actionableAdvice: 'Document CI/CD pipeline, add Terraform/CloudFormation IaC examples, implement health checks'
-            },
-            {
-              title: 'Performance & Security',
-              score: 85,
-              color: 'bg-red-500',
-              icon: Shield,
-              insights: [
-                'Bundle optimization good: code splitting and lazy loading implemented correctly',
-                'Security headers configured but missing CSP and proper CORS implementation',
-                'Performance monitoring absent: no metrics on Core Web Vitals or user experience',
-                'Missing security audit reports and vulnerability scanning in CI pipeline'
-              ],
-              tierComparison: 'Google SWEs implement comprehensive security scanning and performance budgets',
-              actionableAdvice: 'Add Lighthouse CI, implement security headers, create performance budgets with monitoring'
-            },
-            {
-              title: 'Technical Communication',
-              score: 78,
-              color: 'bg-yellow-500',
-              icon: Users,
-              insights: [
-                'README documentation comprehensive but lacks quick start guide for contributors',
-                'Missing technical blog posts demonstrating problem-solving approach',
-                'Code comments clear but architectural decisions not documented',
-                'No contributions to open source projects visible (valued highly at all tier-1 companies)'
-              ],
-              tierComparison: 'Stripe engineers are known for exceptional technical writing and open source contributions',
-              actionableAdvice: 'Write 2-3 technical blog posts, contribute to relevant open source projects, document architectural decisions'
+              concreteImprovements: [
+                'Add: "Optimization reduced page load time from 3.2s to 1.1s (65% improvement)"',
+                'Include: "New feature increased user engagement by 40% over 3 months"',
+                'Show: "Refactoring reduced server costs by $15K annually through 60% efficiency gain"'
+              ]
             }
           ],
-          recommendations: [
-            'Add comprehensive monitoring dashboard with Grafana/DataDog (production readiness)',
-            'Implement feature flags system for gradual rollouts (standard at Facebook/Meta)',
-            'Create load testing scenarios with results (k6/Artillery showing system limits)',
-            'Document on-call experience and incident response (shows production system ownership)',
-            'Showcase mentoring/code review examples (leadership skills valued at senior+ levels)'
-          ],
-          improvementAreas: [
-            {
-              priority: 'High',
-              area: 'Testing & Quality Assurance',
-              action: 'Implement comprehensive test suite with 80%+ coverage and E2E tests',
-              timeEstimate: '12-15 hours',
-              expectedImprovement: '+8 points'
-            },
-            {
-              priority: 'Medium',
-              area: 'System Design Documentation',
-              action: 'Create architecture diagrams and scalability analysis for top projects',
-              timeEstimate: '6-8 hours',
-              expectedImprovement: '+7 points'
-            },
-            {
-              priority: 'Medium',
-              area: 'Technical Writing',
-              action: 'Publish 2-3 technical blog posts about interesting problems solved',
-              timeEstimate: '10-12 hours',
-              expectedImprovement: '+5 points'
-            }
-          ]
-        };
-      } else {
-        // Data Science/Analytics portfolio
-        return {
-          overallScore: 84,
-          rank: 'Data Professional',
-          rankColor: 'from-cyan-400 to-blue-500',
-          benchmark: 'Benchmarked against Google Research, Meta Data Science, and Microsoft AI portfolios',
-          sections: [
-            {
-              title: 'Data Analysis & Methodology',
-              score: 88,
-              color: 'bg-cyan-500',
-              icon: Target,
-              insights: [
-                'Statistical analysis methodology sound with proper hypothesis testing',
-                'Missing experimental design documentation (A/B testing frameworks used at Meta)',
-                'Data visualization excellent but lacks interactive dashboards (Tableau/PowerBI standard)',
-                'Feature engineering process documented but missing feature importance analysis'
-              ],
-              tierComparison: 'Google Research scientists publish methodology with reproducible results',
-              actionableAdvice: 'Add experimental design section, create interactive Plotly/D3 visualizations, document feature selection process'
-            },
-            {
-              title: 'Machine Learning Implementation',
-              score: 82,
-              color: 'bg-purple-500',
-              icon: Code,
-              insights: [
-                'Model selection process well-documented with cross-validation results',
-                'Missing MLOps pipeline implementation (Kubeflow/MLflow standard at tech companies)',
-                'No model monitoring or drift detection systems shown',
-                'Hyperparameter tuning documented but lacks automated optimization (Optuna/Ray Tune)'
-              ],
-              tierComparison: 'Netflix ML engineers showcase complete model lifecycle from training to production monitoring',
-              actionableAdvice: 'Implement MLflow for experiment tracking, add model monitoring dashboard, create automated retraining pipeline'
-            }
-          ],
-          recommendations: [
-            'Add end-to-end ML pipeline from data ingestion to model serving',
-            'Create business impact stories: "Model increased customer retention by 12%"',
-            'Showcase big data processing with Spark/Dask for scalability',
-            'Include statistical significance testing and confidence intervals',
-            'Document model interpretability using SHAP/LIME for stakeholder communication'
-          ],
-          improvementAreas: [
-            {
-              priority: 'High',
-              area: 'MLOps Implementation',
-              action: 'Build complete ML pipeline with monitoring and automated retraining',
-              timeEstimate: '15-20 hours',
-              expectedImprovement: '+10 points'
-            },
-            {
-              priority: 'Medium',
-              area: 'Business Impact Documentation',
-              action: 'Add quantified business metrics and ROI calculations for each project',
-              timeEstimate: '4-6 hours',
-              expectedImprovement: '+6 points'
-            }
-          ]
+          keywordAnalysis: {
+            present: ['React', 'TypeScript', 'Node.js', 'Docker', 'AWS'],
+            missing: ['Kubernetes', 'GraphQL', 'Redis', 'Microservices', 'System Design'],
+            trending: ['Next.js 14', 'Serverless', 'Edge Computing', 'WebAssembly', 'AI/ML Integration']
+          }
         };
       }
-    } else {
-      // Enhanced LinkedIn analysis with tier-1 company benchmarking
+    } else if (data.type === 'linkedin') {
       return {
         overallScore: 74,
-        rank: 'Rising Professional',
+        rank: 'Professional Profile',
         rankColor: 'from-blue-400 to-cyan-500',
-        benchmark: 'Benchmarked against LinkedIn profiles from Google L4-L5, Meta E4-E5, Amazon L5-L6 employees',
+        benchmark: 'Benchmarked against LinkedIn profiles from Google L4-L5, Meta E4-E5 employees',
+        scoringBreakdown: {
+          'Headline Optimization': { score: 13, max: 20, description: 'Generic headline, missing keywords' },
+          'Summary Impact': { score: 14, max: 20, description: 'Lacks quantified achievements' },
+          'Experience Details': { score: 16, max: 20, description: 'Good structure, needs metrics' },
+          'Skills & Keywords': { score: 15, max: 20, description: 'Missing trending technologies' },
+          'Network Quality': { score: 16, max: 20, description: 'Good connections, low engagement' }
+        },
         sections: [
           {
-            title: 'Headline Optimization & Keywords',
+            title: 'Headline & Summary Analysis',
             score: 68,
             color: 'bg-blue-500',
             icon: Target,
+            missing: ['Value proposition', 'Specific technologies', 'Impact metrics', 'Target keywords'],
+            present: ['Job title', 'Company name'],
             insights: [
-              'Current headline: Generic job title without value proposition or specialization',
-              'Missing target keywords that recruiters search for (95% of tech recruiters use Boolean search)',
-              'No mention of technologies, impact metrics, or unique differentiators',
-              'Character count: 67/220 - significantly underutilizing headline real estate'
+              'Headline uses 67/220 characters (Google L5 engineers average 180+ characters)',
+              'Missing 6/8 high-impact keywords that recruiters search for most',
+              'Summary lacks STAR method structure (Situation, Task, Action, Result)',
+              'No quantified achievements: 0/5 recommended impact metrics included'
             ],
-            tierComparison: 'Google L5 engineers average 2.3x more profile views with optimized headlines',
-            actionableAdvice: 'Rewrite as: "Senior Full-Stack Engineer | React/Node.js Expert | Built Scalable Systems for 2M+ Users | Ex-[Company]"',
-            currentExample: 'Software Engineer',
-            improvedExample: 'Senior Software Engineer | React & TypeScript Expert | Building High-Performance Web Apps | Scaled Systems to 1M+ Users'
-          },
-          {
-            title: 'Summary Impact & Storytelling',
-            score: 72,
-            color: 'bg-green-500',
-            icon: Users,
-            insights: [
-              'Summary lacks quantified achievements and specific technologies',
-              'Missing problem-solution narrative structure (storytelling approach used by Meta employees)',
-              'No mention of leadership experience, team sizes, or cross-functional collaboration',
-              'Call-to-action absent - should end with how to connect or collaborate'
-            ],
-            tierComparison: 'Netflix employees excel at storytelling while highlighting technical depth and business impact',
-            actionableAdvice: 'Structure as: Hook → Problem I solve → How I solve it → Results achieved → Technologies used → Call to action',
-            currentExample: 'Experienced software engineer with passion for technology...',
-            improvedExample: 'I turn complex business problems into elegant technical solutions. In my last role, I led a team of 4 engineers to rebuild our payment system, reducing transaction failures by 40% and saving $2M annually...'
+            concreteImprovements: [
+              'Rewrite headline: "Senior Software Engineer | React & TypeScript Expert | Built Systems for 1M+ Users | Ex-[Company]"',
+              'Add summary opening: "I turn complex business problems into scalable technical solutions"',
+              'Include metrics: "Led team of 4 engineers to increase system performance by 60%"'
+            ]
           },
           {
             title: 'Experience Section Optimization',
             score: 79,
-            color: 'bg-purple-500',
+            color: 'bg-green-500',
             icon: Trophy,
+            missing: ['Quantified results', 'Team leadership examples', 'Cross-functional collaboration'],
+            present: ['Comprehensive job descriptions', 'Technology mentions', 'Multiple roles'],
             insights: [
-              'Job descriptions comprehensive but lack STAR method structure (Situation, Task, Action, Result)',
-              'Missing quantified impact metrics: team sizes, budgets, user numbers, performance improvements',
-              'Technology mentions not contextualized with business value',
-              'No mention of cross-functional collaboration or stakeholder management'
+              'Experience descriptions include 3/7 STAR method elements (missing specific results)',
+              'Technology context: mentions tools but lacks business value connection',
+              'Leadership evidence: 0/3 roles show team management or mentoring examples',
+              'Impact quantification: 15% of descriptions include specific metrics (target: 80%+)'
             ],
-            tierComparison: 'Amazon L6 engineers showcase leadership principles with specific examples and quantified results',
-            actionableAdvice: 'Rewrite top 3 roles using: "Led [team size] to [achieve what] by [specific actions], resulting in [quantified outcome]"',
-            currentExample: 'Developed web applications using React and Node.js',
-            improvedExample: 'Led team of 4 engineers to rebuild customer dashboard using React/Node.js, improving page load time by 60% and increasing user engagement by 25% (500K+ monthly users)'
+            concreteImprovements: [
+              'Rewrite top role: "Led cross-functional team of 8 to rebuild payment system, reducing transaction failures by 40%"',
+              'Add leadership example: "Mentored 3 junior engineers, with 2 receiving promotions within 18 months"',
+              'Include collaboration: "Partnered with Product and Design teams to launch feature used by 500K+ users"'
+            ]
           },
           {
-            title: 'Skills & Endorsements Strategy',
+            title: 'Skills & Keyword Strategy',
             score: 76,
-            color: 'bg-yellow-500',
+            color: 'bg-purple-500',
             icon: Zap,
+            missing: ['Trending technologies', 'Soft skills', 'Industry certifications'],
+            present: ['Core technical skills', 'Some endorsements'],
             insights: [
-              'Skill selection good but missing emerging technologies relevant to target roles',
-              'Endorsement count low for core skills (top performers have 50+ endorsements per key skill)',
-              'Missing soft skills that are crucial for senior roles (leadership, mentoring, communication)',
-              'No skill assessments completed (LinkedIn badges increase profile visibility by 30%)'
+              'Skills section includes 12/20 high-demand keywords for target role',
+              'Missing 5/10 trending technologies: Next.js 14, Kubernetes, GraphQL, AI/ML, Edge Computing',
+              'Endorsement count: 15 average per skill (top performers have 50+)',
+              'Soft skills representation: 2/8 leadership skills listed'
             ],
-            tierComparison: 'Microsoft Senior SWEs average 200+ connections and strategic skill endorsements from colleagues',
-            actionableAdvice: 'Complete LinkedIn skill assessments for top 5 technical skills, request strategic endorsements from colleagues',
-            currentExample: '15 endorsements for JavaScript',
-            improvedExample: '50+ endorsements for JavaScript with completed LinkedIn assessment badge'
-          },
-          {
-            title: 'Network Quality & Engagement',
-            score: 71,
-            color: 'bg-red-500',
-            icon: Users,
-            insights: [
-              'Connection count appropriate but network quality could be improved (more senior professionals)',
-              'Low engagement on industry content - commenting/sharing increases visibility by 400%',
-              'No original content posted - thought leadership crucial for career advancement',
-              'Missing connections with employees from target companies (strategic networking)'
-            ],
-            tierComparison: 'Uber engineers engage 3-4x more with industry content and maintain strategic networks',
-            actionableAdvice: 'Post 1-2 technical insights monthly, comment thoughtfully on 3-5 industry posts weekly, connect with 10 target company employees monthly',
-            currentExample: '500 connections, minimal engagement',
-            improvedExample: '750+ strategic connections, weekly industry engagement, monthly technical content sharing'
+            concreteImprovements: [
+              'Add trending skills: "Next.js 14", "Kubernetes", "System Design", "Technical Leadership"',
+              'Request strategic endorsements from 10 colleagues for top 5 skills',
+              'Complete LinkedIn skill assessments for JavaScript, React, and System Design'
+            ]
           }
         ],
-        recommendations: [
-          'Rewrite headline using "Role + Technology + Impact + Company" formula (160+ characters)',
-          'Add 3-5 quantified achievements per role using STAR method with specific metrics',
-          'Request recommendations from managers emphasizing leadership and technical impact',
-          'Create content calendar: 1 technical post monthly + 3-5 thoughtful comments weekly',
-          'Strategic networking: Connect with 10 professionals from target companies monthly with personalized messages',
-          'Complete top 5 LinkedIn skill assessments to earn verified badges',
-          'Join and actively participate in 3-5 industry-relevant LinkedIn groups'
-        ],
-        improvementAreas: [
+        keywordAnalysis: {
+          present: ['Software Engineer', 'JavaScript', 'React', 'Node.js'],
+          missing: ['Technical Lead', 'System Architecture', 'Microservices', 'DevOps', 'Mentoring'],
+          trending: ['AI Integration', 'Cloud Native', 'Performance Optimization', 'Technical Strategy']
+        }
+      };
+    } else if (data.type === 'github') {
+      return {
+        overallScore: 81,
+        rank: 'Active Developer',
+        rankColor: 'from-green-400 to-blue-500',
+        benchmark: 'Benchmarked against GitHub profiles from tier-1 company engineers',
+        scoringBreakdown: {
+          'Repository Quality': { score: 17, max: 20, description: 'Good projects, need better documentation' },
+          'Code Consistency': { score: 18, max: 20, description: 'Excellent commit patterns and code style' },
+          'Community Impact': { score: 14, max: 20, description: 'Limited open source contributions' },
+          'Technical Breadth': { score: 16, max: 20, description: 'Good variety, missing some trending tech' },
+          'Professional Presence': { score: 16, max: 20, description: 'Active profile, needs more visibility' }
+        },
+        sections: [
           {
-            priority: 'High',
-            area: 'Headline & Summary Rewrite',
-            action: 'Optimize headline and rewrite summary using proven frameworks with quantified impact',
-            timeEstimate: '2-3 hours',
-            expectedImprovement: '+12 points'
+            title: 'Repository Analysis',
+            score: 85,
+            color: 'bg-green-500',
+            icon: GitBranch,
+            missing: ['Comprehensive READMEs', 'Live demo links', 'Architecture docs'],
+            present: ['Clean code structure', 'Consistent naming', 'Good commit messages'],
+            insights: [
+              'Repository quality: 6/12 repos have comprehensive READMEs (target: 10+)',
+              'Documentation completeness: 40% of projects include setup instructions',
+              'Live demos: 2/12 projects have deployed versions (should be 80%+)',
+              'Architecture documentation: 1/12 projects show system design diagrams'
+            ],
+            concreteImprovements: [
+              'Add comprehensive README to top 5 repositories with setup, features, and tech stack',
+              'Deploy 6+ projects to Vercel/Netlify with live demo links',
+              'Create architecture diagrams for 2 most complex projects showing data flow'
+            ]
           },
           {
-            priority: 'High',
-            area: 'Experience Quantification',
-            action: 'Add specific metrics and STAR method structure to top 3 most recent roles',
-            timeEstimate: '3-4 hours',
-            expectedImprovement: '+10 points'
+            title: 'Contribution Patterns & Activity',
+            score: 88,
+            color: 'bg-blue-500',
+            icon: BarChart3,
+            missing: ['Open source contributions', 'Issue participation', 'Code reviews'],
+            present: ['Consistent commits', 'Active development', 'Multiple languages'],
+            insights: [
+              'Commit frequency: 847 commits in last year (excellent consistency)',
+              'Open source contributions: 3 external repositories (Google engineers average 15+)',
+              'Issue tracking: participates in 2/12 own repositories (should engage in community issues)',
+              'Code review activity: 0 visible reviews on other projects'
+            ],
+            concreteImprovements: [
+              'Contribute to 5 relevant open source projects in your tech stack',
+              'Participate in issue discussions for 10 community repositories',
+              'Submit 3 meaningful pull requests to popular libraries you use'
+            ]
           },
           {
-            priority: 'Medium',
-            area: 'Thought Leadership Content',
-            action: 'Create content strategy with 4 weeks of posts and engagement plan',
-            timeEstimate: '2-3 hours planning + ongoing',
-            expectedImprovement: '+8 points'
-          },
-          {
-            priority: 'Medium',
-            area: 'Strategic Networking',
-            action: 'Identify and connect with 20 professionals from target companies with personalized messages',
-            timeEstimate: '1-2 hours weekly',
-            expectedImprovement: '+6 points'
+            title: 'Technical Impact & Metrics',
+            score: 72,
+            color: 'bg-purple-500',
+            icon: TrendingUp,
+            missing: ['Star/fork metrics', 'Usage statistics', 'Performance benchmarks'],
+            present: ['Multiple programming languages', 'Recent activity'],
+            insights: [
+              'Repository engagement: 23 total stars across all repos (tier-1 engineers average 200+)',
+              'Fork activity: 8 forks total (indicates limited community adoption)',
+              'Language diversity: 6 languages used (good technical breadth)',
+              'Performance documentation: 0/12 projects include benchmark data'
+            ],
+            concreteImprovements: [
+              'Create 2 utility libraries or tools that solve common developer problems',
+              'Add performance benchmarks to main projects showing speed/efficiency gains',
+              'Write technical blog posts about interesting problems solved to drive visibility'
+            ]
           }
-        ]
+        ],
+        keywordAnalysis: {
+          present: ['JavaScript', 'Python', 'React', 'Docker'],
+          missing: ['TypeScript', 'Kubernetes', 'CI/CD', 'Testing', 'System Design'],
+          trending: ['AI/ML', 'WebAssembly', 'Edge Functions', 'Serverless', 'DevOps Automation']
+        }
       };
     }
+
+    // Fallback for other input types
+    return {
+      overallScore: 70,
+      rank: 'Professional',
+      rankColor: 'from-gray-400 to-gray-500',
+      benchmark: 'General professional analysis',
+      scoringBreakdown: {
+        'Overall Quality': { score: 14, max: 20, description: 'Good foundation with room for improvement' }
+      },
+      sections: [],
+      keywordAnalysis: {
+        present: [],
+        missing: [],
+        trending: []
+      }
+    };
   };
 
   const results = getAnalysisResults();
@@ -470,7 +386,7 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6 animate-fade-in">
-      {/* Enhanced Overall Score Card with Visual Report Card */}
+      {/* Enhanced Overall Score Card with Granular Breakdown */}
       <Card className="glass border-white/10 overflow-hidden">
         <div className={`h-3 bg-gradient-to-r ${rankBadge.color}`} />
         <CardHeader className="text-center pb-4">
@@ -496,19 +412,22 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
             </div>
           </div>
           
-          {/* Visual Report Card */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6 p-4 bg-white/5 rounded-lg border border-white/10">
-            {results.sections.slice(0, 6).map((section, index) => (
-              <div key={index} className="text-center space-y-2">
-                <div className="flex items-center justify-center gap-2">
-                  <section.icon className="h-4 w-4 text-white" />
-                  <span className="text-xs font-medium">{section.title.split(' ')[0]}</span>
+          {/* Granular Scoring Breakdown */}
+          {results.scoringBreakdown && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 p-4 bg-white/5 rounded-lg border border-white/10">
+              {Object.entries(results.scoringBreakdown).map(([category, data], index) => (
+                <div key={index} className="text-center space-y-2">
+                  <div className="text-xs font-medium text-muted-foreground">{category}</div>
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-2xl font-bold text-gradient">{data.score}</span>
+                    <span className="text-sm text-muted-foreground">/{data.max}</span>
+                  </div>
+                  <Progress value={(data.score / data.max) * 100} className="h-2" />
+                  <div className="text-xs text-muted-foreground px-2">{data.description}</div>
                 </div>
-                <div className="text-2xl font-bold text-gradient">{section.score}</div>
-                <Progress value={section.score} className="h-2" />
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
           
           <CardTitle className="text-2xl mb-2 mt-4">
             <span className={`bg-gradient-to-r ${rankBadge.color} bg-clip-text text-transparent`}>
@@ -516,7 +435,10 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
             </span>
           </CardTitle>
           <CardDescription className="text-lg">
-            {data.type === 'portfolio' ? 'Portfolio Analysis Complete' : 'LinkedIn Profile Analysis Complete'}
+            {data.type === 'portfolio' ? 'Portfolio Analysis Complete' : 
+             data.type === 'linkedin' ? 'LinkedIn Profile Analysis Complete' :
+             data.type === 'github' ? 'GitHub Profile Analysis Complete' :
+             'Professional Analysis Complete'}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -526,7 +448,7 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center gap-2 mb-4">
             <h3 className="text-xl font-semibold text-gradient">Detailed Analysis</h3>
-            <Badge variant="outline" className="glass">Tier-1 Benchmarked</Badge>
+            <Badge variant="outline" className="glass">Context-Aware</Badge>
           </div>
           
           {results.sections.map((section, index) => {
@@ -548,126 +470,136 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
                       <Progress value={section.score} className="mt-2 w-24" />
                     </div>
                   </div>
-                  
-                  {section.tierComparison && (
-                    <div className="bg-brand-500/10 border border-brand-500/20 rounded-lg p-3 mt-3">
-                      <p className="text-sm text-brand-300 font-medium">
-                        💡 Tier-1 Insight: {section.tierComparison}
-                      </p>
+
+                  {/* Missing vs Present Analysis */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                      <h4 className="text-sm font-medium text-red-300 mb-2">❌ Missing Elements</h4>
+                      <ul className="space-y-1">
+                        {section.missing?.map((item, i) => (
+                          <li key={i} className="text-xs text-red-200">• {item}</li>
+                        ))}
+                      </ul>
                     </div>
-                  )}
+                    <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                      <h4 className="text-sm font-medium text-green-300 mb-2">✅ Present Elements</h4>
+                      <ul className="space-y-1">
+                        {section.present?.map((item, i) => (
+                          <li key={i} className="text-xs text-green-200">• {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3">
-                    {section.insights.map((insight, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm">
-                        {section.score >= 85 ? (
-                          <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
-                        ) : section.score >= 70 ? (
-                          <AlertCircle className="h-4 w-4 text-yellow-400 mt-0.5 flex-shrink-0" />
-                        ) : (
-                          <TrendingUp className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                        )}
-                        <span className="text-muted-foreground">{insight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  {section.actionableAdvice && (
-                    <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-                      <p className="text-sm text-green-300">
-                        <strong>Actionable advice:</strong> {section.actionableAdvice}
-                      </p>
-                    </div>
-                  )}
-                  
-                  {/* Before/After Examples for LinkedIn */}
-                  {section.currentExample && section.improvedExample && (
-                    <div className="mt-4 space-y-3">
-                      <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-                        <p className="text-xs text-red-300 font-medium mb-1">❌ Current Example:</p>
-                        <p className="text-sm text-red-200">{section.currentExample}</p>
-                      </div>
-                      <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-                        <p className="text-xs text-green-300 font-medium mb-1">✅ Improved Example:</p>
-                        <p className="text-sm text-green-200">{section.improvedExample}</p>
-                      </div>
-                    </div>
-                  )}
+                  {/* Detailed Insights */}
+                  <div className="space-y-3 mb-4">
+                    <h4 className="font-medium text-sm">Detailed Analysis:</h4>
+                    <ul className="space-y-2">
+                      {section.insights.map((insight, i) => (
+                        <li key={i} className="flex items-start gap-3 text-sm">
+                          <div className="w-2 h-2 rounded-full bg-brand-500 mt-2 flex-shrink-0" />
+                          <span className="text-muted-foreground">{insight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Concrete Improvements */}
+                  <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                    <h4 className="text-sm font-medium text-blue-300 mb-2">🎯 Concrete Actions to Take:</h4>
+                    <ul className="space-y-2">
+                      {section.concreteImprovements?.map((improvement, i) => (
+                        <li key={i} className="text-sm text-blue-200 flex items-start gap-2">
+                          <span className="text-blue-400 font-bold">{i + 1}.</span>
+                          <span>{improvement}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </CardContent>
               </Card>
             );
           })}
+
+          {/* Keyword Analysis Section */}
+          {results.keywordAnalysis && (
+            <Card className="glass border-white/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Search className="h-5 w-5 text-yellow-400" />
+                  Keyword Strategy Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                    <h4 className="text-sm font-medium text-green-300 mb-2">✅ Keywords Present</h4>
+                    <div className="flex flex-wrap gap-1">
+                      {results.keywordAnalysis.present.map((keyword, i) => (
+                        <Badge key={i} variant="outline" className="text-xs bg-green-500/20 text-green-300 border-green-500/30">
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                    <h4 className="text-sm font-medium text-red-300 mb-2">❌ Missing Keywords</h4>
+                    <div className="flex flex-wrap gap-1">
+                      {results.keywordAnalysis.missing.map((keyword, i) => (
+                        <Badge key={i} variant="outline" className="text-xs bg-red-500/20 text-red-300 border-red-500/30">
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                    <h4 className="text-sm font-medium text-purple-300 mb-2">🔥 Trending Keywords</h4>
+                    <div className="flex flex-wrap gap-1">
+                      {results.keywordAnalysis.trending.map((keyword, i) => (
+                        <Badge key={i} variant="outline" className="text-xs bg-purple-500/20 text-purple-300 border-purple-500/30">
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Action Items & Summary */}
         <div className="space-y-4">
-          {/* Priority Actions with Expected Impact */}
+          {/* Quick Win Actions */}
           <Card className="glass border-white/10">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Zap className="h-5 w-5 text-yellow-400" />
-                Priority Actions
+                Quick Wins (30 min each)
               </CardTitle>
               <CardDescription>
-                Focus on these for maximum impact
+                High-impact changes you can make today
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {results.improvementAreas?.map((area, index) => (
+                {results.sections.slice(0, 3).map((section, index) => (
                   <div key={index} className="p-3 rounded-lg bg-white/5 border border-white/10">
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge 
-                        variant="outline" 
-                        className={`glass text-xs ${
-                          area.priority === 'High' ? 'border-red-500/50 text-red-300' :
-                          area.priority === 'Medium' ? 'border-yellow-500/50 text-yellow-300' :
-                          'border-green-500/50 text-green-300'
-                        }`}
-                      >
-                        {area.priority} Priority
-                      </Badge>
-                      <span className="text-xs text-muted-foreground">{area.timeEstimate}</span>
-                    </div>
-                    <h4 className="font-medium text-sm mb-1">{area.area}</h4>
-                    <p className="text-xs text-muted-foreground mb-2">{area.action}</p>
-                    {area.expectedImprovement && (
-                      <div className="flex items-center gap-2">
-                        <TrendingUp className="h-3 w-3 text-green-400" />
-                        <span className="text-xs text-green-400 font-medium">
-                          Expected improvement: {area.expectedImprovement}
-                        </span>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-brand-500 to-neon-purple flex items-center justify-center text-xs font-bold text-white">
+                        {index + 1}
                       </div>
+                      <h4 className="font-medium text-sm">{section.title}</h4>
+                    </div>
+                    {section.concreteImprovements && (
+                      <p className="text-xs text-muted-foreground">
+                        {section.concreteImprovements[0]}
+                      </p>
                     )}
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Tier-1 Recommendations */}
-          <Card className="glass border-white/10">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-gold-400" />
-                Tier-1 Standards
-              </CardTitle>
-              <CardDescription>
-                What top companies expect
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3">
-                {results.recommendations.map((rec, index) => (
-                  <li key={index} className="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/10">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-brand-500 to-neon-purple flex items-center justify-center text-xs font-bold text-white mt-0.5 flex-shrink-0">
-                      {index + 1}
-                    </div>
-                    <span className="text-sm">{rec}</span>
-                  </li>
-                ))}
-              </ul>
             </CardContent>
           </Card>
 
@@ -680,7 +612,9 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Type:</span>
                 <Badge variant="outline" className="glass">
-                  {data.type === 'portfolio' ? 'Portfolio' : 'LinkedIn'}
+                  {data.type === 'portfolio' ? 'Portfolio' : 
+                   data.type === 'linkedin' ? 'LinkedIn' :
+                   data.type === 'github' ? 'GitHub' : 'General'}
                 </Badge>
               </div>
               <div className="flex justify-between text-sm">
@@ -704,7 +638,7 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
         </div>
       </div>
 
-      {/* New AI-Powered Features Section */}
+      {/* AI-Powered Features Section */}
       <div className="mt-8 space-y-6">
         <h2 className="text-2xl font-bold text-gradient text-center mb-8">AI-Powered Career Intelligence</h2>
         
