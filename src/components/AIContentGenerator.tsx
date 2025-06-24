@@ -1,214 +1,480 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Wand2, Copy, RefreshCw, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, Copy, RefreshCw, Sparkles, CheckCircle, Edit } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
 
-interface AIContentGeneratorProps {
-  userProfile: any;
-  careerGoal: string;
+interface GeneratedContent {
+  type: 'headline' | 'summary' | 'readme' | 'about';
+  content: string;
+  tone: string;
 }
 
-const AIContentGenerator = ({ userProfile, careerGoal }: AIContentGeneratorProps) => {
-  const [generatedContent, setGeneratedContent] = useState<any>({});
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [editingSection, setEditingSection] = useState<string | null>(null);
+interface AIContentGeneratorProps {
+  analysisData: any;
+}
 
-  const generateContent = async (section: string) => {
+const AIContentGenerator = ({ analysisData }: AIContentGeneratorProps) => {
+  const [selectedType, setSelectedType] = useState<string>('headline');
+  const [selectedTone, setSelectedTone] = useState<string>('professional');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
+  const { toast } = useToast();
+
+  const contentTypes = [
+    { value: 'headline', label: 'LinkedIn Headline', icon: '💼' },
+    { value: 'summary', label: 'LinkedIn Summary', icon: '📝' },
+    { value: 'readme', label: 'GitHub README', icon: '📋' },
+    { value: 'about', label: 'Portfolio About Section', icon: '👤' }
+  ];
+
+  const tones = [
+    { value: 'professional', label: 'Professional', desc: 'Corporate-friendly, polished' },
+    { value: 'minimal', label: 'Minimal', desc: 'Clean, concise, direct' },
+    { value: 'bold', label: 'Bold', desc: 'Confident, attention-grabbing' },
+    { value: 'friendly', label: 'Friendly', desc: 'Approachable, personable' }
+  ];
+
+  const generateContent = async () => {
     setIsGenerating(true);
     
-    // Simulate AI generation with realistic content
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const generatedSections = {
+    // Simulate API call
+    setTimeout(() => {
+      const mockContent = generateMockContent(selectedType, selectedTone);
+      setGeneratedContent({
+        type: selectedType as any,
+        content: mockContent,
+        tone: selectedTone
+      });
+      setIsGenerating(false);
+    }, 2000);
+  };
+
+  const generateMockContent = (type: string, tone: string): string => {
+    const templates = {
       headline: {
-        current: "Software Engineer at Tech Company",
-        improved: "Senior Full-Stack Engineer | React & Node.js Expert | Building Scalable Web Apps for 2M+ Users | Ex-Meta",
-        reasoning: "Includes seniority level, specific technologies, quantified impact, and credible background signal",
-        score: 92
+        professional: "Senior Full-Stack Engineer | React & Node.js Expert | Building Scalable Systems for 1M+ Users | Ex-Tech Giant",
+        minimal: "Full-Stack Engineer | React + Node.js | Scale & Performance",
+        bold: "🚀 Senior Engineer Building the Future | React/Node.js | 5+ Years Scaling to Millions",
+        friendly: "Passionate Full-Stack Developer | Love building with React & Node.js | Always learning, always growing"
       },
       summary: {
-        current: "Experienced software engineer with passion for technology and problem-solving...",
-        improved: "I transform complex business challenges into elegant, scalable solutions. In my 5 years at Meta, I led a team of 6 engineers to rebuild our user authentication system, reducing login failures by 45% and improving user satisfaction scores by 30%.\n\nMy expertise spans the full technology stack - from React frontends that delight users to Node.js backends that handle millions of requests. I've architected systems serving 2M+ daily active users while maintaining 99.9% uptime.\n\nCurrently seeking a Senior Engineering role where I can leverage my experience in distributed systems and team leadership to drive product innovation and engineering excellence.\n\n🔧 Core Tech: React, TypeScript, Node.js, AWS, PostgreSQL\n💡 Specialties: System Architecture, Performance Optimization, Team Leadership\n📈 Impact: $2M+ cost savings through infrastructure optimization",
-        reasoning: "Uses STAR method, includes quantified achievements, shows progression, and ends with clear value proposition",
-        score: 89
+        professional: `I'm a Senior Full-Stack Engineer with 5+ years of experience building scalable web applications that serve millions of users. 
+
+At my current role, I led a team of 6 engineers to rebuild our core platform, resulting in 40% faster load times and 25% higher user engagement. My expertise spans React, Node.js, PostgreSQL, and AWS.
+
+Key achievements:
+• Architected microservices handling 10M+ requests/day
+• Reduced system downtime by 60% through improved monitoring
+• Mentored 15+ junior developers, with 80% receiving promotions
+
+I'm passionate about clean code, system design, and building products that make a real impact. Always excited to tackle new challenges and collaborate with great teams.
+
+Let's connect if you're building something interesting!`,
+        minimal: `Full-Stack Engineer with 5+ years experience. Built systems serving 1M+ users.
+
+Tech: React, Node.js, PostgreSQL, AWS
+Impact: 40% faster apps, 60% less downtime, 25% higher engagement
+
+Currently leading platform architecture at [Company]. Interested in scalable systems and great user experiences.`,
+        bold: `🚀 I DON'T JUST CODE—I BUILD DIGITAL EXPERIENCES THAT SCALE
+
+5+ years turning ideas into reality. My code serves millions of users daily.
+
+RECENT WINS:
+⚡ Led 6-person team → rebuilt platform → 40% faster, 25% more engaging
+🏗️ Architected microservices → 10M+ requests/day, bulletproof reliability  
+👥 Mentored 15+ developers → 80% got promoted (I'm proud of this!)
+
+OBSESSED WITH: React ecosystems, Node.js performance, AWS optimization, and products that actually matter.
+
+Ready for the next big challenge. Let's build something incredible together! 💪`,
+        friendly: `Hey there! 👋 I'm a Full-Stack Engineer who loves turning coffee into code and ideas into reality.
+
+For the past 5+ years, I've been building web applications that millions of people use every day. My sweet spot is React and Node.js, but I'm always excited to learn new technologies!
+
+Some fun stuff I've worked on:
+🎯 Led a team rebuild that made our app 40% faster (users love it!)
+🏗️ Built systems that handle 10M+ requests daily (still amazes me)
+🌱 Helped 15+ junior devs grow their careers (my favorite part of the job)
+
+When I'm not coding, you'll find me hiking, trying new coffee shops, or contributing to open source projects.
+
+Always up for interesting conversations about tech, startups, or the best pizza in town! Feel free to reach out. 😊`
       },
-      jobDescription: {
-        current: "Developed web applications using React and Node.js. Worked with team to deliver features.",
-        improved: "Led cross-functional team of 4 engineers to rebuild customer dashboard using React 18 and TypeScript, resulting in:\n• 60% faster page load times (2.1s → 0.8s average)\n• 25% increase in user engagement (500K+ monthly active users)\n• 40% reduction in customer support tickets related to UI issues\n\nArchitected microservices backend with Node.js and PostgreSQL, implementing caching layer that reduced database queries by 35% and improved API response times by 50%.\n\nEstablished testing standards with Jest and Cypress, achieving 85% code coverage and reducing production bugs by 70%.",
-        reasoning: "Follows STAR method with specific metrics, shows leadership and technical depth, includes business impact",
-        score: 94
+      readme: {
+        professional: `# Project Name
+
+A comprehensive full-stack application built with React and Node.js, designed for scalability and performance.
+
+## 🚀 Features
+
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Real-time Updates**: WebSocket implementation for live data
+- **Secure Authentication**: JWT-based auth with role management
+- **Database Integration**: PostgreSQL with optimized queries
+- **API Documentation**: Comprehensive Swagger/OpenAPI docs
+
+## 🛠️ Tech Stack
+
+**Frontend:** React 18, TypeScript, Tailwind CSS, Zustand
+**Backend:** Node.js, Express, PostgreSQL, Redis
+**DevOps:** Docker, GitHub Actions, AWS EC2
+
+## 📊 Performance
+
+- **98+ Lighthouse Score**: Optimized for performance and accessibility
+- **Sub-200ms API Response**: Efficient database queries and caching
+- **99.9% Uptime**: Robust error handling and monitoring
+
+## 🚀 Quick Start
+
+\`\`\`bash
+# Clone the repository
+git clone https://github.com/username/project-name.git
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+
+# Start development server
+npm run dev
+\`\`\`
+
+## 📸 Screenshots
+
+![Homepage](./screenshots/homepage.png)
+![Dashboard](./screenshots/dashboard.png)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.`,
+        minimal: `# Project Name
+
+Full-stack React + Node.js application.
+
+## Stack
+- React, TypeScript, Tailwind
+- Node.js, Express, PostgreSQL
+- Docker, AWS
+
+## Setup
+\`\`\`bash
+npm install
+cp .env.example .env
+npm run dev
+\`\`\`
+
+## Features
+- Authentication & authorization
+- Real-time updates
+- Responsive design
+- API documentation
+
+Live demo: [project-name.com](https://project-name.com)`,
+        bold: `# 🚀 PROJECT NAME - NEXT-GEN WEB APP
+
+> **Building the future, one line of code at a time**
+
+## ⚡ What Makes This Special
+
+🎯 **LIGHTNING FAST** - Sub-200ms response times  
+🛡️ **BULLETPROOF** - 99.9% uptime, enterprise-grade security  
+📱 **UNIVERSAL** - Works flawlessly on every device  
+🔥 **MODERN STACK** - Built with cutting-edge technologies  
+
+## 🛠️ TECH ARSENAL
+
+| Frontend | Backend | DevOps |
+|----------|---------|--------|
+| ⚛️ React 18 | 🟢 Node.js | 🐳 Docker |
+| 📘 TypeScript | ⚡ Express | ☁️ AWS |
+| 🎨 Tailwind CSS | 🐘 PostgreSQL | 🚀 GitHub Actions |
+
+## 🎬 LIVE DEMO
+👉 **[See it in action](https://project-name.com)** 👈
+
+## ⚡ QUICK START
+\`\`\`bash
+git clone https://github.com/username/project-name.git
+npm install && npm run dev
+# 🎉 You're ready to rock!
+\`\`\`
+
+**⭐ Star this repo if you found it useful!**`,
+        friendly: `# 👋 Welcome to My Project!
+
+Hey there! Thanks for checking out my little corner of GitHub. This is a full-stack web app I built with lots of ☕ and a bit of 🎵.
+
+## 🌟 What's This About?
+
+This project started as a personal challenge to build something really useful. It's a [brief description] that helps people [main benefit]. Along the way, I learned a ton about React, Node.js, and how to make things that don't break! 😅
+
+## 🎨 Built With Love Using
+
+- **React** - Because components are awesome
+- **Node.js** - JavaScript everywhere! 
+- **PostgreSQL** - Reliable data storage
+- **Tailwind CSS** - Making things pretty without the CSS headaches
+
+## 🚀 Want to Try It Out?
+
+\`\`\`bash
+# Get the code
+git clone https://github.com/username/project-name.git
+
+# Install the magic
+npm install
+
+# Copy the secrets (don't worry, they're not real secrets)
+cp .env.example .env
+
+# Fire it up!
+npm run dev
+\`\`\`
+
+## 📱 Screenshots
+
+[Include some nice screenshots here - people love visuals!]
+
+## 🤝 Wanna Help Out?
+
+Found a bug? Have a cool idea? I'd love to hear from you! Feel free to open an issue or send a PR. First-time contributors are especially welcome! 
+
+## 📧 Let's Chat!
+
+Questions? Ideas? Just want to say hi? Reach out at [your-email] or find me on [social platforms].
+
+Thanks for stopping by! 🙏`
       },
-      githubReadme: {
-        current: "# My Project\nThis is a web application built with React.",
-        improved: "# E-Commerce Platform 🛒\n\n**A full-stack e-commerce solution built for scale and performance**\n\n[![Live Demo](https://img.shields.io/badge/Demo-Live-green)](https://demo-link.com)\n[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)]()\n[![Coverage](https://img.shields.io/badge/Coverage-87%25-green)]()\n\n## 🚀 Features\n\n- **Real-time inventory management** with WebSocket updates\n- **Secure payment processing** via Stripe integration\n- **Advanced search & filtering** with Elasticsearch\n- **Mobile-responsive design** with 95+ Lighthouse score\n- **Comprehensive admin dashboard** with analytics\n\n## 🏗️ Architecture\n\n```\nFrontend (React 18 + TypeScript) ↔ API Gateway ↔ Microservices\n     ↓                                    ↓\nRedis Cache                         PostgreSQL + Redis\n```\n\n## 🛠️ Tech Stack\n\n**Frontend:** React 18, TypeScript, Tailwind CSS, Zustand\n**Backend:** Node.js, Express, PostgreSQL, Redis\n**Infrastructure:** AWS (ECS, RDS, ElastiCache), Docker\n**Testing:** Jest, Cypress, React Testing Library\n\n## 📊 Performance\n\n- **Load Time:** < 1s (95th percentile)\n- **Concurrent Users:** 10,000+ tested\n- **Uptime:** 99.9% (last 12 months)\n- **Core Web Vitals:** All green scores\n\n## 🚀 Quick Start\n\n```bash\n# Clone and install\ngit clone https://github.com/username/ecommerce-platform\ncd ecommerce-platform\nnpm install\n\n# Set up environment\ncp .env.example .env\n# Add your API keys\n\n# Run development server\nnpm run dev\n```\n\n## 📈 Key Metrics\n\n- Reduced checkout abandonment by **32%**\n- Improved page load speed by **65%**\n- Increased conversion rate by **18%**\n- Serving **50,000+ monthly transactions**\n\n---\n\n⭐ **Star this repo if you found it helpful!**",
-        reasoning: "Professional structure with metrics, clear tech stack, performance data, and visual elements that grab attention",
-        score: 91
+      about: {
+        professional: `I'm a passionate Full-Stack Engineer with 5+ years of experience building scalable web applications that serve millions of users worldwide.
+
+My expertise spans the entire development lifecycle, from initial concept and design to deployment and maintenance. I specialize in React, Node.js, and cloud architecture, with a strong focus on performance optimization and user experience.
+
+## Professional Experience
+
+At my current role, I lead a team of 6 engineers developing mission-critical applications. Some highlights include:
+
+• **Platform Rebuild**: Led complete architecture overhaul resulting in 40% performance improvement
+• **Scalability**: Built microservices handling 10M+ requests daily with 99.9% uptime
+• **Team Leadership**: Mentored 15+ developers, with 80% receiving promotions within 2 years
+
+## Technical Expertise
+
+**Frontend**: React, TypeScript, Next.js, Tailwind CSS, Redux
+**Backend**: Node.js, Express, PostgreSQL, MongoDB, Redis
+**Cloud**: AWS, Docker, Kubernetes, CI/CD pipelines
+**Tools**: Git, Jest, Webpack, Figma, Linear
+
+## Philosophy
+
+I believe great software comes from understanding both the technical challenges and the human needs behind them. I'm passionate about writing clean, maintainable code and building products that make a real difference in people's lives.
+
+Always excited to take on new challenges and collaborate with teams that share a vision for excellence.`,
+        minimal: `Full-Stack Engineer. 5+ years building scalable web applications.
+
+**Focus**: React, Node.js, system architecture, performance optimization.
+
+**Recent impact**: Led team rebuild → 40% faster platform serving 1M+ users.
+
+**Approach**: Clean code, user-first design, continuous learning.
+
+Currently interested in: distributed systems, real-time applications, developer tools.`,
+        bold: `🚀 I BUILD DIGITAL EXPERIENCES THAT SCALE AND PERFORM
+
+I'm not just another developer—I'm a problem-solver who happens to love code.
+
+**THE NUMBERS:**
+• 5+ years turning ideas into reality
+• 1M+ users interact with my code daily  
+• 40% performance improvements through smart architecture
+• 15+ developers mentored and promoted
+
+**WHAT DRIVES ME:**
+Building things that matter. Whether it's shaving 2 seconds off a page load or architecting systems that handle millions of requests, I obsess over the details that create exceptional user experiences.
+
+**MY SUPERPOWER:**
+Taking complex business problems and turning them into elegant, scalable solutions. I speak both developer and business fluent, which means I build what actually needs to be built.
+
+**TECH I'M PASSIONATE ABOUT:**
+React ecosystems • Node.js performance • AWS architecture • Real-time systems • Developer experience
+
+Ready to build something incredible together? Let's talk.`,
+        friendly: `Hey there! 👋
+
+I'm a Full-Stack Engineer who loves turning ideas into digital reality. For the past 5+ years, I've been building web applications that millions of people use every day—and honestly, it still feels pretty magical! ✨
+
+## What I Love Building
+
+I'm passionate about creating applications that are not just functional, but delightful to use. My sweet spot is React and Node.js, but I'm always excited to learn new technologies and approaches.
+
+Some recent projects I'm proud of:
+🎯 Led a platform rebuild that made our app 40% faster (our users definitely noticed!)
+🏗️ Built real-time systems handling millions of requests (still amazes me when I think about it)
+🌱 Mentored junior developers—watching them grow is honestly the best part of my job
+
+## How I Work
+
+I believe the best software comes from really understanding the people who'll use it. I love collaborating with designers, product managers, and other engineers to create something that's both technically solid and genuinely useful.
+
+My approach: start with empathy, build with purpose, iterate with feedback.
+
+## Beyond Code
+
+When I'm not coding, you'll find me hiking local trails, experimenting with new coffee brewing methods, or contributing to open source projects. I'm also slightly obsessed with mechanical keyboards (ask me about switches! 😄).
+
+Always up for interesting conversations about technology, startups, or the best local coffee shops. Feel free to reach out!`
       }
     };
 
-    setGeneratedContent(prev => ({
-      ...prev,
-      [section]: generatedSections[section as keyof typeof generatedSections]
-    }));
-    
-    setIsGenerating(false);
+    return templates[type as keyof typeof templates][tone as keyof typeof templates.headline] || "Content generation failed. Please try again.";
   };
 
-  const copyToClipboard = async (text: string) => {
-    await navigator.clipboard.writeText(text);
+  const copyToClipboard = async () => {
+    if (generatedContent) {
+      await navigator.clipboard.writeText(generatedContent.content);
+      toast({
+        title: "Copied to clipboard",
+        description: "Content has been copied to your clipboard",
+      });
+    }
+  };
+
+  const regenerateContent = () => {
+    generateContent();
   };
 
   return (
-    <div className="space-y-6">
-      <Card className="glass border-white/10">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-purple-400" />
-            AI Content Generator
-          </CardTitle>
-          <CardDescription>
-            Generate optimized content based on tier-1 company standards
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="headline" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 glass">
-              <TabsTrigger value="headline">LinkedIn Headline</TabsTrigger>
-              <TabsTrigger value="summary">Profile Summary</TabsTrigger>
-              <TabsTrigger value="jobDescription">Job Descriptions</TabsTrigger>
-              <TabsTrigger value="githubReadme">GitHub README</TabsTrigger>
-            </TabsList>
+    <Card className="glass border-white/10">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Wand2 className="h-5 w-5 text-purple-400" />
+          AI Content Generator
+        </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Generate professional content optimized for tier-1 company standards
+        </p>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Content Type Selection */}
+        <div>
+          <label className="text-sm font-medium mb-2 block">Content Type</label>
+          <Select value={selectedType} onValueChange={setSelectedType}>
+            <SelectTrigger className="bg-white/10 border-white/20">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {contentTypes.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  {type.icon} {type.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-            {['headline', 'summary', 'jobDescription', 'githubReadme'].map(section => (
-              <TabsContent key={section} value={section} className="mt-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium capitalize">
-                      {section.replace(/([A-Z])/g, ' $1').trim()}
-                    </h3>
-                    <Button
-                      onClick={() => generateContent(section)}
-                      disabled={isGenerating}
-                      className="glass hover:bg-white/10"
-                    >
-                      {isGenerating ? (
-                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                      ) : (
-                        <Sparkles className="h-4 w-4 mr-2" />
-                      )}
-                      Generate AI Content
-                    </Button>
+        {/* Tone Selection */}
+        <div>
+          <label className="text-sm font-medium mb-2 block">Tone & Style</label>
+          <Select value={selectedTone} onValueChange={setSelectedTone}>
+            <SelectTrigger className="bg-white/10 border-white/20">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {tones.map((tone) => (
+                <SelectItem key={tone.value} value={tone.value}>
+                  <div>
+                    <div className="font-medium">{tone.label}</div>
+                    <div className="text-xs text-muted-foreground">{tone.desc}</div>
                   </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-                  {generatedContent[section] && (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {/* Current Version */}
-                      <Card className="bg-red-500/10 border-red-500/20">
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-sm text-red-300 flex items-center gap-2">
-                            ❌ Current Version
-                            <Badge variant="outline" className="text-red-400 border-red-500/30">
-                              Needs Improvement
-                            </Badge>
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="p-3 rounded bg-red-500/5 border border-red-500/20">
-                            <pre className="text-sm text-red-200 whitespace-pre-wrap font-sans">
-                              {generatedContent[section].current}
-                            </pre>
-                          </div>
-                        </CardContent>
-                      </Card>
+        {/* Generate Button */}
+        <Button 
+          onClick={generateContent}
+          disabled={isGenerating}
+          className="w-full bg-gradient-to-r from-purple-500 to-pink-500"
+        >
+          {isGenerating ? (
+            <>
+              <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+              Generating...
+            </>
+          ) : (
+            <>
+              <Wand2 className="h-4 w-4 mr-2" />
+              Generate Content
+            </>
+          )}
+        </Button>
 
-                      {/* Improved Version */}
-                      <Card className="bg-green-500/10 border-green-500/20">
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-sm text-green-300 flex items-center gap-2">
-                            ✅ AI-Optimized Version
-                            <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
-                              Score: {generatedContent[section].score}/100
-                            </Badge>
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-3">
-                            <div className="p-3 rounded bg-green-500/5 border border-green-500/20">
-                              {editingSection === section ? (
-                                <Textarea
-                                  value={generatedContent[section].improved}
-                                  onChange={(e) => setGeneratedContent(prev => ({
-                                    ...prev,
-                                    [section]: { ...prev[section], improved: e.target.value }
-                                  }))}
-                                  className="w-full bg-transparent border-none resize-none p-0 text-sm text-green-200"
-                                  rows={8}
-                                />
-                              ) : (
-                                <pre className="text-sm text-green-200 whitespace-pre-wrap font-sans">
-                                  {generatedContent[section].improved}
-                                </pre>
-                              )}
-                            </div>
-                            
-                            <div className="flex items-center gap-2">
-                              <Button
-                                size="sm"
-                                onClick={() => setEditingSection(editingSection === section ? null : section)}
-                                variant="outline"
-                                className="glass"
-                              >
-                                <Edit className="h-3 w-3 mr-1" />
-                                {editingSection === section ? 'Save' : 'Edit'}
-                              </Button>
-                              <Button
-                                size="sm"
-                                onClick={() => copyToClipboard(generatedContent[section].improved)}
-                                variant="outline"
-                                className="glass"
-                              >
-                                <Copy className="h-3 w-3 mr-1" />
-                                Copy
-                              </Button>
-                              <Button
-                                size="sm"
-                                onClick={() => generateContent(section)}
-                                variant="outline"
-                                className="glass"
-                              >
-                                <RefreshCw className="h-3 w-3 mr-1" />
-                                Regenerate
-                              </Button>
-                            </div>
+        {/* Generated Content */}
+        {generatedContent && (
+          <div className="mt-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="glass">
+                  {contentTypes.find(t => t.value === generatedContent.type)?.label}
+                </Badge>
+                <Badge variant="outline" className="glass">
+                  {tones.find(t => t.value === generatedContent.tone)?.label}
+                </Badge>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={regenerateContent} className="glass">
+                  <RefreshCw className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" size="sm" onClick={copyToClipboard} className="glass">
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
 
-                            <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded">
-                              <p className="text-xs text-blue-300 font-medium mb-1">💡 Why this works:</p>
-                              <p className="text-xs text-blue-200">{generatedContent[section].reasoning}</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  )}
+            <Textarea
+              value={generatedContent.content}
+              onChange={(e) => setGeneratedContent({...generatedContent, content: e.target.value})}
+              className="min-h-[200px] bg-white/10 border-white/20 font-mono text-sm"
+              placeholder="Generated content will appear here..."
+            />
 
-                  {!generatedContent[section] && (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <Brain className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                      <p>Click "Generate AI Content" to create optimized content</p>
-                      <p className="text-sm">Based on analysis of 1000+ successful profiles</p>
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
+            <div className="flex gap-2">
+              <Button variant="outline" className="glass flex-1">
+                <Download className="h-4 w-4 mr-2" />
+                Download as File
+              </Button>
+              <Button className="bg-gradient-to-r from-green-500 to-emerald-500 flex-1">
+                Use This Content
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Tips */}
+        <div className="mt-4 p-3 bg-brand-500/10 border border-brand-500/20 rounded-lg">
+          <h4 className="font-medium text-sm mb-1">💡 Pro Tips</h4>
+          <ul className="text-xs text-muted-foreground space-y-1">
+            <li>• Customize the generated content to match your specific experience</li>
+            <li>• Include quantified achievements and specific technologies</li>
+            <li>• Test different tones to see what resonates with your audience</li>
+          </ul>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

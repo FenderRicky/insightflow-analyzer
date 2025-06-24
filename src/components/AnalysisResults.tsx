@@ -1,10 +1,12 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { Star, TrendingUp, AlertCircle, CheckCircle, Zap, Target, Code, Palette, Users, Trophy, Eye, Shield, Gauge, Search, Smartphone, Globe } from 'lucide-react';
+import AIFeedbackChatbot from './AIFeedbackChatbot';
+import SmartComparisonTool from './SmartComparisonTool';
+import AIContentGenerator from './AIContentGenerator';
 
 interface AnalysisData {
   type: string;
@@ -17,6 +19,8 @@ interface AnalysisResultsProps {
 }
 
 const AnalysisResults = ({ data }: AnalysisResultsProps) => {
+  const [isChatbotVisible, setIsChatbotVisible] = useState(false);
+
   // Enhanced analysis with tier-1 company benchmarking and detailed technical evaluation
   const getAnalysisResults = () => {
     if (data.type === 'portfolio') {
@@ -692,6 +696,26 @@ const AnalysisResults = ({ data }: AnalysisResultsProps) => {
           </Card>
         </div>
       </div>
+
+      {/* New AI-Powered Features Section */}
+      <div className="mt-8 space-y-6">
+        <h2 className="text-2xl font-bold text-gradient text-center mb-8">AI-Powered Career Intelligence</h2>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Smart Comparison Tool */}
+          <SmartComparisonTool />
+          
+          {/* AI Content Generator */}
+          <AIContentGenerator analysisData={results} />
+        </div>
+      </div>
+
+      {/* AI Feedback Chatbot */}
+      <AIFeedbackChatbot 
+        analysisData={results}
+        isVisible={isChatbotVisible}
+        onToggle={() => setIsChatbotVisible(!isChatbotVisible)}
+      />
     </div>
   );
 };
