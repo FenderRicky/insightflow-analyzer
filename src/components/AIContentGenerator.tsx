@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Wand2, Copy, RefreshCw, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,10 +14,15 @@ interface GeneratedContent {
 }
 
 interface AIContentGeneratorProps {
-  analysisData: any;
+  userProfile: {
+    skills: string[];
+    experience: string;
+    role: string;
+  };
+  careerGoal: string;
 }
 
-const AIContentGenerator = ({ analysisData }: AIContentGeneratorProps) => {
+const AIContentGenerator = ({ userProfile, careerGoal }: AIContentGeneratorProps) => {
   const [selectedType, setSelectedType] = useState<string>('headline');
   const [selectedTone, setSelectedTone] = useState<string>('professional');
   const [isGenerating, setIsGenerating] = useState(false);
