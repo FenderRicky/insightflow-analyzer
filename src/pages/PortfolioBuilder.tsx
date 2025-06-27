@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, Eye, Edit3, Copy, Download, Star, Users, Zap, Palette, Code, Smartphone } from 'lucide-react';
 import EnhancedTemplateShowcase from '../components/EnhancedTemplateShowcase';
+import { type PortfolioTemplate } from '../data/enhancedPortfolioTemplates';
 
 const PortfolioBuilder = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,6 +35,11 @@ const PortfolioBuilder = () => {
     { name: 'Code Export', icon: Code, description: 'Export clean, deployable code' },
     { name: 'Analytics Ready', icon: Users, description: 'Track your portfolio performance' }
   ];
+
+  const handleSelectTemplate = (template: PortfolioTemplate) => {
+    console.log('Selected template:', template);
+    // TODO: Navigate to template editor or show template details
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
@@ -96,7 +102,7 @@ const PortfolioBuilder = () => {
             </Card>
 
             {/* Enhanced Template Showcase */}
-            <EnhancedTemplateShowcase />
+            <EnhancedTemplateShowcase onSelectTemplate={handleSelectTemplate} />
 
             {/* Quick Actions */}
             <Card className="glass border-white/10">
