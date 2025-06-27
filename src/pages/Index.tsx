@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ThemeToggle from '@/components/ThemeToggle';
-import AdvancedAnalysisInput from '@/components/AdvancedAnalysisInput';
+import AnalysisInput from '@/components/AnalysisInput';
 import EnhancedAnalysisResults from '@/components/EnhancedAnalysisResults';
 import LoadingScreen from '@/components/LoadingScreen';
 import { Button } from '@/components/ui/button';
@@ -33,8 +34,8 @@ const Index = () => {
     setIsLoading(true);
     setAnalysisData(data);
     
-    // Simulate advanced analysis processing
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    // Simulate real-time analysis processing
+    await new Promise(resolve => setTimeout(resolve, 1500));
     
     setIsLoading(false);
     setShowResults(true);
@@ -91,7 +92,7 @@ const Index = () => {
             <section className="text-center space-y-8 py-16 transition-all duration-600 ease-out">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 mb-6 transition-all duration-600 ease-out">
                 <Brain className="h-4 w-4 text-neon-purple transition-all duration-600 ease-out" />
-                <span className="text-sm text-muted-foreground transition-all duration-600 ease-out">Next-Gen AI Career Intelligence</span>
+                <span className="text-sm text-muted-foreground transition-all duration-600 ease-out">Real-Time AI Career Intelligence</span>
               </div>
               
               <h1 className="text-4xl md:text-7xl font-bold leading-tight transition-all duration-600 ease-out">
@@ -101,17 +102,17 @@ const Index = () => {
               </h1>
               
               <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed transition-all duration-600 ease-out">
-                Get comprehensive AI-driven analysis of your portfolio, LinkedIn, and GitHub. 
+                Get instant AI-driven analysis of your portfolio, LinkedIn, and GitHub. 
                 Receive tier-1 company benchmarking, personalized career progression maps, 
-                and AI-generated content optimizations.
+                and real-time actionable insights in under 2 seconds.
               </p>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8">
                 {[
-                  { icon: Brain, color: 'text-purple-400', label: 'AI Content Generation', desc: 'Smart headlines & summaries' },
+                  { icon: Brain, color: 'text-purple-400', label: 'Instant Analysis', desc: '< 2 second results' },
                   { icon: Target, color: 'text-green-400', label: 'Tier-1 Benchmarking', desc: 'Compare to FAANG standards' },
-                  { icon: TrendingUp, color: 'text-blue-400', label: 'Career Progression', desc: 'Personalized growth maps' },
-                  { icon: Sparkles, color: 'text-yellow-400', label: 'Smart Insights', desc: 'Actionable recommendations' }
+                  { icon: TrendingUp, color: 'text-blue-400', label: 'Real-Time Feedback', desc: 'Live scoring & insights' },
+                  { icon: Sparkles, color: 'text-yellow-400', label: 'Actionable Insights', desc: 'Specific improvements' }
                 ].map((item, index) => (
                   <div key={index} className="p-4 rounded-xl glass border border-white/10 text-center transition-all duration-600 ease-out hover:border-white/20 group">
                     <item.icon className={`h-8 w-8 ${item.color} mx-auto mb-3 transition-all duration-300 group-hover:scale-110`} />
@@ -123,16 +124,16 @@ const Index = () => {
 
               <div className="flex flex-wrap justify-center gap-3 pt-6">
                 <div className="px-4 py-2 rounded-full glass border border-green-500/30 text-green-300 text-sm">
-                  ✨ AI-Powered Analysis
+                  ⚡ Instant Results
                 </div>
                 <div className="px-4 py-2 rounded-full glass border border-blue-500/30 text-blue-300 text-sm">
-                  🎯 Tier-1 Standards
+                  🎯 Professional Benchmarks
                 </div>
                 <div className="px-4 py-2 rounded-full glass border border-purple-500/30 text-purple-300 text-sm">
-                  📊 Real-Time Benchmarking
+                  📊 Real-Time Scoring
                 </div>
                 <div className="px-4 py-2 rounded-full glass border border-yellow-500/30 text-yellow-300 text-sm">
-                  🚀 Career Intelligence
+                  🚀 Actionable Insights
                 </div>
               </div>
 
@@ -154,9 +155,9 @@ const Index = () => {
               </div>
             </section>
 
-            {/* Advanced Analysis Input */}
+            {/* Real-Time Analysis Input */}
             <section className="transition-all duration-600 ease-out">
-              <AdvancedAnalysisInput onAnalyze={handleAnalyze} isLoading={isLoading} />
+              <AnalysisInput onAnalyze={handleAnalyze} isLoading={isLoading} />
             </section>
           </div>
         ) : (
@@ -164,7 +165,7 @@ const Index = () => {
             {/* Results Header */}
             <div className="flex items-center justify-between">
               <h2 className="text-3xl font-bold text-gradient transition-all duration-600 ease-out">
-                AI Analysis Complete
+                Real-Time Analysis Complete
               </h2>
               <Button 
                 onClick={resetAnalysis}
@@ -196,7 +197,7 @@ const Index = () => {
       <footer className="relative z-10 border-t border-white/10 glass mt-20 transition-all duration-600 ease-out">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center text-sm text-muted-foreground transition-all duration-600 ease-out">
-            <p>© 2024 InsightFlow AI. Empowering careers with intelligent analysis.</p>
+            <p>© 2024 InsightFlow AI. Empowering careers with real-time intelligence.</p>
             <p className="mt-1 text-xs">Powered by advanced AI and tier-1 company benchmarking</p>
           </div>
         </div>
