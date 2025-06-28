@@ -6,6 +6,8 @@ import { ArrowUp, Brain, Target, TrendingUp, Zap, Palette } from 'lucide-react';
 import CoreAnalysisInput from '@/components/CoreAnalysisInput';
 import AnalysisResultsDisplay from '@/components/AnalysisResultsDisplay';
 import LoadingScreen from '@/components/LoadingScreen';
+import ThemeToggle from '@/components/ThemeToggle';
+import { useTheme } from '@/hooks/useTheme';
 import { analyzeUrlContent } from '@/utils/realAnalysisEngine';
 import type { AnalysisResult } from '@/utils/realAnalysisEngine';
 
@@ -14,6 +16,7 @@ const Index = () => {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [analyzedUrl, setAnalyzedUrl] = useState<string>('');
   const [showResults, setShowResults] = useState(false);
+  const { theme, setTheme, isDark } = useTheme();
 
   const handleAnalyze = async (data: { url: string; type: string }) => {
     setIsLoading(true);
@@ -40,8 +43,18 @@ const Index = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      setTheme('dark');
+    } else if (theme === 'dark') {
+      setTheme('system');
+    } else {
+      setTheme('light');
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden transition-colors duration-300">
       {/* Loading Screen */}
       <LoadingScreen isVisible={isLoading} />
 
@@ -61,8 +74,9 @@ const Index = () => {
               <h1 className="text-xl font-bold text-gradient">InsightFlow AI</h1>
             </div>
             <div className="flex items-center gap-4">
+              <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
               <Link to="/portfolio-presets">
-                <Button variant="outline" size="sm" className="glass hover:bg-white/10">
+                <Button variant="outline" size="sm" className="glass hover:bg-white/10 dark:hover:bg-white/20">
                   <Palette className="h-4 w-4 mr-2" />
                   Portfolio Presets
                 </Button>
@@ -125,7 +139,7 @@ const Index = () => {
               <Button 
                 onClick={resetAnalysis}
                 variant="outline" 
-                className="glass hover:bg-white/10"
+                className="glass hover:bg-white/10 dark:hover:bg-white/20"
               >
                 New Analysis
               </Button>
@@ -144,7 +158,7 @@ const Index = () => {
               <Button
                 onClick={scrollToTop}
                 size="icon"
-                className="glass hover:bg-white/10 glow"
+                className="glass hover:bg-white/10 dark:hover:bg-white/20 glow"
               >
                 <ArrowUp className="h-4 w-4" />
               </Button>

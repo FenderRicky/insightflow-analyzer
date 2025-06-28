@@ -5,42 +5,6 @@
 
 @layer base {
   :root {
-    --background: 240 20% 6%;
-    --foreground: 240 5% 96%;
-
-    --card: 240 15% 9%;
-    --card-foreground: 240 5% 96%;
-
-    --popover: 240 15% 9%;
-    --popover-foreground: 240 5% 96%;
-
-    --primary: 231 81% 63%;
-    --primary-foreground: 240 20% 6%;
-
-    --secondary: 240 10% 15%;
-    --secondary-foreground: 240 5% 96%;
-
-    --muted: 240 10% 15%;
-    --muted-foreground: 240 5% 65%;
-
-    --accent: 240 10% 15%;
-    --accent-foreground: 240 5% 96%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 240 5% 96%;
-
-    --border: 240 10% 18%;
-    --input: 240 10% 18%;
-    --ring: 231 81% 63%;
-
-    --radius: 0.75rem;
-    
-    /* Transition timing */
-    --theme-transition-duration: 600ms;
-    --theme-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .light {
     --background: 240 20% 98%;
     --foreground: 240 20% 6%;
 
@@ -68,6 +32,42 @@
     --border: 240 10% 88%;
     --input: 240 10% 88%;
     --ring: 231 81% 63%;
+
+    --radius: 0.75rem;
+    
+    /* Transition timing */
+    --theme-transition-duration: 300ms;
+    --theme-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 240 20% 6%;
+    --foreground: 240 5% 96%;
+
+    --card: 240 15% 9%;
+    --card-foreground: 240 5% 96%;
+
+    --popover: 240 15% 9%;
+    --popover-foreground: 240 5% 96%;
+
+    --primary: 231 81% 63%;
+    --primary-foreground: 240 20% 6%;
+
+    --secondary: 240 10% 15%;
+    --secondary-foreground: 240 5% 96%;
+
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 240 10% 15%;
+    --accent-foreground: 240 5% 96%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 240 5% 96%;
+
+    --border: 240 10% 18%;
+    --input: 240 10% 18%;
+    --ring: 231 81% 63%;
   }
 }
 
@@ -91,8 +91,14 @@
     transition: 
       background-color var(--theme-transition-duration) var(--theme-transition-timing),
       background-image var(--theme-transition-duration) var(--theme-transition-timing),
-      color var(--theme-transition-duration) var(--theme-transition-timing),
-      opacity var(--theme-transition-duration) var(--theme-transition-timing);
+      color var(--theme-transition-duration) var(--theme-transition-timing);
+  }
+
+  .dark body {
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
   }
 
   /* Enhanced theme transition overlay with layered fade */
@@ -131,11 +137,20 @@
       box-shadow var(--theme-transition-duration) var(--theme-transition-timing);
   }
 
+  .dark .glass {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
   .glow {
     box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
     transition: 
       box-shadow var(--theme-transition-duration) var(--theme-transition-timing),
       filter var(--theme-transition-duration) var(--theme-transition-timing);
+  }
+
+  .dark .glow {
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
   }
 
   .text-gradient {
@@ -278,8 +293,8 @@
 
 /* Responsive transitions - maintain smoothness on mobile */
 @media (max-width: 768px) {
-  :root {
-    --theme-transition-duration: 500ms;
+  :root, .dark {
+    --theme-transition-duration: 250ms;
   }
 }
 
