@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle, AlertTriangle, Target, TrendingUp, Trophy, Star } from 'lucide-react';
+import { CheckCircle, AlertTriangle, Target, TrendingUp, Trophy, Star, Heart, MessageCircle, Lightbulb } from 'lucide-react';
 import type { AnalysisResult } from '../utils/realAnalysisEngine';
 
 interface AnalysisResultsDisplayProps {
@@ -39,10 +39,31 @@ const AnalysisResultsDisplay = ({ result, analyzedUrl }: AnalysisResultsDisplayP
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6 animate-fade-in">
-      {/* Overall Score Header */}
+      {/* Coaching Header with Personal Touch */}
       <Card className="glass border-white/10 overflow-hidden">
         <div className={`h-3 bg-gradient-to-r ${getRankColor(result.overallScore)}`} />
         <CardHeader className="text-center pb-6">
+          {/* Coaching Tone Section */}
+          <div className="mb-8 p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-white/10">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Heart className="h-5 w-5 text-pink-400" />
+              <span className="text-lg font-semibold text-white">Personal Coaching Insights</span>
+              <Heart className="h-5 w-5 text-pink-400" />
+            </div>
+            <p className="text-lg text-blue-200 mb-4 leading-relaxed">
+              {result.coachingTone.overallImpression}
+            </p>
+            <div className="bg-white/5 rounded-lg p-4 border border-blue-500/20">
+              <div className="flex items-center gap-2 mb-2">
+                <MessageCircle className="h-4 w-4 text-blue-400" />
+                <span className="text-sm font-medium text-blue-300">Your Coach Says:</span>
+              </div>
+              <p className="text-blue-100 text-sm leading-relaxed">
+                {result.coachingTone.motivationalMessage}
+              </p>
+            </div>
+          </div>
+
           <div className="flex items-center justify-center gap-8 mb-6">
             <div className="relative">
               <div className={`w-32 h-32 rounded-full bg-gradient-to-r ${getRankColor(result.overallScore)}/20 flex items-center justify-center border-4 border-white/10`}>
@@ -60,7 +81,7 @@ const AnalysisResultsDisplay = ({ result, analyzedUrl }: AnalysisResultsDisplayP
                 {getRankLabel(result.professionalLevel)}
               </Badge>
               <p className="text-sm text-gray-400 max-w-xs">
-                {result.benchmarkComparison}
+                {result.coachingTone.industryComparison}
               </p>
               <div className="text-xs text-gray-500 break-all">
                 Analyzed: {analyzedUrl}
@@ -70,10 +91,29 @@ const AnalysisResultsDisplay = ({ result, analyzedUrl }: AnalysisResultsDisplayP
         </CardHeader>
       </Card>
 
+      {/* Transparent Scoring Explanation */}
+      <Card className="glass border-white/10">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Lightbulb className="h-5 w-5 text-yellow-400" />
+            How We Calculated Your Score
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {result.scoringExplanation.map((explanation, index) => (
+              <div key={index} className="p-3 bg-white/5 rounded-lg border border-white/10">
+                <p className="text-sm text-gray-300">{explanation}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Detailed Analysis Sections */}
         <div className="lg:col-span-2 space-y-4">
-          <h3 className="text-xl font-semibold text-white mb-4">Detailed Analysis</h3>
+          <h3 className="text-xl font-semibold text-white mb-4">Detailed Professional Analysis</h3>
           
           {result.sections.map((section, index) => (
             <Card key={index} className="glass border-white/10" style={{ animationDelay: `${index * 100}ms` }}>
@@ -88,10 +128,22 @@ const AnalysisResultsDisplay = ({ result, analyzedUrl }: AnalysisResultsDisplayP
                   </div>
                 </div>
 
+                {/* Industry Benchmark Context */}
+                <div className="mb-4 p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+                  <h4 className="text-sm font-medium text-indigo-300 mb-1">📊 Industry Benchmark</h4>
+                  <p className="text-xs text-indigo-200">{section.industryBenchmark}</p>
+                </div>
+
+                {/* Transparent Reasoning */}
+                <div className="mb-4 p-3 bg-teal-500/10 border border-teal-500/20 rounded-lg">
+                  <h4 className="text-sm font-medium text-teal-300 mb-2">🔍 Why This Score?</h4>
+                  <p className="text-sm text-teal-200 leading-relaxed">{section.reasoning}</p>
+                </div>
+
                 {/* Section Details */}
                 <div className="space-y-3">
                   <div>
-                    <h4 className="text-sm font-medium text-white mb-2">Analysis Details:</h4>
+                    <h4 className="text-sm font-medium text-white mb-2">What We Found:</h4>
                     <ul className="space-y-1">
                       {section.details.map((detail, i) => (
                         <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
@@ -128,7 +180,7 @@ const AnalysisResultsDisplay = ({ result, analyzedUrl }: AnalysisResultsDisplayP
             <CardHeader>
               <CardTitle className="text-lg text-green-400 flex items-center gap-2">
                 <CheckCircle className="h-5 w-5" />
-                Strengths
+                Your Strengths
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -143,12 +195,12 @@ const AnalysisResultsDisplay = ({ result, analyzedUrl }: AnalysisResultsDisplayP
             </CardContent>
           </Card>
 
-          {/* Weaknesses */}
+          {/* Areas for Growth */}
           <Card className="glass border-white/10">
             <CardHeader>
               <CardTitle className="text-lg text-yellow-400 flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5" />
-                Areas for Improvement
+                Growth Opportunities
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -181,10 +233,10 @@ const AnalysisResultsDisplay = ({ result, analyzedUrl }: AnalysisResultsDisplayP
             </Card>
           )}
 
-          {/* Recommendations */}
+          {/* Personalized Action Plan */}
           <Card className="glass border-white/10">
             <CardHeader>
-              <CardTitle className="text-lg text-white">Key Recommendations</CardTitle>
+              <CardTitle className="text-lg text-white">Your Action Plan</CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
