@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Download, Edit, Eye, Sparkles, Code, Palette, Zap, Users, Briefcase, GraduationCap, Camera, PenTool } from 'lucide-react';
@@ -52,7 +53,6 @@ const PortfolioPresets = () => {
   };
 
   const handleDownload = (template: Template) => {
-    // Create a complete HTML file with embedded CSS and JS
     const fullHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,27 +127,26 @@ const PortfolioPresets = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Background Effects */}
+      {/* Simplified background for mobile performance */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background/80" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-neon-purple/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       
-      {/* Header */}
+      {/* Header - Mobile optimized */}
       <header className="relative z-10 w-full border-b border-white/10 glass">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <Link to="/">
-                <Button variant="ghost" size="sm" className="glass hover:bg-white/10">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Home
+                <Button variant="ghost" size="sm" className="glass hover:bg-white/10 text-xs sm:text-sm px-2 sm:px-3">
+                  <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Back to Home</span>
+                  <span className="sm:hidden">Back</span>
                 </Button>
               </Link>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-brand-500 to-neon-purple rounded-lg flex items-center justify-center">
-                  <Palette className="h-4 w-4 text-white" />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-brand-500 to-neon-purple rounded-lg flex items-center justify-center">
+                  <Palette className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                 </div>
-                <h1 className="text-xl font-bold text-gradient">Portfolio Presets</h1>
+                <h1 className="text-lg sm:text-xl font-bold text-gradient">Portfolio Presets</h1>
               </div>
             </div>
             <ThemeToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
@@ -155,102 +154,136 @@ const PortfolioPresets = () => {
         </div>
       </header>
 
-      <main className="relative z-10 container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <section className="text-center space-y-6 py-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 mb-4">
-            <Sparkles className="h-4 w-4 text-neon-purple" />
-            <span className="text-sm text-muted-foreground">Professional Portfolio Templates</span>
+      <main className="relative z-10 container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        {/* Hero Section - Mobile optimized */}
+        <section className="text-center space-y-4 sm:space-y-6 py-8 sm:py-12">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full glass border border-white/10 mb-3 sm:mb-4">
+            <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-neon-purple" />
+            <span className="text-xs sm:text-sm text-muted-foreground">Professional Portfolio Templates</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold leading-tight px-2">
             Launch Your
             <span className="text-gradient block">Dream Portfolio</span>
           </h1>
           
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-sm sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
             Choose from our curated collection of {portfolioTemplates.length}+ premium portfolio templates. 
             Customize, preview, and download in minutes. No coding experience required.
           </p>
 
-          {/* Search Bar */}
-          <div className="max-w-md mx-auto pt-6">
+          {/* Mobile-optimized Search Bar */}
+          <div className="max-w-md mx-auto pt-4 sm:pt-6 px-4">
             <Input
               placeholder="Search templates..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="glass bg-white/5 border-white/10 focus:border-brand-500"
+              className="glass bg-white/5 border-white/10 focus:border-brand-500 text-sm"
             />
           </div>
 
-          {/* Filter Categories */}
-          <div className="flex flex-wrap justify-center gap-3 pt-6">
-            {Object.entries(categoryIcons).map(([categoryId, IconComponent]) => {
-              const categoryLabels = {
-                'all': 'All Templates',
-                'developer': 'Developer',
-                'designer': 'Designer',
-                'creative': 'Creative',
-                'business': 'Business',
-                'student': 'Student',
-                'data-scientist': 'Data Science',
-                'general': 'General'
-              };
+          {/* Mobile-optimized Filter Categories */}
+          <div className="pt-4 sm:pt-6 px-2">
+            {/* Mobile: Show first 4 categories, then "More" dropdown for others */}
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-3">
+              {Object.entries(categoryIcons).slice(0, 4).map(([categoryId, IconComponent]) => {
+                const categoryLabels = {
+                  'all': 'All',
+                  'developer': 'Developer',
+                  'designer': 'Designer',
+                  'creative': 'Creative',
+                  'business': 'Business',
+                  'student': 'Student',
+                  'data-scientist': 'Data Science',
+                  'general': 'General'
+                };
 
-              return (
-                <Button
-                  key={categoryId}
-                  variant={filterCategory === categoryId ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setFilterCategory(categoryId)}
-                  className={`glass transition-all duration-300 ${
-                    filterCategory === categoryId ? 'glow' : 'hover:bg-white/10'
-                  }`}
-                >
-                  <IconComponent className="h-4 w-4 mr-2" />
-                  {categoryLabels[categoryId]}
-                </Button>
-              );
-            })}
+                return (
+                  <Button
+                    key={categoryId}
+                    variant={filterCategory === categoryId ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilterCategory(categoryId)}
+                    className={`glass transition-all duration-300 text-xs sm:text-sm ${
+                      filterCategory === categoryId ? 'glow' : 'hover:bg-white/10'
+                    }`}
+                  >
+                    <IconComponent className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    {categoryLabels[categoryId]}
+                  </Button>
+                );
+              })}
+            </div>
+            
+            {/* Show remaining categories on larger screens */}
+            <div className="hidden sm:flex flex-wrap justify-center gap-3 mt-3">
+              {Object.entries(categoryIcons).slice(4).map(([categoryId, IconComponent]) => {
+                const categoryLabels = {
+                  'all': 'All Templates',
+                  'developer': 'Developer',
+                  'designer': 'Designer',
+                  'creative': 'Creative',
+                  'business': 'Business',
+                  'student': 'Student',
+                  'data-scientist': 'Data Science',
+                  'general': 'General'
+                };
+
+                return (
+                  <Button
+                    key={categoryId}
+                    variant={filterCategory === categoryId ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilterCategory(categoryId)}
+                    className={`glass transition-all duration-300 ${
+                      filterCategory === categoryId ? 'glow' : 'hover:bg-white/10'
+                    }`}
+                  >
+                    <IconComponent className="h-4 w-4 mr-2" />
+                    {categoryLabels[categoryId]}
+                  </Button>
+                );
+              })}
+            </div>
           </div>
         </section>
 
         {/* Results Count */}
-        <div className="text-center mb-8">
-          <p className="text-muted-foreground">
+        <div className="text-center mb-6 sm:mb-8">
+          <p className="text-muted-foreground text-sm">
             Showing {filteredTemplates.length} of {portfolioTemplates.length} templates
             {searchQuery && ` for "${searchQuery}"`}
           </p>
         </div>
 
-        {/* Templates Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Mobile-optimized Templates Grid */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
           {filteredTemplates.map((template) => (
             <Card key={template.id} className="glass border-white/10 hover:border-white/20 transition-all duration-300 group hover:scale-[1.02] hover:shadow-2xl">
               <div className="relative overflow-hidden rounded-t-lg">
                 <img
                   src={template.thumbnail}
                   alt={template.name}
-                  className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-40 sm:h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                   onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                     e.currentTarget.src = '/api/placeholder/400/300';
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute top-3 right-3">
-                  <Badge variant="secondary" className="bg-black/50 text-white border-0">
+                <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+                  <Badge variant="secondary" className="bg-black/50 text-white border-0 text-xs">
                     {template.category}
                   </Badge>
                 </div>
               </div>
               
-              <CardHeader className="pb-3">
-                <CardTitle className="text-gradient text-lg">{template.name}</CardTitle>
-                <CardDescription className="line-clamp-2">{template.description}</CardDescription>
+              <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
+                <CardTitle className="text-gradient text-base sm:text-lg">{template.name}</CardTitle>
+                <CardDescription className="line-clamp-2 text-sm">{template.description}</CardDescription>
                 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {template.tags.slice(0, 3).map((tag) => (
+                {/* Mobile-optimized Tags */}
+                <div className="flex flex-wrap gap-1 sm:gap-2 pt-2">
+                  {template.tags.slice(0, 2).map((tag) => (
                     <Badge
                       key={tag}
                       variant="outline"
@@ -259,43 +292,46 @@ const PortfolioPresets = () => {
                       {tag}
                     </Badge>
                   ))}
-                  {template.tags.length > 3 && (
+                  {template.tags.length > 2 && (
                     <Badge variant="outline" className="text-xs bg-gray-500/20 text-gray-300 border-gray-500/30">
-                      +{template.tags.length - 3}
+                      +{template.tags.length - 2}
                     </Badge>
                   )}
                 </div>
               </CardHeader>
               
-              <CardContent className="pt-0">
-                <div className="flex gap-2">
+              <CardContent className="pt-0 p-3 sm:p-6 sm:pt-0">
+                {/* Mobile-optimized buttons */}
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => handlePreview(template)}
-                    className="flex-1 glass hover:bg-white/10 hover:border-brand-400 transition-all duration-300"
+                    className="flex-1 glass hover:bg-white/10 hover:border-brand-400 transition-all duration-300 text-xs sm:text-sm"
                   >
-                    <Eye className="h-4 w-4 mr-2" />
+                    <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                     Preview
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleEdit(template)}
-                    className="flex-1 glass hover:bg-white/10 hover:border-neon-purple/50 transition-all duration-300"
-                  >
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => handleDownload(template)}
-                    className="glass hover:bg-white/10 hover:text-green-400 transition-all duration-300"
-                    title="Download HTML file"
-                  >
-                    <Download className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleEdit(template)}
+                      className="flex-1 glass hover:bg-white/10 hover:border-neon-purple/50 transition-all duration-300 text-xs sm:text-sm"
+                    >
+                      <Edit className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                      <span className="hidden sm:inline">Edit</span>
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleDownload(template)}
+                      className="glass hover:bg-white/10 hover:text-green-400 transition-all duration-300 px-2 sm:px-3"
+                      title="Download HTML file"
+                    >
+                      <Download className="h-3 w-3 sm:h-4 sm:w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -304,10 +340,10 @@ const PortfolioPresets = () => {
 
         {/* No Results */}
         {filteredTemplates.length === 0 && (
-          <div className="text-center py-16">
-            <div className="text-4xl mb-4">🔍</div>
-            <h3 className="text-2xl font-bold mb-2">No templates found</h3>
-            <p className="text-muted-foreground mb-6">
+          <div className="text-center py-12 sm:py-16 px-4">
+            <div className="text-3xl sm:text-4xl mb-4">🔍</div>
+            <h3 className="text-xl sm:text-2xl font-bold mb-2">No templates found</h3>
+            <p className="text-muted-foreground mb-4 sm:mb-6">
               Try adjusting your search or category filters
             </p>
             <Button 
@@ -323,23 +359,23 @@ const PortfolioPresets = () => {
           </div>
         )}
 
-        {/* AI Recommendations Section */}
-        <section className="mt-16 p-8 rounded-xl glass border border-white/10">
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-brand-500/20 to-neon-purple/20 border border-white/10">
-              <Sparkles className="h-4 w-4 text-neon-purple" />
-              <span className="text-sm font-medium">AI-Powered Recommendations</span>
+        {/* Mobile-optimized AI Recommendations Section */}
+        <section className="mt-12 sm:mt-16 p-4 sm:p-8 rounded-xl glass border border-white/10">
+          <div className="text-center space-y-3 sm:space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-gradient-to-r from-brand-500/20 to-neon-purple/20 border border-white/10">
+              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-neon-purple" />
+              <span className="text-xs sm:text-sm font-medium">AI-Powered Recommendations</span>
             </div>
             
-            <h3 className="text-2xl font-bold text-gradient">Perfect Templates for Your Career</h3>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <h3 className="text-xl sm:text-2xl font-bold text-gradient">Perfect Templates for Your Career</h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base">
               Get personalized template recommendations based on your LinkedIn profile, 
               GitHub activity, and career goals. Let AI find the perfect starting point for your portfolio.
             </p>
             
             <Link to="/">
-              <Button className="mt-4 glow">
-                <Sparkles className="h-4 w-4 mr-2" />
+              <Button className="mt-3 sm:mt-4 glow">
+                <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 Get AI Recommendations
               </Button>
             </Link>
