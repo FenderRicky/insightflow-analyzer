@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Download, Edit, Eye, Sparkles, Code, Palette, Zap, Users, Briefcase, GraduationCap, Camera, PenTool } from 'lucide-react';
@@ -233,8 +232,8 @@ const PortfolioPresets = () => {
                   src={template.thumbnail}
                   alt={template.name}
                   className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/api/placeholder/400/300';
+                  onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                    e.currentTarget.src = '/api/placeholder/400/300';
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
