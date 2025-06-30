@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import PortfolioPresets from "./pages/PortfolioPresets";
 import PortfolioBuilder from "./pages/PortfolioBuilder";
 import NotFound from "./pages/NotFound";
+import PageTransition from "./components/PageTransition";
 
 const queryClient = new QueryClient();
 
@@ -19,12 +20,14 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/portfolio-presets" element={<PortfolioPresets />} />
-              <Route path="/portfolio-builder" element={<PortfolioBuilder />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <PageTransition>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/portfolio-presets" element={<PortfolioPresets />} />
+                <Route path="/portfolio-builder" element={<PortfolioBuilder />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </PageTransition>
           </div>
         </BrowserRouter>
       </TooltipProvider>

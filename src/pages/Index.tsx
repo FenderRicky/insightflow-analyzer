@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -77,7 +76,7 @@ const Index = () => {
             <FuturisticLogo size="md" animate={true} />
             <div className="flex items-center gap-3">
               <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
-              <Link to="/portfolio-presets">
+              <Link to="/portfolio-presets" className="smooth-link">
                 <Button variant="outline" size="sm" className="group hover:bg-brand-500/10 hover:border-brand-500/30 transition-all duration-300">
                   <Palette className="h-4 w-4 mr-2 group-hover:text-brand-500 transition-colors" />
                   <span className="hidden sm:inline">Portfolio Presets</span>
@@ -139,8 +138,8 @@ const Index = () => {
                 ))}
               </div>
 
-              {/* Fixed feature grid with proper spacing */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto pt-12">
+              {/* Fixed feature grid with proper spacing and card morphing */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto pt-12 stagger-children">
                 {[
                   { 
                     icon: Brain, 
@@ -171,7 +170,7 @@ const Index = () => {
                     highlight: 'Instant Apply'
                   }
                 ].map((item, index) => (
-                  <div key={index} className="group relative p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10">
+                  <div key={index} className="group relative p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10 card-morph">
                     <div className="absolute top-3 right-3">
                       <span className="text-xs px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 font-medium border border-cyan-500/30">
                         {item.highlight}
@@ -205,7 +204,7 @@ const Index = () => {
         ) : (
           <div className="space-y-6">
             {/* Enhanced Results Header */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-cyan-500/20">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-cyan-500/20 card-morph">
               <div>
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">
                   Analysis Complete ✨
@@ -217,7 +216,7 @@ const Index = () => {
               <Button 
                 onClick={resetAnalysis}
                 variant="outline" 
-                className="bg-background/80 hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300"
+                className="bg-background/80 hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300 smooth-link"
               >
                 <Brain className="h-4 w-4 mr-2" />
                 New Analysis
@@ -250,7 +249,7 @@ const Index = () => {
               <Button
                 onClick={scrollToTop}
                 size="icon"
-                className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-110"
+                className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-110 card-morph"
               >
                 <ArrowUp className="h-5 w-5 text-white" />
               </Button>
