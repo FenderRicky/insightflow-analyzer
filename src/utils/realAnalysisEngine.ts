@@ -1,4 +1,3 @@
-
 // Enhanced AI-powered analysis engine with real benchmarking
 export interface TierOneBenchmark {
   company: string;
@@ -290,7 +289,7 @@ export async function analyzeUrlContent(url: string, type: string): Promise<Anal
         industryComparison: `You're performing in the ${tierBenchmark.percentile}th percentile compared to professionals in your field. This puts you ${tierBenchmark.percentile > 70 ? 'above average' : 'on track for growth'} relative to industry standards.`,
         motivationalMessage: overallScore >= 85 ? "You're already operating at a high level! Focus on showcasing leadership and system design thinking to reach elite status." : "You have excellent fundamentals! With focused improvements in the areas highlighted, you'll be competitive for top-tier opportunities."
       },
-      tierOneBenchmark,
+      tierOneBenchmark: tierBenchmark,
       proTips: generateProTips(aiAnalysis, tierBenchmark),
       portfolioPolishSuggestions: generatePortfolioPolishSuggestions(aiAnalysis)
     };
