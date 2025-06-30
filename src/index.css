@@ -26,9 +26,10 @@
     --ring: 231 81% 63%;
     --radius: 0.75rem;
     
-    /* Optimized transition timing for better performance */
-    --theme-transition-duration: 200ms;
-    --theme-transition-timing: ease-out;
+    /* Enhanced transition variables for original smooth effect */
+    --theme-transition-duration: 600ms;
+    --theme-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --smooth-transition: all var(--theme-transition-duration) var(--theme-transition-timing);
   }
 
   .dark {
@@ -60,156 +61,235 @@
   }
 
   html {
-    transition: color var(--theme-transition-duration) var(--theme-transition-timing);
-    /* Improve text rendering on mobile */
+    /* Original smooth transition restored */
+    transition: var(--smooth-transition);
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    scroll-behavior: smooth;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    /* Simplified background for better performance */
     background: hsl(var(--background));
     
-    /* Smooth theme transitions - reduced complexity for mobile */
+    /* Original enhanced theme transitions restored */
     transition: 
       background-color var(--theme-transition-duration) var(--theme-transition-timing),
-      color var(--theme-transition-duration) var(--theme-transition-timing);
+      color var(--theme-transition-duration) var(--theme-transition-timing),
+      border-color var(--theme-transition-duration) var(--theme-transition-timing);
+    
+    /* Enhanced smooth rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
-  /* Dark mode background enhancement - lighter on resources */
+  /* Enhanced dark mode background with original smooth effect */
   .dark body {
     background: hsl(var(--background));
+    transition: var(--smooth-transition);
   }
 
-  /* Optimized glass effect with reduced blur for performance */
+  /* Restored original glass effect with enhanced performance */
   .glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: 
-      background-color var(--theme-transition-duration) var(--theme-transition-timing),
-      border-color var(--theme-transition-duration) var(--theme-transition-timing);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: var(--smooth-transition);
+    will-change: background-color, border-color, backdrop-filter;
   }
 
   .dark .glass {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.16);
   }
 
-  /* Reduced glow effect for better performance */
+  /* Enhanced glow effect with original intensity */
   .glow {
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    box-shadow: 
+      0 0 20px rgba(99, 102, 241, 0.4),
+      0 0 40px rgba(99, 102, 241, 0.2),
+      0 0 60px rgba(99, 102, 241, 0.1);
     transition: box-shadow var(--theme-transition-duration) var(--theme-transition-timing);
   }
 
   .dark .glow {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    box-shadow: 
+      0 0 25px rgba(99, 102, 241, 0.5),
+      0 0 50px rgba(99, 102, 241, 0.3),
+      0 0 75px rgba(99, 102, 241, 0.15);
   }
 
+  /* Enhanced gradient text with smooth animation */
   .text-gradient {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #3b82f6 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #3b82f6 50%, #06b6d4 75%, #8b5cf6 100%);
+    background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: gradient-shift 8s ease-in-out infinite;
   }
 
-  /* Reduced transitions for better performance - only essential properties */
+  /* Original smooth transitions for all elements */
   *, *::before, *::after {
-    transition-property: background-color, border-color, color, opacity;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
     transition-duration: var(--theme-transition-duration);
     transition-timing-function: var(--theme-transition-timing);
   }
 
-  /* Optimized UI element transitions */
-  button, input, textarea, select {
-    transition: 
-      background-color var(--theme-transition-duration) var(--theme-transition-timing),
-      border-color var(--theme-transition-duration) var(--theme-transition-timing),
-      color var(--theme-transition-duration) var(--theme-transition-timing),
-      opacity var(--theme-transition-duration) var(--theme-transition-timing);
+  /* Enhanced UI element transitions with original smoothness */
+  button, input, textarea, select, a {
+    transition: var(--smooth-transition);
+    will-change: transform, opacity, background-color, border-color;
   }
 
-  /* Essential animations only - reduced for performance */
+  button:hover, a:hover {
+    transform: translateY(-1px);
+  }
+
+  /* Original enhanced animations restored */
   @keyframes float-up {
-    0%, 100% { transform: translateY(0px); opacity: 0.8; }
-    50% { transform: translateY(-10px); opacity: 1; }
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg); 
+      opacity: 0.8; 
+    }
+    50% { 
+      transform: translateY(-12px) rotate(1deg); 
+      opacity: 1; 
+    }
   }
 
   @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 15px rgba(99, 102, 241, 0.3); }
-    50% { box-shadow: 0 0 25px rgba(99, 102, 241, 0.5); }
+    0%, 100% { 
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); 
+      transform: scale(1);
+    }
+    50% { 
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); 
+      transform: scale(1.02);
+    }
   }
 
   @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%, 100% { 
+      background-position: 0% 50%; 
+      filter: hue-rotate(0deg);
+    }
+    25% { 
+      background-position: 100% 50%; 
+      filter: hue-rotate(90deg);
+    }
+    50% { 
+      background-position: 200% 50%; 
+      filter: hue-rotate(180deg);
+    }
+    75% { 
+      background-position: 100% 50%; 
+      filter: hue-rotate(270deg);
+    }
+  }
+
+  @keyframes gradient-x {
+    0%, 100% {
+      background-size: 200% 200%;
+      background-position: left center;
+    }
+    50% {
+      background-size: 200% 200%;
+      background-position: right center;
+    }
   }
 
   .animate-float-up {
-    animation: float-up 2s ease-in-out infinite;
+    animation: float-up 3s ease-in-out infinite;
   }
 
   .animate-pulse-glow {
-    animation: pulse-glow 1.5s ease-in-out infinite;
+    animation: pulse-glow 2s ease-in-out infinite;
   }
 
   .animate-gradient-shift {
-    background: linear-gradient(-45deg, #6366f1, #8b5cf6, #3b82f6);
-    background-size: 200% 200%;
-    animation: gradient-shift 3s ease-in-out infinite;
+    background: linear-gradient(-45deg, #6366f1, #8b5cf6, #3b82f6, #06b6d4);
+    background-size: 400% 400%;
+    animation: gradient-shift 6s ease-in-out infinite;
+  }
+
+  .animate-gradient-x {
+    animation: gradient-x 8s ease infinite;
   }
 }
 
-/* Mobile-optimized scrollbar */
+/* Enhanced scrollbar with original smooth styling */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(99, 102, 241, 0.5);
-  border-radius: 2px;
+  background: linear-gradient(45deg, rgba(99, 102, 241, 0.6), rgba(139, 92, 246, 0.6));
+  border-radius: 10px;
+  transition: var(--smooth-transition);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.7);
+  background: linear-gradient(45deg, rgba(99, 102, 241, 0.8), rgba(139, 92, 246, 0.8));
+  transform: scale(1.1);
 }
 
-/* Mobile-first responsive approach */
-@media (max-width: 640px) {
+/* Enhanced mobile optimizations with original smoothness preserved */
+@media (max-width: 768px) {
   :root, .dark {
-    --theme-transition-duration: 150ms;
+    --theme-transition-duration: 400ms;
   }
   
   .glass {
-    backdrop-filter: blur(4px);
-  }
-  
-  /* Reduced animations on mobile for better performance */
-  .animate-float-up,
-  .animate-pulse-glow,
-  .animate-gradient-shift {
-    animation: none;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
-/* Reduce motion for accessibility and performance */
+/* Original smooth motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-/* High contrast mode support */
+/* Enhanced high contrast support */
 @media (prefers-contrast: high) {
   .glass {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.4);
   }
+  
+  .text-gradient {
+    -webkit-text-fill-color: currentColor;
+    background: none;
+  }
+}
+
+/* Additional performance optimizations */
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Enhanced focus states for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
 }
