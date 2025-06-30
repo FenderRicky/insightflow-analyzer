@@ -16,7 +16,7 @@ const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
     
     setIsTransitioning(true);
     
-    // Create the original smooth transition overlay effect
+    // Create ultra-smooth transition overlay
     const overlay = document.createElement('div');
     overlay.style.cssText = `
       position: fixed;
@@ -24,41 +24,46 @@ const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 50%, transparent 100%);
-      backdrop-filter: blur(10px);
+      background: radial-gradient(circle at center, rgba(34, 211, 238, 0.12) 0%, rgba(147, 51, 234, 0.08) 50%, transparent 100%);
+      backdrop-filter: blur(8px);
       z-index: 9999;
       opacity: 0;
-      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       pointer-events: none;
     `;
     
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
 
-    // Original smooth fade sequence
+    // Smooth fade in
     requestAnimationFrame(() => {
       overlay.style.opacity = '1';
     });
 
-    // Phase 1: Gradual fade with transform (300ms)
+    // Enhanced smooth document transition
     setTimeout(() => {
-      document.documentElement.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-      document.documentElement.style.transform = 'scale(0.98)';
-      document.documentElement.style.filter = 'brightness(0.7)';
-    }, 150);
+      document.documentElement.style.cssText = `
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transform: scale(0.99);
+        filter: brightness(0.85) contrast(1.1);
+      `;
+    }, 100);
 
-    // Phase 2: Theme change at peak transition (500ms)
+    // Theme change at optimal timing
     setTimeout(() => {
       onToggle();
-    }, 500);
+    }, 300);
 
-    // Phase 3: Restore with new theme (650ms)
+    // Restore document state
     setTimeout(() => {
-      document.documentElement.style.transform = 'scale(1)';
-      document.documentElement.style.filter = 'brightness(1)';
-    }, 650);
+      document.documentElement.style.cssText = `
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transform: scale(1);
+        filter: brightness(1) contrast(1);
+      `;
+    }, 400);
 
-    // Phase 4: Complete transition and cleanup (1200ms total)
+    // Complete transition and cleanup
     setTimeout(() => {
       overlay.style.opacity = '0';
       overlay.style.backdropFilter = 'blur(0px)';
@@ -70,8 +75,8 @@ const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
         document.documentElement.style.cssText = '';
         document.body.style.overflow = '';
         setIsTransitioning(false);
-      }, 400);
-    }, 1200);
+      }, 300);
+    }, 800);
   };
 
   return (
@@ -80,29 +85,29 @@ const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
       size="sm"
       onClick={handleToggle}
       disabled={isTransitioning}
-      className={`relative overflow-hidden group hover:bg-brand-500/10 hover:border-brand-500/20 border border-transparent transition-all duration-500 ${
+      className={`relative overflow-hidden group hover:bg-cyan-500/10 hover:border-cyan-500/20 border border-transparent transition-all duration-300 ${
         isTransitioning ? 'opacity-70 scale-95' : 'opacity-100 scale-100'
       }`}
     >
       <div className="relative w-5 h-5">
         <Sun 
-          className={`absolute inset-0 text-yellow-500 transition-all duration-1000 ease-out ${
+          className={`absolute inset-0 text-yellow-500 transition-all duration-700 ease-out ${
             isDark 
               ? 'opacity-0 rotate-180 scale-50' 
               : 'opacity-100 rotate-0 scale-100'
           } group-hover:drop-shadow-[0_0_8px_rgba(234,179,8,0.6)]`} 
         />
         <Moon 
-          className={`absolute inset-0 text-blue-400 transition-all duration-1000 ease-out ${
+          className={`absolute inset-0 text-cyan-400 transition-all duration-700 ease-out ${
             isDark 
               ? 'opacity-100 rotate-0 scale-100' 
               : 'opacity-0 -rotate-180 scale-50'
-          } group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]`} 
+          } group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]`} 
         />
       </div>
       
-      {/* Enhanced ripple effect on click */}
-      <div className={`absolute inset-0 rounded-md bg-gradient-to-r from-brand-500/20 to-neon-purple/20 transition-all duration-700 ${
+      {/* Enhanced ripple effect */}
+      <div className={`absolute inset-0 rounded-md bg-gradient-to-r from-cyan-500/20 to-purple-500/20 transition-all duration-500 ${
         isTransitioning ? 'scale-150 opacity-0' : 'scale-0 opacity-100'
       }`} />
     </Button>

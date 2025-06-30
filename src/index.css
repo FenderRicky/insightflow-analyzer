@@ -26,10 +26,10 @@
     --ring: 231 81% 63%;
     --radius: 0.75rem;
     
-    /* Enhanced transition variables for original smooth effect */
-    --theme-transition-duration: 600ms;
-    --theme-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
-    --smooth-transition: all var(--theme-transition-duration) var(--theme-transition-timing);
+    /* Enhanced transition variables for ultra-smooth themes */
+    --theme-transition-duration: 400ms;
+    --theme-transition-timing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ultra-smooth-transition: all var(--theme-transition-duration) var(--theme-transition-timing);
   }
 
   .dark {
@@ -61,8 +61,8 @@
   }
 
   html {
-    /* Original smooth transition restored */
-    transition: var(--smooth-transition);
+    /* Ultra-smooth transitions restored to perfection */
+    transition: var(--ultra-smooth-transition);
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     scroll-behavior: smooth;
@@ -72,31 +72,32 @@
     @apply bg-background text-foreground font-sans antialiased;
     background: hsl(var(--background));
     
-    /* Original enhanced theme transitions restored */
+    /* Perfect theme transitions optimized for all devices */
     transition: 
       background-color var(--theme-transition-duration) var(--theme-transition-timing),
       color var(--theme-transition-duration) var(--theme-transition-timing),
       border-color var(--theme-transition-duration) var(--theme-transition-timing);
     
-    /* Enhanced smooth rendering */
+    /* Enhanced rendering for smooth performance */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    will-change: background-color, color;
   }
 
-  /* Enhanced dark mode background with original smooth effect */
+  /* Enhanced dark mode with ultra-smooth transitions */
   .dark body {
     background: hsl(var(--background));
-    transition: var(--smooth-transition);
+    transition: var(--ultra-smooth-transition);
   }
 
-  /* Restored original glass effect with enhanced performance */
+  /* Optimized glass effect with performance improvements */
   .glass {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    transition: var(--smooth-transition);
+    transition: var(--ultra-smooth-transition);
     will-change: background-color, border-color, backdrop-filter;
   }
 
@@ -105,25 +106,25 @@
     border: 1px solid rgba(255, 255, 255, 0.16);
   }
 
-  /* Enhanced glow effect with original intensity */
+  /* Enhanced glow effects optimized for modern design */
   .glow {
     box-shadow: 
-      0 0 20px rgba(99, 102, 241, 0.4),
-      0 0 40px rgba(99, 102, 241, 0.2),
-      0 0 60px rgba(99, 102, 241, 0.1);
+      0 0 20px rgba(34, 211, 238, 0.4),
+      0 0 40px rgba(34, 211, 238, 0.2),
+      0 0 60px rgba(34, 211, 238, 0.1);
     transition: box-shadow var(--theme-transition-duration) var(--theme-transition-timing);
   }
 
   .dark .glow {
     box-shadow: 
-      0 0 25px rgba(99, 102, 241, 0.5),
-      0 0 50px rgba(99, 102, 241, 0.3),
-      0 0 75px rgba(99, 102, 241, 0.15);
+      0 0 25px rgba(34, 211, 238, 0.5),
+      0 0 50px rgba(34, 211, 238, 0.3),
+      0 0 75px rgba(34, 211, 238, 0.15);
   }
 
   /* Enhanced gradient text with smooth animation */
   .text-gradient {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #3b82f6 50%, #06b6d4 75%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 25%, #6366f1 50%, #8b5cf6 75%, #a855f7 100%);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -131,16 +132,16 @@
     animation: gradient-shift 8s ease-in-out infinite;
   }
 
-  /* Original smooth transitions for all elements */
+  /* Ultra-smooth transitions for all elements */
   *, *::before, *::after {
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
     transition-duration: var(--theme-transition-duration);
     transition-timing-function: var(--theme-transition-timing);
   }
 
-  /* Enhanced UI element transitions with original smoothness */
+  /* Enhanced UI element transitions */
   button, input, textarea, select, a {
-    transition: var(--smooth-transition);
+    transition: var(--ultra-smooth-transition);
     will-change: transform, opacity, background-color, border-color;
   }
 
@@ -148,25 +149,25 @@
     transform: translateY(-1px);
   }
 
-  /* Original enhanced animations restored */
+  /* Optimized animations for better performance */
   @keyframes float-up {
     0%, 100% { 
       transform: translateY(0px) rotate(0deg); 
       opacity: 0.8; 
     }
     50% { 
-      transform: translateY(-12px) rotate(1deg); 
+      transform: translateY(-10px) rotate(1deg); 
       opacity: 1; 
     }
   }
 
   @keyframes pulse-glow {
     0%, 100% { 
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); 
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.4); 
       transform: scale(1);
     }
     50% { 
-      box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); 
+      box-shadow: 0 0 40px rgba(34, 211, 238, 0.6); 
       transform: scale(1.02);
     }
   }
@@ -210,7 +211,7 @@
   }
 
   .animate-gradient-shift {
-    background: linear-gradient(-45deg, #6366f1, #8b5cf6, #3b82f6, #06b6d4);
+    background: linear-gradient(-45deg, #22d3ee, #3b82f6, #6366f1, #8b5cf6);
     background-size: 400% 400%;
     animation: gradient-shift 6s ease-in-out infinite;
   }
@@ -220,7 +221,7 @@
   }
 }
 
-/* Enhanced scrollbar with original smooth styling */
+/* Enhanced scrollbar with modern styling */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -231,20 +232,20 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, rgba(99, 102, 241, 0.6), rgba(139, 92, 246, 0.6));
+  background: linear-gradient(45deg, rgba(34, 211, 238, 0.6), rgba(147, 51, 234, 0.6));
   border-radius: 10px;
-  transition: var(--smooth-transition);
+  transition: var(--ultra-smooth-transition);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(45deg, rgba(99, 102, 241, 0.8), rgba(139, 92, 246, 0.8));
+  background: linear-gradient(45deg, rgba(34, 211, 238, 0.8), rgba(147, 51, 234, 0.8));
   transform: scale(1.1);
 }
 
-/* Enhanced mobile optimizations with original smoothness preserved */
+/* Mobile optimizations for better performance */
 @media (max-width: 768px) {
   :root, .dark {
-    --theme-transition-duration: 400ms;
+    --theme-transition-duration: 300ms;
   }
   
   .glass {
@@ -253,7 +254,7 @@
   }
 }
 
-/* Original smooth motion preferences */
+/* Accessibility: Respect motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -276,7 +277,7 @@
   }
 }
 
-/* Additional performance optimizations */
+/* Performance optimizations for hover effects */
 @media (hover: hover) and (pointer: fine) {
   .hover-lift:hover {
     transform: translateY(-2px) scale(1.02);
