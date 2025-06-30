@@ -98,7 +98,7 @@ const Index = () => {
               <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 mb-8">
                 <Sparkles className="h-4 w-4 text-cyan-400 animate-pulse" />
                 <span className="text-sm font-medium bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                  AI-Powered Career Intelligence • Tier 1 Benchmarking • Real-Time Analysis
+                  Smart Career Intelligence • Tier 1 Benchmarking • Real-Time Analysis
                 </span>
                 <Sparkles className="h-4 w-4 text-purple-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
               </div>
@@ -110,12 +110,12 @@ const Index = () => {
                     Professional Profile
                   </span>
                   <span className="text-2xl sm:text-3xl md:text-5xl block mt-4 text-muted-foreground font-normal">
-                    with AI-Driven Tier 1 Insights
+                    with Smart Tier 1 Insights
                   </span>
                 </h1>
                 
                 <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Get comprehensive AI analysis benchmarked against Tier 1 companies like Google, Meta, and Microsoft. 
+                  Get comprehensive analysis benchmarked against Tier 1 companies like Google, Meta, and Microsoft. 
                   Receive personalized recommendations, portfolio polish suggestions, and actionable insights 
                   to accelerate your career growth.
                 </p>
@@ -139,15 +139,15 @@ const Index = () => {
                 ))}
               </div>
 
-              {/* Enhanced feature grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto pt-12">
+              {/* Fixed feature grid with proper spacing */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto pt-12">
                 {[
                   { 
                     icon: Brain, 
                     color: 'from-purple-500 to-pink-500', 
-                    label: 'AI-Powered Analysis', 
+                    label: 'Smart Analysis', 
                     desc: 'Advanced algorithms analyze actual content',
-                    highlight: 'Real AI'
+                    highlight: 'Real Intelligence'
                   },
                   { 
                     icon: Target, 
@@ -167,20 +167,20 @@ const Index = () => {
                     icon: Zap, 
                     color: 'from-yellow-500 to-orange-500', 
                     label: 'Portfolio Polish', 
-                    desc: 'One-click AI enhancements ready to apply',
+                    desc: 'One-click enhancements ready to apply',
                     highlight: 'Instant Apply'
                   }
                 ].map((item, index) => (
                   <div key={index} className="group relative p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10">
-                    <div className="absolute top-4 right-4">
-                      <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 font-medium">
+                    <div className="absolute top-3 right-3">
+                      <span className="text-xs px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 font-medium border border-cyan-500/30">
                         {item.highlight}
                       </span>
                     </div>
-                    <div className={`w-14 h-14 mx-auto mb-4 bg-gradient-to-r ${item.color} bg-opacity-20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
+                    <div className={`w-14 h-14 mx-auto mb-6 mt-2 bg-gradient-to-r ${item.color} bg-opacity-20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
                       <item.icon className="h-7 w-7 text-white" />
                     </div>
-                    <h3 className="font-semibold text-lg mb-2 text-foreground group-hover:text-cyan-400 transition-colors">
+                    <h3 className="font-semibold text-lg mb-3 text-foreground group-hover:text-cyan-400 transition-colors">
                       {item.label}
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
@@ -196,7 +196,7 @@ const Index = () => {
                   Start Your Tier 1 Analysis
                 </h2>
                 <p className="text-muted-foreground text-lg">
-                  Enter your GitHub, LinkedIn, or portfolio URL for AI-powered insights benchmarked against top tech companies
+                  Enter your GitHub, LinkedIn, or portfolio URL for advanced insights benchmarked against top tech companies
                 </p>
               </div>
               <CoreAnalysisInput onAnalyze={handleAnalyze} isLoading={isLoading} />
@@ -208,10 +208,10 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-cyan-500/20">
               <div>
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">
-                  AI Analysis Complete ✨
+                  Analysis Complete ✨
                 </h2>
                 <p className="text-muted-foreground">
-                  Your profile analyzed with Tier 1 benchmarking and AI precision
+                  Your profile analyzed with Tier 1 benchmarking and advanced precision
                 </p>
               </div>
               <Button 
@@ -265,10 +265,10 @@ const Index = () => {
           <div className="text-center space-y-4">
             <FuturisticLogo size="sm" animate={false} />
             <p className="text-muted-foreground max-w-md mx-auto">
-              Empowering careers with AI-driven professional intelligence and Tier 1 benchmarking.
+              Empowering careers with intelligent professional analysis and Tier 1 benchmarking.
             </p>
             <div className="text-sm text-muted-foreground">
-              © 2024 InsightFlow AI. Transforming professional development through artificial intelligence.
+              © 2024 InsightFlow. Transforming professional development through intelligent analysis.
             </div>
           </div>
         </div>

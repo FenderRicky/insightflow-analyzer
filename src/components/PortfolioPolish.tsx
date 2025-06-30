@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Wand2, Copy, CheckCircle, Sparkles, RefreshCw } from 'lucide-react';
+import { Wand2, Copy, CheckCircle, Sparkles, RefreshCw, Download, Share2 } from 'lucide-react';
 
 interface PortfolioPolishProps {
   suggestions: {
@@ -17,7 +17,9 @@ interface PortfolioPolishProps {
 const PortfolioPolish = ({ suggestions }: PortfolioPolishProps) => {
   const [activeTab, setActiveTab] = useState<'headline' | 'projects' | 'skills'>('headline');
   const [isPolishing, setIsPolishing] = useState(false);
+  const [isGeneratingBadge, setIsGeneratingBadge] = useState(false);
   const [copiedItems, setCopiedItems] = useState<Set<string>>(new Set());
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleCopy = async (text: string, id: string) => {
     try {
@@ -37,9 +39,59 @@ const PortfolioPolish = ({ suggestions }: PortfolioPolishProps) => {
 
   const handlePolish = async () => {
     setIsPolishing(true);
-    // Simulate AI processing
     await new Promise(resolve => setTimeout(resolve, 2000));
     setIsPolishing(false);
+  };
+
+  const generateBadge = async () => {
+    setIsGeneratingBadge(true);
+    
+    try {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      
+      // Set canvas size
+      canvas.width = 400;
+      canvas.height = 200;
+      
+      // Create gradient background
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, '#3b82f6');
+      gradient.addColorStop(0.5, '#8b5cf6');
+      gradient.addColorStop(1, '#06b6d4');
+      
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Add text
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 24px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Profile Optimized', canvas.width / 2, 60);
+      
+      ctx.font = '16px Inter, sans-serif';
+      ctx.fillText('InsightFlow Analysis Complete', canvas.width / 2, 90);
+      
+      ctx.font = 'bold 20px Inter, sans-serif';
+      ctx.fillText('Tier 1 Ready', canvas.width / 2, 130);
+      
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText('www.insightflow.ai', canvas.width / 2, 170);
+      
+      // Download the badge
+      const link = document.createElement('a');
+      link.download = 'insightflow-badge.png';
+      link.href = canvas.toDataURL();
+      link.click();
+      
+    } catch (error) {
+      console.error('Failed to generate badge:', error);
+    } finally {
+      setIsGeneratingBadge(false);
+    }
   };
 
   return (
@@ -50,7 +102,7 @@ const PortfolioPolish = ({ suggestions }: PortfolioPolishProps) => {
             <Wand2 className="h-5 w-5 text-white" />
           </div>
           <span className="bg-gradient-to-r from-brand-500 to-neon-purple bg-clip-text text-transparent">
-            AI Portfolio Polish
+            Portfolio Polish
           </span>
           <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white">
             <Sparkles className="h-3 w-3 mr-1" />
@@ -212,11 +264,28 @@ const PortfolioPolish = ({ suggestions }: PortfolioPolishProps) => {
             <Wand2 className="h-4 w-4 mr-2" />
             Apply All Suggestions
           </Button>
-          <Button variant="outline" className="flex-1">
-            <Sparkles className="h-4 w-4 mr-2" />
-            Generate Badge
+          <Button 
+            variant="outline" 
+            className="flex-1"
+            onClick={generateBadge}
+            disabled={isGeneratingBadge}
+          >
+            {isGeneratingBadge ? (
+              <>
+                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Download className="h-4 w-4 mr-2" />
+                Generate Badge
+              </>
+            )}
           </Button>
         </div>
+
+        {/* Hidden canvas for badge generation */}
+        <canvas ref={canvasRef} style={{ display: 'none' }} />
       </CardContent>
     </Card>
   );
