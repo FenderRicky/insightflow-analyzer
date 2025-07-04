@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -9,8 +10,14 @@ import ThemeToggle from '@/components/ThemeToggle';
 import FuturisticLogo from '@/components/FuturisticLogo';
 import TierOneRadarChart from '@/components/TierOneRadarChart';
 import PortfolioPolish from '@/components/PortfolioPolish';
+import StealthAudit from '@/components/StealthAudit';
+import AIPolish from '@/components/AIPolish';
+import SkillHeatmap from '@/components/SkillHeatmap';
+import TrustSignals from '@/components/TrustSignals';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTheme } from '@/hooks/useTheme';
 import { analyzeUrlContent } from '@/utils/realAnalysisEngine';
+import { ErrorTracker } from '@/utils/errorTracking';
 import type { AnalysisResult } from '@/utils/realAnalysisEngine';
 
 const Index = () => {
@@ -29,6 +36,7 @@ const Index = () => {
       setShowResults(true);
     } catch (error) {
       console.error('Analysis failed:', error);
+      ErrorTracker.track(error as Error, { url: data.url, type: data.type });
       throw error;
     } finally {
       setIsLoading(false);
@@ -139,7 +147,7 @@ const Index = () => {
               </div>
 
               {/* Fixed feature grid with proper spacing and card morphing */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto pt-12 stagger-children">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto pt-12 stagger-children">
                 {[
                   { 
                     icon: Brain, 
@@ -170,22 +178,35 @@ const Index = () => {
                     highlight: 'Instant Apply'
                   }
                 ].map((item, index) => (
-                  <div key={index} className="group relative p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10 card-morph">
-                    <div className="absolute top-3 right-3">
-                      <span className="text-xs px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 font-medium border border-cyan-500/30">
+                  <div key={index} className="group relative p-4 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10 card-morph">
+                    <div className="absolute top-2 right-2">
+                      <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 font-medium border border-cyan-500/30">
                         {item.highlight}
                       </span>
                     </div>
-                    <div className={`w-14 h-14 mx-auto mb-6 mt-2 bg-gradient-to-r ${item.color} bg-opacity-20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
-                      <item.icon className="h-7 w-7 text-white" />
+                    <div className={`w-12 h-12 mx-auto mb-4 mt-2 bg-gradient-to-r ${item.color} bg-opacity-20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
+                      <item.icon className="h-6 w-6 text-white" />
                     </div>
-                    <h3 className="font-semibold text-lg mb-3 text-foreground group-hover:text-cyan-400 transition-colors">
+                    <h3 className="font-semibold text-base mb-2 text-foreground group-hover:text-cyan-400 transition-colors">
                       {item.label}
                     </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
                   </div>
                 ))}
               </div>
+            </section>
+
+            {/* Trust Signals */}
+            <section className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                  Trusted by Professionals Worldwide
+                </h2>
+                <p className="text-muted-foreground text-lg">
+                  See why thousands trust InsightFlow for their career advancement
+                </p>
+              </div>
+              <TrustSignals />
             </section>
 
             {/* Enhanced Analysis Input */}
@@ -223,26 +244,57 @@ const Index = () => {
               </Button>
             </div>
 
-            {/* Enhanced Results Display with new components */}
-            {analysisResult && (
-              <div className="space-y-8">
-                {/* Tier One Radar Chart */}
-                <TierOneRadarChart 
-                  data={radarData}
-                  overallScore={analysisResult.overallScore}
-                  tierOnePercentile={analysisResult.tierOneBenchmark.percentile}
-                />
+            {/* Game-Changing Features Tabs */}
+            <Tabs defaultValue="results" className="w-full">
+              <TabsList className="grid w-full grid-cols-5 mb-6">
+                <TabsTrigger value="results">Results</TabsTrigger>
+                <TabsTrigger value="stealth">Stealth Audit</TabsTrigger>
+                <TabsTrigger value="polish">Polish</TabsTrigger>
+                <TabsTrigger value="heatmap">Skills</TabsTrigger>
+                <TabsTrigger value="radar">Radar</TabsTrigger>
+              </TabsList>
 
-                {/* Portfolio Polish Component */}
-                <PortfolioPolish suggestions={analysisResult.portfolioPolishSuggestions} />
+              <TabsContent value="results">
+                {analysisResult && (
+                  <div className="space-y-8">
+                    <AnalysisResultsDisplay 
+                      result={analysisResult} 
+                      analyzedUrl={analyzedUrl}
+                    />
+                  </div>
+                )}
+              </TabsContent>
 
-                {/* Original Analysis Results */}
-                <AnalysisResultsDisplay 
-                  result={analysisResult} 
-                  analyzedUrl={analyzedUrl}
-                />
-              </div>
-            )}
+              <TabsContent value="stealth">
+                <StealthAudit userProfile={{
+                  skills: analysisResult?.detectedTechnologies || [],
+                  experience: analysisResult?.professionalLevel || 'mid',
+                  githubUrl: analyzedUrl.includes('github') ? analyzedUrl : undefined,
+                  linkedinUrl: analyzedUrl.includes('linkedin') ? analyzedUrl : undefined
+                }} />
+              </TabsContent>
+
+              <TabsContent value="polish">
+                <AIPolish userProfile={{
+                  skills: analysisResult?.detectedTechnologies || [],
+                  experience: analysisResult?.professionalLevel || 'mid'
+                }} />
+              </TabsContent>
+
+              <TabsContent value="heatmap">
+                <SkillHeatmap userSkills={analysisResult?.detectedTechnologies || []} />
+              </TabsContent>
+
+              <TabsContent value="radar">
+                {analysisResult && (
+                  <TierOneRadarChart 
+                    data={radarData}
+                    overallScore={analysisResult.overallScore}
+                    tierOnePercentile={analysisResult.tierOneBenchmark.percentile}
+                  />
+                )}
+              </TabsContent>
+            </Tabs>
 
             {/* Scroll to Top */}
             <div className="fixed bottom-6 right-6 z-50">
