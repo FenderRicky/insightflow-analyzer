@@ -70,10 +70,24 @@ const Index = () => {
         },
         tierOneBenchmark: {
           percentile: Math.min(result.hireabilityScore + 10, 95),
-          comparison: result.hireabilityScore >= 85 ? 'Above average' : 'Room for improvement'
+          comparisonResults: [
+            {
+              company: data.type === 'tesla' ? 'Tesla' : data.type === 'google' ? 'Google' : 'Meta',
+              role: 'Software Engineer',
+              avgScore: 85,
+              keyStrengths: ['Technical Excellence', 'System Design', 'Code Quality'],
+              requirements: ['5+ years experience', 'Advanced algorithms', 'Leadership skills']
+            }
+          ],
+          gapAnalysis: result.criticalGaps,
+          nextLevelRequirements: result.nextSteps
         },
         proTips: result.nextSteps,
-        portfolioPolishSuggestions: result.quickWins
+        portfolioPolishSuggestions: {
+          headline: result.quickWins[0] || 'Optimize your profile headline',
+          projectDescriptions: result.quickWins.slice(1, 3) || ['Improve project descriptions'],
+          skillsOptimization: result.projectSuggestions.slice(0, 2) || ['Add relevant skills']
+        }
       };
 
       setAnalysisResult(analysisResult);

@@ -42,13 +42,18 @@ export class URLValidator {
 
   static async testURLAccessibility(url: string): Promise<{ accessible: boolean; status?: number }> {
     try {
+      // Use AbortController for timeout instead of invalid timeout property
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      
       // Use a CORS proxy for client-side testing
       const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
       const response = await fetch(proxyUrl, { 
         method: 'HEAD',
-        timeout: 5000 
+        signal: controller.signal
       });
       
+      clearTimeout(timeoutId);
       return { accessible: response.ok, status: response.status };
     } catch (error) {
       // If CORS fails, assume URL is valid (many sites block CORS)
