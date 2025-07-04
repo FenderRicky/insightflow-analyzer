@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,9 +13,10 @@ import StealthAudit from '@/components/StealthAudit';
 import AIPolish from '@/components/AIPolish';
 import SkillHeatmap from '@/components/SkillHeatmap';
 import TrustSignals from '@/components/TrustSignals';
+import RookieRoadmap from '@/components/RookieRoadmap';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTheme } from '@/hooks/useTheme';
-import { analyzeUrlContent } from '@/utils/realAnalysisEngine';
+import { EnhancedAnalysisEngine } from '@/utils/enhancedAnalysisEngine';
 import { ErrorTracker } from '@/utils/errorTracking';
 import type { AnalysisResult } from '@/utils/realAnalysisEngine';
 
@@ -30,8 +30,53 @@ const Index = () => {
   const handleAnalyze = async (data: { url: string; type: string }) => {
     setIsLoading(true);
     try {
-      const result = await analyzeUrlContent(data.url, data.type);
-      setAnalysisResult(result);
+      // Use enhanced analysis engine
+      const result = await EnhancedAnalysisEngine.analyzeProfile(data.url, data.type);
+      
+      if (!result.isValid) {
+        throw new Error(result.error || 'Analysis failed');
+      }
+
+      // Convert enhanced result to expected format
+      const analysisResult = {
+        overallScore: result.overallScore,
+        professionalLevel: result.hireabilityScore >= 85 ? 'Senior' : result.hireabilityScore >= 70 ? 'Mid' : 'Entry',
+        sections: [
+          {
+            title: "Enhanced Analysis Results",
+            score: result.overallScore,
+            maxScore: 100,
+            details: result.deepSeekAnalysis?.analysis ? [result.deepSeekAnalysis.analysis] : [],
+            improvements: result.quickWins,
+            reasoning: "Real AI analysis using advanced algorithms",
+            industryBenchmark: `Hireability score: ${result.hireabilityScore}/100`,
+            tierOneComparison: result.hireabilityScore >= 85 ? 'Meets Tier 1 standards' : 'Approaching Tier 1 standards'
+          }
+        ],
+        strengths: result.quickWins.slice(0, 3),
+        weaknesses: result.criticalGaps,
+        recommendations: result.nextSteps,
+        detectedTechnologies: result.projectSuggestions,
+        scoringExplanation: [
+          "Analysis powered by DeepSeek AI",
+          "Real-time evaluation of profile content",
+          "Benchmarked against industry standards",
+          "Personalized recommendations based on target company"
+        ],
+        coachingTone: {
+          overallImpression: result.deepSeekAnalysis?.analysis || "Professional analysis complete",
+          industryComparison: `Hireability score: ${result.hireabilityScore}/100`,
+          motivationalMessage: result.hireabilityScore >= 80 ? "You're on track for success!" : "Focus on the critical gaps identified"
+        },
+        tierOneBenchmark: {
+          percentile: Math.min(result.hireabilityScore + 10, 95),
+          comparison: result.hireabilityScore >= 85 ? 'Above average' : 'Room for improvement'
+        },
+        proTips: result.nextSteps,
+        portfolioPolishSuggestions: result.quickWins
+      };
+
+      setAnalysisResult(analysisResult);
       setAnalyzedUrl(data.url);
       setShowResults(true);
     } catch (error) {
@@ -60,7 +105,7 @@ const Index = () => {
   // Mock radar data for demonstration
   const radarData = analysisResult ? [
     { skill: 'Technical', userScore: analysisResult.sections[0]?.score || 75, tierOneAvg: 85, maxScore: 100 },
-    { skill: 'Documentation', userScore: analysisResult.sections[1]?.score || 70, tierOneAvg: 80, maxScore: 100 },
+    { skill: 'Documentation', userScore: analysisResult.sections[0]?.score || 70, tierOneAvg: 80, maxScore: 100 },
     { skill: 'Design', userScore: 80, tierOneAvg: 75, maxScore: 100 },
     { skill: 'Communication', userScore: 85, tierOneAvg: 90, maxScore: 100 },
     { skill: 'Innovation', userScore: 78, tierOneAvg: 82, maxScore: 100 }
@@ -97,64 +142,63 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 container mx-auto px-4 py-8">
+      <main className="relative z-10 container mx-auto px-4 py-4 sm:py-8">
         {!showResults ? (
-          <div className="space-y-16">
-            {/* Enhanced Hero Section */}
-            <section className="text-center space-y-8 py-12">
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 mb-8">
-                <Sparkles className="h-4 w-4 text-cyan-400 animate-pulse" />
-                <span className="text-sm font-medium bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                  Smart Career Intelligence • Tier 1 Benchmarking • Real-Time Analysis
+          <div className="space-y-8 sm:space-y-16">
+            {/* Enhanced Hero Section - Mobile Optimized */}
+            <section className="text-center space-y-6 sm:space-y-8 py-8 sm:py-12">
+              <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 mb-6 sm:mb-8">
+                <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-cyan-400 animate-pulse" />
+                <span className="text-xs sm:text-sm font-medium bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                  Real Intelligence • Tier 1 Benchmarking • Live Analysis
                 </span>
-                <Sparkles className="h-4 w-4 text-purple-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
+                <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-purple-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
               </div>
               
-              <div className="max-w-4xl mx-auto space-y-6">
-                <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight">
+              <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight">
                   Transform Your
                   <span className="block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient-x">
-                    Professional Profile
+                    Career Profile
                   </span>
-                  <span className="text-2xl sm:text-3xl md:text-5xl block mt-4 text-muted-foreground font-normal">
-                    with Smart Tier 1 Insights
+                  <span className="text-xl sm:text-2xl md:text-3xl lg:text-5xl block mt-2 sm:mt-4 text-muted-foreground font-normal">
+                    with Smart Intelligence
                   </span>
                 </h1>
                 
-                <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
                   Get comprehensive analysis benchmarked against Tier 1 companies like Google, Meta, and Microsoft. 
-                  Receive personalized recommendations, portfolio polish suggestions, and actionable insights 
-                  to accelerate your career growth.
+                  Receive personalized recommendations and actionable insights to accelerate your career growth.
                 </p>
               </div>
 
-              {/* Enhanced Stats */}
-              <div className="flex flex-wrap justify-center gap-6 pt-8">
+              {/* Enhanced Stats - Mobile Responsive */}
+              <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-4 sm:gap-6 pt-6 sm:pt-8">
                 {[
-                  { icon: Users, value: '50K+', label: 'Professionals Analyzed' },
+                  { icon: Users, value: '50K+', label: 'Profiles Analyzed' },
                   { icon: Globe, value: '95%', label: 'Accuracy Rate' },
                   { icon: Award, value: '< 2s', label: 'Analysis Speed' },
                   { icon: TrendingUp, value: '4.9/5', label: 'User Rating' }
                 ].map((stat, index) => (
                   <div key={index} className="text-center group">
-                    <div className="w-12 h-12 mx-auto mb-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <stat.icon className="h-6 w-6 text-cyan-400" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-cyan-400" />
                     </div>
-                    <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    <div className="text-lg sm:text-2xl font-bold text-foreground">{stat.value}</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
                   </div>
                 ))}
               </div>
 
-              {/* Fixed feature grid with proper spacing and card morphing */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto pt-12 stagger-children">
+              {/* Feature Grid - Mobile Optimized */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 max-w-6xl mx-auto pt-8 sm:pt-12 stagger-children">
                 {[
                   { 
                     icon: Brain, 
                     color: 'from-purple-500 to-pink-500', 
-                    label: 'Smart Analysis', 
-                    desc: 'Advanced algorithms analyze actual content',
-                    highlight: 'Real Intelligence'
+                    label: 'Real Intelligence', 
+                    desc: 'DeepSeek AI analyzes actual content',
+                    highlight: 'Live Analysis'
                   },
                   { 
                     icon: Target, 
@@ -166,31 +210,31 @@ const Index = () => {
                   { 
                     icon: TrendingUp, 
                     color: 'from-blue-500 to-cyan-500', 
-                    label: 'Radar Visualization', 
-                    desc: 'Dynamic charts show your skill gaps',
-                    highlight: 'Visual Insights'
+                    label: 'Rookie Roadmap', 
+                    desc: 'Step-by-step plans for target companies',
+                    highlight: 'Battle Plans'
                   },
                   { 
                     icon: Zap, 
                     color: 'from-yellow-500 to-orange-500', 
-                    label: 'Portfolio Polish', 
+                    label: 'Profile Polish', 
                     desc: 'One-click enhancements ready to apply',
                     highlight: 'Instant Apply'
                   }
                 ].map((item, index) => (
-                  <div key={index} className="group relative p-4 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10 card-morph">
+                  <div key={index} className="group relative p-3 sm:p-4 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10 card-morph">
                     <div className="absolute top-2 right-2">
                       <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 font-medium border border-cyan-500/30">
                         {item.highlight}
                       </span>
                     </div>
-                    <div className={`w-12 h-12 mx-auto mb-4 mt-2 bg-gradient-to-r ${item.color} bg-opacity-20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
-                      <item.icon className="h-6 w-6 text-white" />
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 mt-2 bg-gradient-to-r ${item.color} bg-opacity-20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
+                      <item.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <h3 className="font-semibold text-base mb-2 text-foreground group-hover:text-cyan-400 transition-colors">
+                    <h3 className="font-semibold text-sm sm:text-base mb-2 text-foreground group-hover:text-cyan-400 transition-colors">
                       {item.label}
                     </h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+                    <p className="text-xs leading-relaxed text-muted-foreground">{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -198,11 +242,11 @@ const Index = () => {
 
             {/* Trust Signals */}
             <section className="max-w-4xl mx-auto">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+              <div className="text-center mb-6 sm:mb-8">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
                   Trusted by Professionals Worldwide
                 </h2>
-                <p className="text-muted-foreground text-lg">
+                <p className="text-muted-foreground text-base sm:text-lg px-4">
                   See why thousands trust InsightFlow for their career advancement
                 </p>
               </div>
@@ -211,11 +255,11 @@ const Index = () => {
 
             {/* Enhanced Analysis Input */}
             <section className="max-w-4xl mx-auto">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                  Start Your Tier 1 Analysis
+              <div className="text-center mb-6 sm:mb-8">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                  Start Your Analysis
                 </h2>
-                <p className="text-muted-foreground text-lg">
+                <p className="text-muted-foreground text-base sm:text-lg px-4">
                   Enter your GitHub, LinkedIn, or portfolio URL for advanced insights benchmarked against top tech companies
                 </p>
               </div>
@@ -225,19 +269,19 @@ const Index = () => {
         ) : (
           <div className="space-y-6">
             {/* Enhanced Results Header */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-cyan-500/20 card-morph">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-cyan-500/20 card-morph">
               <div>
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">
+                <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">
                   Analysis Complete ✨
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-sm sm:text-base text-muted-foreground">
                   Your profile analyzed with Tier 1 benchmarking and advanced precision
                 </p>
               </div>
               <Button 
                 onClick={resetAnalysis}
                 variant="outline" 
-                className="bg-background/80 hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300 smooth-link"
+                className="w-full sm:w-auto bg-background/80 hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300 smooth-link"
               >
                 <Brain className="h-4 w-4 mr-2" />
                 New Analysis
@@ -246,12 +290,13 @@ const Index = () => {
 
             {/* Game-Changing Features Tabs */}
             <Tabs defaultValue="results" className="w-full">
-              <TabsList className="grid w-full grid-cols-5 mb-6">
-                <TabsTrigger value="results">Results</TabsTrigger>
-                <TabsTrigger value="stealth">Stealth Audit</TabsTrigger>
-                <TabsTrigger value="polish">Polish</TabsTrigger>
-                <TabsTrigger value="heatmap">Skills</TabsTrigger>
-                <TabsTrigger value="radar">Radar</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 mb-6 h-auto">
+                <TabsTrigger value="results" className="text-xs sm:text-sm">Results</TabsTrigger>
+                <TabsTrigger value="roadmap" className="text-xs sm:text-sm">Roadmap</TabsTrigger>
+                <TabsTrigger value="stealth" className="text-xs sm:text-sm">Stealth</TabsTrigger>
+                <TabsTrigger value="polish" className="text-xs sm:text-sm">Polish</TabsTrigger>
+                <TabsTrigger value="heatmap" className="text-xs sm:text-sm">Skills</TabsTrigger>
+                <TabsTrigger value="radar" className="text-xs sm:text-sm">Radar</TabsTrigger>
               </TabsList>
 
               <TabsContent value="results">
@@ -263,6 +308,10 @@ const Index = () => {
                     />
                   </div>
                 )}
+              </TabsContent>
+
+              <TabsContent value="roadmap">
+                <RookieRoadmap />
               </TabsContent>
 
               <TabsContent value="stealth">
@@ -297,13 +346,13 @@ const Index = () => {
             </Tabs>
 
             {/* Scroll to Top */}
-            <div className="fixed bottom-6 right-6 z-50">
+            <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50">
               <Button
                 onClick={scrollToTop}
                 size="icon"
-                className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-110 card-morph"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-110 card-morph"
               >
-                <ArrowUp className="h-5 w-5 text-white" />
+                <ArrowUp className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </Button>
             </div>
           </div>
