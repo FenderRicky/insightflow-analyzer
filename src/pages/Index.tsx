@@ -143,6 +143,13 @@ const Index = () => {
             <FuturisticLogo size="md" animate={true} />
             <div className="flex items-center gap-3">
               <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+              <Link to="/roadmap" className="smooth-link">
+                <Button variant="outline" size="sm" className="group hover:bg-brand-500/10 hover:border-brand-500/30 transition-all duration-300">
+                  <Target className="h-4 w-4 mr-2 group-hover:text-brand-500 transition-colors" />
+                  <span className="hidden sm:inline">Roadmaps</span>
+                  <span className="sm:hidden">Plans</span>
+                </Button>
+              </Link>
               <Link to="/portfolio-presets" className="smooth-link">
                 <Button variant="outline" size="sm" className="group hover:bg-brand-500/10 hover:border-brand-500/30 transition-all duration-300">
                   <Palette className="h-4 w-4 mr-2 group-hover:text-brand-500 transition-colors" />
@@ -212,44 +219,50 @@ const Index = () => {
                     color: 'from-purple-500 to-pink-500', 
                     label: 'Real Intelligence', 
                     desc: 'DeepSeek AI analyzes actual content',
-                    highlight: 'Live Analysis'
+                    highlight: 'Live Analysis',
+                    link: '/'
                   },
                   { 
                     icon: Target, 
                     color: 'from-green-500 to-emerald-500', 
                     label: 'Tier 1 Benchmarking', 
                     desc: 'Compare against Google, Meta, Microsoft',
-                    highlight: 'Elite Standards'
+                    highlight: 'Elite Standards',
+                    link: '/'
                   },
                   { 
                     icon: TrendingUp, 
                     color: 'from-blue-500 to-cyan-500', 
                     label: 'Rookie Roadmap', 
                     desc: 'Step-by-step plans for target companies',
-                    highlight: 'Battle Plans'
+                    highlight: 'Battle Plans',
+                    link: '/roadmap'
                   },
                   { 
                     icon: Zap, 
                     color: 'from-yellow-500 to-orange-500', 
                     label: 'Profile Polish', 
                     desc: 'One-click enhancements ready to apply',
-                    highlight: 'Instant Apply'
+                    highlight: 'Instant Apply',
+                    link: '/portfolio-presets'
                   }
                 ].map((item, index) => (
-                  <div key={index} className="group relative p-3 sm:p-4 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10 card-morph">
-                    <div className="absolute top-2 right-2">
-                      <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 font-medium border border-cyan-500/30">
-                        {item.highlight}
-                      </span>
+                  <Link key={index} to={item.link} className="smooth-link">
+                    <div className="group relative p-3 sm:p-4 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10 card-morph h-full">
+                      <div className="absolute top-2 right-2">
+                        <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 font-medium border border-cyan-500/30">
+                          {item.highlight}
+                        </span>
+                      </div>
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 mt-2 bg-gradient-to-r ${item.color} bg-opacity-20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
+                        <item.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                      </div>
+                      <h3 className="font-semibold text-sm sm:text-base mb-2 text-foreground group-hover:text-cyan-400 transition-colors">
+                        {item.label}
+                      </h3>
+                      <p className="text-xs leading-relaxed text-muted-foreground">{item.desc}</p>
                     </div>
-                    <div className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 mt-2 bg-gradient-to-r ${item.color} bg-opacity-20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
-                      <item.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-                    </div>
-                    <h3 className="font-semibold text-sm sm:text-base mb-2 text-foreground group-hover:text-cyan-400 transition-colors">
-                      {item.label}
-                    </h3>
-                    <p className="text-xs leading-relaxed text-muted-foreground">{item.desc}</p>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </section>
