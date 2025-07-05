@@ -1,12 +1,11 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
-import { Sparkles, Github, Linkedin, Globe, Zap, AlertCircle } from 'lucide-react';
+import { Sparkles, Github, Linkedin, Globe, Zap, AlertCircle, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { EnhancedAnalysisEngine } from '@/utils/enhancedAnalysisEngine';
+import { RealTimeAnalysisEngine } from '@/utils/realTimeAnalysisEngine';
 
 interface CoreAnalysisInputProps {
   onAnalyze: (data: { url: string; type: string }) => Promise<void>;
@@ -18,6 +17,8 @@ const CoreAnalysisInput = ({ onAnalyze, isLoading }: CoreAnalysisInputProps) => 
   const [type, setType] = useState('');
   const [targetCompany, setTargetCompany] = useState('');
   const [validationError, setValidationError] = useState('');
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationSuccess, setValidationSuccess] = useState(false);
   const { toast } = useToast();
 
   const detectUrlType = (inputUrl: string) => {
@@ -26,14 +27,52 @@ const CoreAnalysisInput = ({ onAnalyze, isLoading }: CoreAnalysisInputProps) => 
     return 'portfolio';
   };
 
+  const validateUrlInRealTime = async (inputUrl: string) => {
+    if (!inputUrl.trim()) {
+      setValidationError('');
+      setValidationSuccess(false);
+      return;
+    }
+
+    setIsValidating(true);
+    setValidationError('');
+    setValidationSuccess(false);
+
+    try {
+      const result = await RealTimeAnalysisEngine.analyzeProfile(inputUrl, 'Software Engineer');
+      
+      if (result.isValid) {
+        setValidationSuccess(true);
+        toast({
+          title: "URL Validated ✅",
+          description: "Profile accessible and ready for analysis",
+        });
+      } else {
+        setValidationError(result.error || 'Invalid URL');
+      }
+    } catch (error) {
+      setValidationError('Unable to validate URL. Please check and try again.');
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
   const handleUrlChange = (value: string) => {
     setUrl(value);
     setValidationError('');
+    setValidationSuccess(false);
     
     // Auto-detect type
     if (value.trim()) {
       const detectedType = detectUrlType(value);
       setType(detectedType);
+      
+      // Debounced validation
+      const timeoutId = setTimeout(() => {
+        validateUrlInRealTime(value);
+      }, 1000);
+      
+      return () => clearTimeout(timeoutId);
     }
   };
 
@@ -50,29 +89,21 @@ const CoreAnalysisInput = ({ onAnalyze, isLoading }: CoreAnalysisInputProps) => 
       return;
     }
 
-    // Clear previous errors
-    setValidationError('');
+    if (validationError) {
+      toast({
+        title: "Fix Validation Errors",
+        description: "Please resolve the URL validation issues before proceeding",
+        variant: "destructive"
+      });
+      return;
+    }
 
     try {
-      // Use enhanced analysis engine for validation and analysis
-      const result = await EnhancedAnalysisEngine.analyzeProfile(url.trim(), targetCompany);
-      
-      if (!result.isValid) {
-        setValidationError(result.error || 'Invalid URL');
-        toast({
-          title: "Validation Error",
-          description: result.error,
-          variant: "destructive"
-        });
-        return;
-      }
-
-      // If validation passes, proceed with main analysis
       const detectedType = type || detectUrlType(url);
       await onAnalyze({ url: url.trim(), type: detectedType });
       
     } catch (error) {
-      console.error('Analysis failed:', error);
+      console.error('Analysis submission failed:', error);
       setValidationError('Analysis failed. Please try again.');
       
       toast({
@@ -98,7 +129,7 @@ const CoreAnalysisInput = ({ onAnalyze, isLoading }: CoreAnalysisInputProps) => 
       <CardContent className="p-4 sm:p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
-            {/* URL Input */}
+            {/* Enhanced URL Input with Real-time Validation */}
             <div>
               <label htmlFor="url" className="block text-sm font-medium mb-3 text-foreground">
                 Professional Profile URL
@@ -110,17 +141,34 @@ const CoreAnalysisInput = ({ onAnalyze, isLoading }: CoreAnalysisInputProps) => 
                   placeholder="https://github.com/username or https://linkedin.com/in/username"
                   value={url}
                   onChange={(e) => handleUrlChange(e.target.value)}
-                  className={`h-12 text-base pr-10 ${validationError ? 'border-red-500' : ''}`}
+                  className={`h-12 text-base pr-10 ${
+                    validationError ? 'border-red-500' : 
+                    validationSuccess ? 'border-green-500' : ''
+                  }`}
                   disabled={isLoading}
                 />
-                {validationError && (
-                  <AlertCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-red-500" />
-                )}
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  {isValidating && (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-500" />
+                  )}
+                  {validationError && (
+                    <AlertCircle className="h-5 w-5 text-red-500" />
+                  )}
+                  {validationSuccess && (
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  )}
+                </div>
               </div>
               {validationError && (
                 <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
                   <AlertCircle className="h-4 w-4" />
                   {validationError}
+                </p>
+              )}
+              {validationSuccess && (
+                <p className="mt-2 text-sm text-green-500 flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4" />
+                  Profile validated and ready for analysis
                 </p>
               )}
             </div>
@@ -179,7 +227,7 @@ const CoreAnalysisInput = ({ onAnalyze, isLoading }: CoreAnalysisInputProps) => 
 
           <Button
             type="submit"
-            disabled={isLoading || !url.trim() || !!validationError}
+            disabled={isLoading || !url.trim() || !!validationError || isValidating}
             className="w-full h-12 text-base bg-gradient-to-r from-brand-500 to-neon-purple hover:from-brand-600 hover:to-neon-purple/90 transition-all duration-300 hover:scale-105"
           >
             {isLoading ? (

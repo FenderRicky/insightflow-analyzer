@@ -2,6 +2,7 @@
 import { URLValidator, RetryManager } from './urlValidation';
 import { DeepSeekAnalyzer } from './deepSeekAnalysis';
 import { ErrorTracker } from './errorTracking';
+import { RealTimeAnalysisEngine } from './realTimeAnalysisEngine';
 
 export interface EnhancedAnalysisResult {
   isValid: boolean;
@@ -20,12 +21,13 @@ export class EnhancedAnalysisEngine {
     try {
       console.log('🚀 Starting enhanced analysis for:', url);
       
-      // Step 1: Validate and normalize URL
-      const validation = URLValidator.validateURL(url);
-      if (!validation.isValid) {
+      // Use the new real-time analysis engine as the primary method
+      const realTimeResult = await RealTimeAnalysisEngine.analyzeProfile(url, targetCompany || 'Software Engineer');
+      
+      if (!realTimeResult.isValid) {
         return {
           isValid: false,
-          error: validation.error,
+          error: realTimeResult.error,
           overallScore: 0,
           criticalGaps: [],
           quickWins: [],
@@ -35,39 +37,30 @@ export class EnhancedAnalysisEngine {
         };
       }
 
-      // Step 2: Test URL accessibility with retry logic
-      const accessibilityCheck = await RetryManager.withRetry(
-        () => URLValidator.testURLAccessibility(validation.normalizedUrl!),
-        2,
-        1000
-      );
-
-      // Step 3: Run AI analysis with DeepSeek
-      const aiAnalysis = await RetryManager.withRetry(
-        () => DeepSeekAnalyzer.analyzeProfile(validation.normalizedUrl!, targetCompany),
-        3,
-        2000
-      );
-
-      // Step 4: Calculate enhanced metrics
-      const overallScore = Math.round((aiAnalysis.scores.technical + aiAnalysis.scores.professional + aiAnalysis.scores.hireability) / 3);
-      
-      const nextSteps = this.generateNextSteps(aiAnalysis, targetCompany);
+      // Convert real-time result to enhanced format
+      const nextSteps = this.generateNextSteps(realTimeResult, targetCompany);
 
       console.log('✅ Enhanced analysis complete:', {
-        overallScore,
-        hireabilityScore: aiAnalysis.scores.hireability,
-        criticalGaps: aiAnalysis.criticalGaps.length
+        overallScore: realTimeResult.overallScore,
+        hireabilityScore: realTimeResult.hireabilityScore,
+        criticalGaps: realTimeResult.criticalFlaws.length
       });
 
       return {
         isValid: true,
-        overallScore,
-        deepSeekAnalysis: aiAnalysis,
-        criticalGaps: aiAnalysis.criticalGaps,
-        quickWins: aiAnalysis.quickWins,
-        projectSuggestions: aiAnalysis.projectSuggestions,
-        hireabilityScore: aiAnalysis.scores.hireability,
+        overallScore: realTimeResult.overallScore,
+        deepSeekAnalysis: {
+          analysis: `Real-time AI analysis completed for ${url}`,
+          scores: {
+            technical: realTimeResult.technicalScore,
+            professional: realTimeResult.professionalScore,
+            hireability: realTimeResult.hireabilityScore
+          }
+        },
+        criticalGaps: realTimeResult.criticalFlaws,
+        quickWins: realTimeResult.quickWins,
+        projectSuggestions: realTimeResult.quickWins, // Use quick wins as project suggestions
+        hireabilityScore: realTimeResult.hireabilityScore,
         nextSteps
       };
 
@@ -88,11 +81,11 @@ export class EnhancedAnalysisEngine {
     }
   }
 
-  private static generateNextSteps(analysis: any, targetCompany?: string): string[] {
+  private static generateNextSteps(realTimeResult: any, targetCompany?: string): string[] {
     const steps = [
-      `Focus on your lowest score: ${this.getLowestScoreArea(analysis.scores)}`,
-      'Complete at least 2 of the quick wins this week',
-      'Start working on the first suggested project'
+      `Address critical gaps: ${realTimeResult.criticalFlaws.slice(0, 2).join(', ')}`,
+      'Complete at least 2 quick wins this week',
+      'Follow the 90-day career plan phases systematically'
     ];
 
     if (targetCompany) {
@@ -100,25 +93,11 @@ export class EnhancedAnalysisEngine {
       steps.push(`Connect with ${targetCompany} engineers on LinkedIn`);
     }
 
-    if (analysis.scores.hireability < 70) {
+    if (realTimeResult.hireabilityScore < 70) {
       steps.push('Schedule a mock interview to practice storytelling');
       steps.push('Get your resume reviewed by someone who works at your target company');
     }
 
     return steps;
-  }
-
-  private static getLowestScoreArea(scores: any): string {
-    const areas = [
-      { name: 'technical skills', score: scores.technical },
-      { name: 'professional presentation', score: scores.professional },
-      { name: 'overall hireability', score: scores.hireability }
-    ];
-
-    const lowest = areas.reduce((prev, current) => 
-      prev.score < current.score ? prev : current
-    );
-
-    return lowest.name;
   }
 }
