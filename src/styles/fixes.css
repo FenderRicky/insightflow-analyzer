@@ -19,20 +19,34 @@
 .cta-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+  background: linear-gradient(135deg, #0891b2, #7c3aed);
 }
 
-/* Fix dark mode flashing (FOUC) */
+/* Fix dark mode flashing (FOUC) - CRITICAL FIX */
 .dark-mode-transition {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Prevent flash of unstyled content */
 html {
-  background-color: #0f172a; /* dark background by default */
+  background-color: #0f172a !important; /* dark background by default */
 }
 
 html.light {
-  background-color: #ffffff;
+  background-color: #ffffff !important;
+}
+
+/* WCAG AA Compliant Dark Mode Text Contrast */
+.dark body {
+  color: #e2e8f0; /* Light gray instead of dark gray */
+}
+
+.dark .text-muted-foreground {
+  color: #94a3b8 !important; /* Better contrast */
+}
+
+.dark .bg-background {
+  background-color: #0f172a !important;
 }
 
 /* Mobile menu fixes */
@@ -45,6 +59,15 @@ html.light {
   .mobile-menu-content {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Fix timeline overlap on mobile */
+  .timeline-container {
+    padding-bottom: 120px !important;
+  }
+  
+  .roadmap-timeline {
+    margin-bottom: 100px !important;
   }
 }
 
@@ -116,4 +139,33 @@ html.light {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Fix button click handlers */
+button[disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+button:not([disabled]) {
+  cursor: pointer;
+}
+
+/* Ensure all interactive elements are clickable */
+.interactive {
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Loading state improvements */
+.loading-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }

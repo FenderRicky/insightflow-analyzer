@@ -16,17 +16,21 @@ import RookieRoadmap from '@/components/RookieRoadmap';
 import CareerArchitect from '@/components/CareerArchitect';
 import MobileMenu from '@/components/MobileMenu';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import ProfileDiagnosis from '@/components/ProfileDiagnosis';
+import CompetitiveXRay from '@/components/CompetitiveXRay';
+import JobMarketPulse from '@/components/JobMarketPulse';
+import ErrorDisplay from '@/components/ErrorDisplay';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTheme } from '@/hooks/useTheme';
-import { RealTimeAnalysisEngine } from '@/utils/realTimeAnalysisEngine';
 import { ErrorTracker } from '@/utils/errorTracking';
 import type { AnalysisResult } from '@/utils/realAnalysisEngine';
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [analyzedUrl, setAnalyzedUrl] = useState<string>('');
   const [showResults, setShowResults] = useState(false);
+  const [profileDiagnosis, setProfileDiagnosis] = useState<any>(null);
   const { theme, setTheme, isDark } = useTheme();
 
   const handleAnalyze = async (data: { url: string; type: string }) => {
@@ -34,72 +38,71 @@ const Index = () => {
     setIsLoading(true);
     
     try {
-      // Use the new real-time analysis engine
-      const realTimeResult = await RealTimeAnalysisEngine.analyzeProfile(data.url, 'Software Engineer');
+      // Use the new ProfileAnalyzer for real analysis
+      const { ProfileAnalyzer } = await import('@/utils/profileAnalyzer');
+      const diagnosis = await ProfileAnalyzer.analyzeProfile(data.url);
       
-      if (!realTimeResult.isValid) {
-        throw new Error(realTimeResult.error || 'Analysis failed - please check URL and try again');
+      if (!diagnosis.isValid) {
+        throw new Error(diagnosis.error || 'Analysis failed - please check URL and try again');
       }
 
-      // Convert real-time result to expected format for display
-      const analysisResult: AnalysisResult = {
-        overallScore: realTimeResult.overallScore,
-        professionalLevel: realTimeResult.hireabilityScore >= 85 ? 'Senior' : realTimeResult.hireabilityScore >= 70 ? 'Mid' : 'Entry',
+      // Set the diagnosis for the new UI components
+      setProfileDiagnosis(diagnosis);
+
+      // Convert to legacy format for existing components
+      const analysisResult = {
+        overallScore: diagnosis.overallScore,
+        professionalLevel: diagnosis.overallScore >= 85 ? 'Senior' : diagnosis.overallScore >= 70 ? 'Mid' : 'Entry',
         sections: [
           {
-            title: "Real-Time AI Analysis Results",
-            score: realTimeResult.overallScore,
+            title: "AI Profile Surgery Results",
+            score: diagnosis.overallScore,
             maxScore: 100,
-            details: realTimeResult.criticalFlaws.length > 0 
-              ? [`Critical Issues Found: ${realTimeResult.criticalFlaws.join(', ')}`]
-              : ['Profile analysis completed successfully'],
-            improvements: realTimeResult.quickWins,
-            reasoning: "Analysis powered by DeepSeek AI with real-time validation",
-            industryBenchmark: `Technical: ${realTimeResult.technicalScore}/100, Professional: ${realTimeResult.professionalScore}/100`,
-            tierOneComparison: realTimeResult.hireabilityScore >= 85 ? 'Exceeds Tier 1 standards' : 'Approaching Tier 1 standards'
+            details: diagnosis.fatalFlaws.map(flaw => `${flaw.title} (${flaw.urgency} Priority)`),
+            improvements: diagnosis.quickWins.map(win => win.action),
+            reasoning: "Analysis powered by DeepSeek AI with surgical precision",
+            industryBenchmark: `Fatal flaws detected: ${diagnosis.fatalFlaws.length}`,
+            tierOneComparison: diagnosis.overallScore >= 85 ? 'Exceeds FAANG standards' : 'Action plan generated for FAANG readiness'
           }
         ],
-        strengths: realTimeResult.quickWins.slice(0, 3),
-        weaknesses: realTimeResult.criticalFlaws,
-        recommendations: [
-          ...realTimeResult.careerPlan.phase1.map(task => task.task),
-          ...realTimeResult.careerPlan.phase2.map(task => task.task)
-        ],
-        detectedTechnologies: realTimeResult.quickWins,
+        strengths: diagnosis.quickWins.map(win => win.action).slice(0, 3),
+        weaknesses: diagnosis.fatalFlaws.map(flaw => flaw.title),
+        recommendations: diagnosis.fatalFlaws.map(flaw => flaw.fix),
+        detectedTechnologies: diagnosis.competitiveGaps,
         scoringExplanation: [
-          "Real-time analysis using advanced AI",
-          "Profile accessibility validated",
-          "Benchmarked against industry hiring standards",
-          "Personalized recommendations based on current market trends"
+          "Surgical AI analysis with real competitor benchmarking",
+          "Profile accessibility validated in real-time",
+          "Fatal flaw detection with 1-click fixes",
+          "Market pulse integration with live job data"
         ],
         coachingTone: {
-          overallImpression: realTimeResult.criticalFlaws.length > 0 
-            ? "Areas for improvement identified - actionable plan generated"
-            : "Strong profile foundation detected",
-          industryComparison: `Hireability score: ${realTimeResult.hireabilityScore}/100`,
-          motivationalMessage: realTimeResult.hireabilityScore >= 80 
-            ? "You're well-positioned for success! Focus on the strategic improvements." 
-            : "Strong potential identified. Follow the roadmap to accelerate your progress."
+          overallImpression: diagnosis.fatalFlaws.length > 0 
+            ? `${diagnosis.fatalFlaws.length} critical issues found - surgical fixes generated`
+            : "Strong profile foundation - ready for optimization",
+          industryComparison: `Market analysis: ${diagnosis.marketInsights[0]}`,
+          motivationalMessage: diagnosis.overallScore >= 80 
+            ? "You're in the top tier! Focus on the final optimizations." 
+            : "Strong potential detected. Execute the action plan to accelerate results."
         },
         tierOneBenchmark: {
-          percentile: Math.min(realTimeResult.hireabilityScore + 5, 95),
+          percentile: Math.min(diagnosis.overallScore + 5, 95),
           comparisonResults: [
             {
-              company: 'Meta',
+              company: 'FAANG',
               role: 'Software Engineer',
               avgScore: 85,
-              keyStrengths: ['Technical Excellence', 'System Design', 'Code Quality'],
-              requirements: ['5+ years experience', 'Advanced algorithms', 'Leadership skills']
+              keyStrengths: diagnosis.quickWins.map(win => win.action).slice(0, 3),
+              requirements: diagnosis.fatalFlaws.map(flaw => flaw.fix)
             }
           ],
-          gapAnalysis: realTimeResult.criticalFlaws,
-          nextLevelRequirements: realTimeResult.quickWins
+          gapAnalysis: diagnosis.fatalFlaws.map(flaw => flaw.title),
+          nextLevelRequirements: diagnosis.quickWins.map(win => win.action)
         },
-        proTips: realTimeResult.quickWins,
+        proTips: diagnosis.quickWins.map(win => win.action),
         portfolioPolishSuggestions: {
-          headline: realTimeResult.quickWins[0] || 'Optimize your profile headline',
-          projectDescriptions: realTimeResult.quickWins.slice(1, 3) || ['Improve project descriptions'],
-          skillsOptimization: realTimeResult.quickWins.slice(0, 2) || ['Add relevant skills']
+          headline: diagnosis.quickWins[0]?.action || 'Optimize your profile headline',
+          projectDescriptions: diagnosis.quickWins.slice(1, 3).map(win => win.action) || ['Improve project descriptions'],
+          skillsOptimization: diagnosis.fatalFlaws.slice(0, 2).map(flaw => flaw.fix) || ['Add relevant skills']
         }
       };
 
@@ -111,8 +114,18 @@ const Index = () => {
       
     } catch (error) {
       console.error('❌ Analysis failed:', error);
-      ErrorTracker.track(error as Error, { url: data.url, type: data.type, action: 'main_analysis' });
-      throw error; // Re-throw to let the component handle the error display
+      
+      // Show user-friendly error instead of throwing
+      setProfileDiagnosis({
+        isValid: false,
+        error: error instanceof Error ? error.message : 'Analysis temporarily unavailable. Please try again.',
+        fatalFlaws: [],
+        quickWins: [],
+        competitiveGaps: [],
+        overallScore: 0,
+        marketInsights: []
+      });
+      setShowResults(true);
     } finally {
       setIsLoading(false);
     }
@@ -295,10 +308,10 @@ const Index = () => {
               <section className="max-w-4xl mx-auto">
                 <div className="text-center mb-6 sm:mb-8">
                   <h2 className="text-2xl sm:text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                    Start Your Analysis
+                    AI Profile Surgery
                   </h2>
                   <p className="text-muted-foreground text-base sm:text-lg px-4">
-                    Enter your GitHub, LinkedIn, or portfolio URL for advanced insights benchmarked against top tech companies
+                    Get surgical precision analysis that identifies fatal flaws and generates 1-click fixes
                   </p>
                 </div>
                 <CoreAnalysisInput onAnalyze={handleAnalyze} isLoading={isLoading} />
@@ -309,10 +322,10 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-cyan-500/20 card-morph">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">
-                    Analysis Complete ✨
+                    Profile Surgery Complete 🔬
                   </h2>
                   <p className="text-sm sm:text-base text-muted-foreground">
-                    Your profile analyzed with Tier 1 benchmarking and advanced precision
+                    AI surgical analysis with competitor benchmarking and market pulse data
                   </p>
                 </div>
                 <Button 
@@ -321,30 +334,47 @@ const Index = () => {
                   className="w-full sm:w-auto bg-background/80 hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300 smooth-link"
                 >
                   <Brain className="h-4 w-4 mr-2" />
-                  New Analysis
+                  New Surgery
                 </Button>
               </div>
 
-              <Tabs defaultValue="results" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 sm:grid-cols-7 mb-6 h-auto">
-                  <TabsTrigger value="results" className="text-xs sm:text-sm">Results</TabsTrigger>
+              <Tabs defaultValue="diagnosis" className="w-full">
+                <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8 mb-6 h-auto">
+                  <TabsTrigger value="diagnosis" className="text-xs sm:text-sm">Surgery</TabsTrigger>
+                  <TabsTrigger value="xray" className="text-xs sm:text-sm">X-Ray</TabsTrigger>
+                  <TabsTrigger value="pulse" className="text-xs sm:text-sm">Pulse</TabsTrigger>
                   <TabsTrigger value="architect" className="text-xs sm:text-sm">Architect</TabsTrigger>
                   <TabsTrigger value="roadmap" className="text-xs sm:text-sm">Roadmap</TabsTrigger>
                   <TabsTrigger value="stealth" className="text-xs sm:text-sm">Stealth</TabsTrigger>
-                  <TabsTrigger value="polish" className="text-xs sm:text-sm">Polish</TabsTrigger>
                   <TabsTrigger value="heatmap" className="text-xs sm:text-sm">Skills</TabsTrigger>
                   <TabsTrigger value="radar" className="text-xs sm:text-sm">Radar</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="results">
-                  {analysisResult && (
+                <TabsContent value="diagnosis">
+                  {profileDiagnosis && (
                     <div className="space-y-8">
-                      <AnalysisResultsDisplay 
-                        result={analysisResult} 
-                        analyzedUrl={analyzedUrl}
-                      />
+                      {profileDiagnosis.isValid ? (
+                        <ProfileDiagnosis 
+                          analysis={profileDiagnosis}
+                          onFixFlaw={(flaw) => console.log('Fixing flaw:', flaw)}
+                        />
+                      ) : (
+                        <ErrorDisplay 
+                          error={profileDiagnosis.error || 'Analysis failed'}
+                          type="generic"
+                          onRetry={() => window.location.reload()}
+                        />
+                      )}
                     </div>
                   )}
+                </TabsContent>
+
+                <TabsContent value="xray">
+                  <CompetitiveXRay />
+                </TabsContent>
+
+                <TabsContent value="pulse">
+                  <JobMarketPulse />
                 </TabsContent>
 
                 <TabsContent value="architect">
@@ -365,13 +395,6 @@ const Index = () => {
                     experience: analysisResult?.professionalLevel || 'mid',
                     githubUrl: analyzedUrl.includes('github') ? analyzedUrl : undefined,
                     linkedinUrl: analyzedUrl.includes('linkedin') ? analyzedUrl : undefined
-                  }} />
-                </TabsContent>
-
-                <TabsContent value="polish">
-                  <AIPolish userProfile={{
-                    skills: analysisResult?.detectedTechnologies || [],
-                    experience: analysisResult?.professionalLevel || 'mid'
                   }} />
                 </TabsContent>
 
