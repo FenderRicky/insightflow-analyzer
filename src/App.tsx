@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import PortfolioPresets from "./pages/PortfolioPresets";
 import PortfolioBuilder from "./pages/PortfolioBuilder";
 import RoadmapPage from "./pages/RoadmapPage";
+import CompanyRoadmap from "./pages/CompanyRoadmap";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 
