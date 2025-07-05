@@ -8,12 +8,13 @@ import LoadingScreen from '@/components/LoadingScreen';
 import ThemeToggle from '@/components/ThemeToggle';
 import FuturisticLogo from '@/components/FuturisticLogo';
 import TierOneRadarChart from '@/components/TierOneRadarChart';
-import PortfolioPolish from '@/components/PortfolioPolish';
 import StealthAudit from '@/components/StealthAudit';
 import AIPolish from '@/components/AIPolish';
 import SkillHeatmap from '@/components/SkillHeatmap';
 import TrustSignals from '@/components/TrustSignals';
 import RookieRoadmap from '@/components/RookieRoadmap';
+import CareerArchitect from '@/components/CareerArchitect';
+import MobileMenu from '@/components/MobileMenu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTheme } from '@/hooks/useTheme';
 import { EnhancedAnalysisEngine } from '@/utils/enhancedAnalysisEngine';
@@ -30,6 +31,8 @@ const Index = () => {
   const handleAnalyze = async (data: { url: string; type: string }) => {
     setIsLoading(true);
     try {
+      console.log('Starting analysis for:', data);
+      
       // Use enhanced analysis engine
       const result = await EnhancedAnalysisEngine.analyzeProfile(data.url, data.type);
       
@@ -93,6 +96,9 @@ const Index = () => {
       setAnalysisResult(analysisResult);
       setAnalyzedUrl(data.url);
       setShowResults(true);
+      
+      console.log('Analysis completed successfully:', analysisResult);
+      
     } catch (error) {
       console.error('Analysis failed:', error);
       ErrorTracker.track(error as Error, { url: data.url, type: data.type });
@@ -126,7 +132,7 @@ const Index = () => {
   ] : [];
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden dark-mode-transition">
       <LoadingScreen isVisible={isLoading} />
 
       {/* Enhanced background with better performance */}
@@ -142,21 +148,24 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <FuturisticLogo size="md" animate={true} />
             <div className="flex items-center gap-3">
-              <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
-              <Link to="/roadmap" className="smooth-link">
-                <Button variant="outline" size="sm" className="group hover:bg-brand-500/10 hover:border-brand-500/30 transition-all duration-300">
-                  <Target className="h-4 w-4 mr-2 group-hover:text-brand-500 transition-colors" />
-                  <span className="hidden sm:inline">Roadmaps</span>
-                  <span className="sm:hidden">Plans</span>
-                </Button>
-              </Link>
-              <Link to="/portfolio-presets" className="smooth-link">
-                <Button variant="outline" size="sm" className="group hover:bg-brand-500/10 hover:border-brand-500/30 transition-all duration-300">
-                  <Palette className="h-4 w-4 mr-2 group-hover:text-brand-500 transition-colors" />
-                  <span className="hidden sm:inline">Portfolio Presets</span>
-                  <span className="sm:hidden">Presets</span>
-                </Button>
-              </Link>
+              <MobileMenu />
+              <div className="hidden md:flex items-center gap-3">
+                <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+                <Link to="/roadmap" className="smooth-link">
+                  <Button variant="outline" size="sm" className="group hover:bg-brand-500/10 hover:border-brand-500/30 transition-all duration-300">
+                    <Target className="h-4 w-4 mr-2 group-hover:text-brand-500 transition-colors" />
+                    <span className="hidden sm:inline">Roadmaps</span>
+                    <span className="sm:hidden">Plans</span>
+                  </Button>
+                </Link>
+                <Link to="/portfolio-presets" className="smooth-link">
+                  <Button variant="outline" size="sm" className="group hover:bg-brand-500/10 hover:border-brand-500/30 transition-all duration-300">
+                    <Palette className="h-4 w-4 mr-2 group-hover:text-brand-500 transition-colors" />
+                    <span className="hidden sm:inline">Portfolio Presets</span>
+                    <span className="sm:hidden">Presets</span>
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -317,8 +326,9 @@ const Index = () => {
 
             {/* Game-Changing Features Tabs */}
             <Tabs defaultValue="results" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 mb-6 h-auto">
+              <TabsList className="grid w-full grid-cols-3 sm:grid-cols-7 mb-6 h-auto">
                 <TabsTrigger value="results" className="text-xs sm:text-sm">Results</TabsTrigger>
+                <TabsTrigger value="architect" className="text-xs sm:text-sm">Architect</TabsTrigger>
                 <TabsTrigger value="roadmap" className="text-xs sm:text-sm">Roadmap</TabsTrigger>
                 <TabsTrigger value="stealth" className="text-xs sm:text-sm">Stealth</TabsTrigger>
                 <TabsTrigger value="polish" className="text-xs sm:text-sm">Polish</TabsTrigger>
@@ -335,6 +345,14 @@ const Index = () => {
                     />
                   </div>
                 )}
+              </TabsContent>
+
+              <TabsContent value="architect">
+                <CareerArchitect 
+                  profileUrl={analyzedUrl}
+                  targetRole="Software Engineer"
+                  targetCompany="FAANG"
+                />
               </TabsContent>
 
               <TabsContent value="roadmap">
