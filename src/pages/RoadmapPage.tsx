@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -16,10 +15,10 @@ const RoadmapPage = () => {
   const { isDark, setTheme } = useTheme();
 
   const demoOptions = [
-    { id: 'tesla-backend', label: 'Tesla Backend Engineer', company: 'Tesla', role: 'Backend Engineer', difficulty: 'Advanced' },
-    { id: 'google-swe', label: 'Google Software Engineer', company: 'Google', role: 'Software Engineer', difficulty: 'Advanced' },
-    { id: 'netflix-frontend', label: 'Netflix Frontend Dev', company: 'Netflix', role: 'Frontend Developer', difficulty: 'Intermediate' },
-    { id: 'startup-fullstack', label: 'Startup Full-Stack', company: 'Startup', role: 'Full-Stack Developer', difficulty: 'Intermediate' }
+    { id: 'tesla-backend', label: 'Tesla Backend Engineer', company: 'Tesla', role: 'Backend Engineer', difficulty: 'Advanced', path: '/roadmap/tesla' },
+    { id: 'google-swe', label: 'Google Software Engineer', company: 'Google', role: 'Software Engineer', difficulty: 'Advanced', path: '/roadmap/google' },
+    { id: 'netflix-frontend', label: 'Netflix Frontend Dev', company: 'Netflix', role: 'Frontend Developer', difficulty: 'Intermediate', path: '/roadmap/netflix' },
+    { id: 'stripe-fullstack', label: 'Stripe Full-Stack', company: 'Stripe', role: 'Full-Stack Developer', difficulty: 'Intermediate', path: '/roadmap/stripe' }
   ];
 
   const companies = [
@@ -150,6 +149,51 @@ const RoadmapPage = () => {
               <Play className="h-5 w-5 mr-2" />
               Try Demo Below
             </Button>
+          </div>
+        </section>
+
+        {/* Company-Specific Roadmaps Grid */}
+        <section className="max-w-6xl mx-auto space-y-8 py-16">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+              Company-Specific Battle Plans
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              Hyper-targeted roadmaps for top tech companies
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {demoOptions.map((option) => (
+              <Link key={option.id} to={option.path}>
+                <Card className="glass border-white/10 hover:border-cyan-500/30 transition-all duration-300 cursor-pointer group h-full">
+                  <CardContent className="p-6 text-center space-y-4">
+                    <div className="w-16 h-16 mx-auto bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <Building className="h-8 w-8 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-2">{option.company}</h3>
+                      <p className="text-sm text-muted-foreground">{option.role}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <Badge variant="outline" className={`text-xs ${
+                        option.difficulty === 'Advanced' ? 'border-red-500/30 text-red-400' : 'border-yellow-500/30 text-yellow-400'
+                      }`}>
+                        {option.difficulty}
+                      </Badge>
+                      <div className="text-xs text-muted-foreground">
+                        3-Month Plan
+                      </div>
+                    </div>
+                    <div className="pt-2">
+                      <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 w-0 group-hover:w-full transition-all duration-1000" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
           </div>
         </section>
 

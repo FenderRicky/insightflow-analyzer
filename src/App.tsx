@@ -27,6 +27,7 @@ const App = () => {
                 <Route path="/portfolio-presets" element={<PortfolioPresets />} />
                 <Route path="/portfolio-builder" element={<PortfolioBuilder />} />
                 <Route path="/roadmap" element={<RoadmapPage />} />
+                <Route path="/roadmap/:company" element={<CompanyRoadmap />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </PageTransition>
