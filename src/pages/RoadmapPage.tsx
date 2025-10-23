@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Brain, Zap } from 'lucide-react';
+import { ArrowLeft, Brain, Zap, Building, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
 import FuturisticLogo from '@/components/FuturisticLogo';
