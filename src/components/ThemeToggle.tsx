@@ -16,7 +16,7 @@ const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
     
     setIsTransitioning(true);
     
-    // Optimized smooth transition
+    // Ultra-smooth radial gradient overlay
     const overlay = document.createElement('div');
     overlay.style.cssText = `
       position: fixed;
@@ -24,32 +24,29 @@ const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: radial-gradient(circle at center, rgba(34, 211, 238, 0.08) 0%, rgba(147, 51, 234, 0.06) 50%, transparent 100%);
-      backdrop-filter: blur(6px);
+      background: radial-gradient(circle at 50% 0%, rgba(${isDark ? '189, 224, 254' : '30, 41, 59'}, 0.15) 0%, transparent 70%);
       z-index: 9999;
       opacity: 0;
-      transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       pointer-events: none;
     `;
     
     document.body.appendChild(overlay);
 
-    // Smooth fade in
+    // Fade in overlay
     requestAnimationFrame(() => {
       overlay.style.opacity = '1';
     });
 
-    // Enhanced document transition
-    setTimeout(() => {
-      document.documentElement.style.transition = 'color 0.3s ease, background-color 0.3s ease';
-    }, 100);
+    // Apply smooth transition to document
+    document.documentElement.style.transition = 'background-color 0.4s ease, color 0.4s ease';
 
-    // Theme change
+    // Execute theme change at peak of transition
     setTimeout(() => {
       onToggle();
-    }, 250);
+    }, 200);
 
-    // Cleanup and restore
+    // Fade out and cleanup
     setTimeout(() => {
       overlay.style.opacity = '0';
       
@@ -59,8 +56,8 @@ const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
         }
         document.documentElement.style.transition = '';
         setIsTransitioning(false);
-      }, 250);
-    }, 500);
+      }, 400);
+    }, 400);
   };
 
   return (
@@ -69,24 +66,24 @@ const ThemeToggle = ({ isDark, onToggle }: ThemeToggleProps) => {
       size="sm"
       onClick={handleToggle}
       disabled={isTransitioning}
-      className={`relative overflow-hidden group hover:bg-cyan-500/10 hover:border-cyan-500/20 border border-transparent transition-all duration-300 ${
+      className={`relative overflow-hidden group hover:bg-primary/10 hover:border-primary/20 border border-transparent transition-all duration-300 ${
         isTransitioning ? 'opacity-70 scale-95' : 'opacity-100 scale-100'
       }`}
     >
       <div className="relative w-5 h-5">
         <Sun 
-          className={`absolute inset-0 text-yellow-500 transition-all duration-500 ease-out ${
+          className={`absolute inset-0 text-yellow-500 dark:text-yellow-400 transition-all duration-500 ease-out ${
             isDark 
               ? 'opacity-0 rotate-180 scale-50' 
               : 'opacity-100 rotate-0 scale-100'
-          } group-hover:drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]`} 
+          } group-hover:drop-shadow-[0_0_8px_rgba(234,179,8,0.6)]`} 
         />
         <Moon 
-          className={`absolute inset-0 text-cyan-400 transition-all duration-500 ease-out ${
+          className={`absolute inset-0 text-primary transition-all duration-500 ease-out ${
             isDark 
               ? 'opacity-100 rotate-0 scale-100' 
               : 'opacity-0 -rotate-180 scale-50'
-          } group-hover:drop-shadow-[0_0_6px_rgba(34,211,238,0.5)]`} 
+          } group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]`} 
         />
       </div>
     </Button>
