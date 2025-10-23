@@ -7,11 +7,28 @@ import { ProfileAnalysisResult } from '@/utils/profileAnalyzer';
 import ErrorDisplay from './ErrorDisplay';
 
 interface ProfileDiagnosisProps {
-  analysis: ProfileAnalysisResult;
+  analysis?: ProfileAnalysisResult | null;
   onFixFlaw?: (flaw: string) => void;
 }
 
 const ProfileDiagnosis = ({ analysis, onFixFlaw }: ProfileDiagnosisProps) => {
+  if (!analysis) {
+    return (
+      <Card className="bg-card/50 backdrop-blur-xl border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Target className="w-5 h-5 text-primary" />
+            Profile Diagnosis Preview
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">
+            Upload your profile to see AI-powered diagnosis with fatal flaw detection and instant fixes.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
   const getSeverityColor = (severity: number) => {
     if (severity >= 0.8) return 'text-red-400 bg-red-500/20 border-red-500/30';
     if (severity >= 0.6) return 'text-orange-400 bg-orange-500/20 border-orange-500/30';
