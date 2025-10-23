@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Brain, Zap, Building, Target } from 'lucide-react';
+import { ArrowLeft, Brain, Zap, Briefcase, Flag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
 import FuturisticLogo from '@/components/FuturisticLogo';
@@ -93,7 +93,7 @@ const RoadmapPage = () => {
                   onClick={() => setActiveTab('company')}
                   className="flex items-center gap-2"
                 >
-                  <Building className="h-4 w-4" />
+                  <Briefcase className="h-4 w-4" />
                   Company-Specific
                 </Button>
                 <Button
@@ -101,7 +101,7 @@ const RoadmapPage = () => {
                   onClick={() => setActiveTab('rookie')}
                   className="flex items-center gap-2"
                 >
-                  <Target className="h-4 w-4" />
+                  <Flag className="h-4 w-4" />
                   Rookie Roadmap
                 </Button>
               </div>
