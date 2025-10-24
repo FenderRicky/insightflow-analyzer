@@ -12,19 +12,17 @@ import JobMarketPulse from '@/components/JobMarketPulse';
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
+  const [analysisData, setAnalysisData] = useState<any>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
-  const handleAnalyze = async (data: { url: string; type: string }) => {
-    setIsLoading(true);
-    // Simulate analysis
-    setTimeout(() => {
-      setShowAnalysis(true);
-      setIsLoading(false);
-    }, 2000);
+  const handleAnalyze = async (data: any) => {
+    console.log('Analysis data received:', data);
+    setAnalysisData(data);
+    setShowAnalysis(true);
   };
 
   return (
@@ -147,7 +145,86 @@ const Index = () => {
           </div>
         ) : (
           <div className="space-y-8 animate-fade-in">
-            <ProfileDiagnosis analysis={null} />
+            {analysisData && (
+              <div className="max-w-5xl mx-auto space-y-8">
+                <div className="p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10 border border-primary/20 backdrop-blur-xl">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-3xl font-bold mb-2">Analysis Results</h2>
+                      <p className="text-muted-foreground">
+                        {analysisData.type === 'linkedin' ? 'LinkedIn' : 
+                         analysisData.type === 'github' ? 'GitHub' : 'Portfolio'} Profile
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-6xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                        {analysisData.score}
+                      </div>
+                      <div className="text-sm text-muted-foreground">Overall Score</div>
+                    </div>
+                  </div>
+
+                  {analysisData.feedback && (
+                    <div className="space-y-6">
+                      {analysisData.feedback.strengths && analysisData.feedback.strengths.length > 0 && (
+                        <div>
+                          <h3 className="text-xl font-bold mb-3 text-green-400">✨ Strengths</h3>
+                          <ul className="space-y-2">
+                            {analysisData.feedback.strengths.map((item: string, i: number) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="text-green-400">•</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {analysisData.feedback.weaknesses && analysisData.feedback.weaknesses.length > 0 && (
+                        <div>
+                          <h3 className="text-xl font-bold mb-3 text-yellow-400">⚠️ Areas for Improvement</h3>
+                          <ul className="space-y-2">
+                            {analysisData.feedback.weaknesses.map((item: string, i: number) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="text-yellow-400">•</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {analysisData.feedback.recommendations && analysisData.feedback.recommendations.length > 0 && (
+                        <div>
+                          <h3 className="text-xl font-bold mb-3 text-blue-400">🚀 Recommendations</h3>
+                          <ul className="space-y-2">
+                            {analysisData.feedback.recommendations.map((item: string, i: number) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="text-blue-400">•</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {analysisData.feedback.fullAnalysis && (
+                        <div className="pt-6 border-t border-primary/20">
+                          <details className="cursor-pointer">
+                            <summary className="text-sm font-medium text-muted-foreground hover:text-foreground">
+                              View Full AI Analysis
+                            </summary>
+                            <div className="mt-4 text-sm text-muted-foreground whitespace-pre-wrap">
+                              {analysisData.feedback.fullAnalysis}
+                            </div>
+                          </details>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             <CompetitiveXRay />
             <GrowthTimeline />
           </div>

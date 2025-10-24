@@ -1,285 +1,172 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
-import { Sparkles, Github, Linkedin, Globe, Zap, AlertCircle, CheckCircle } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Loader2, Sparkles, Github, Linkedin, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { RealTimeAnalysisEngine } from '@/utils/realTimeAnalysisEngine';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CoreAnalysisInputProps {
-  onAnalyze: (data: { url: string; type: string }) => Promise<void>;
+  onAnalyze: (data: any) => void;
   isLoading: boolean;
 }
 
 const CoreAnalysisInput = ({ onAnalyze, isLoading }: CoreAnalysisInputProps) => {
   const [url, setUrl] = useState('');
-  const [type, setType] = useState('');
-  const [targetCompany, setTargetCompany] = useState('');
-  const [validationError, setValidationError] = useState('');
-  const [isValidating, setIsValidating] = useState(false);
-  const [validationSuccess, setValidationSuccess] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
   const { toast } = useToast();
 
-  const detectUrlType = (inputUrl: string) => {
-    if (inputUrl.includes('github.com')) return 'github';
-    if (inputUrl.includes('linkedin.com')) return 'linkedin';
+  const detectUrlType = (url: string): string => {
+    const lower = url.toLowerCase();
+    if (lower.includes('linkedin.com')) return 'linkedin';
+    if (lower.includes('github.com')) return 'github';
     return 'portfolio';
   };
 
-  const validateUrlInRealTime = async (inputUrl: string) => {
-    if (!inputUrl.trim()) {
-      setValidationError('');
-      setValidationSuccess(false);
-      return;
-    }
-
-    setIsValidating(true);
-    setValidationError('');
-    setValidationSuccess(false);
-
-    try {
-      const result = await RealTimeAnalysisEngine.analyzeProfile(inputUrl, 'Software Engineer');
-      
-      if (result.isValid) {
-        setValidationSuccess(true);
-        toast({
-          title: "URL Validated ✅",
-          description: "Profile accessible and ready for analysis",
-        });
-      } else {
-        setValidationError(result.error || 'Invalid URL');
-      }
-    } catch (error) {
-      setValidationError('Unable to validate URL. Please check and try again.');
-    } finally {
-      setIsValidating(false);
+  const getIcon = (type: string) => {
+    switch (type) {
+      case 'linkedin': return <Linkedin className="w-5 h-5" />;
+      case 'github': return <Github className="w-5 h-5" />;
+      default: return <Globe className="w-5 h-5" />;
     }
   };
 
-  const handleUrlChange = (value: string) => {
-    setUrl(value);
-    setValidationError('');
-    setValidationSuccess(false);
-    
-    // Auto-detect type
-    if (value.trim()) {
-      const detectedType = detectUrlType(value);
-      setType(detectedType);
-      
-      // Debounced validation
-      const timeoutId = setTimeout(() => {
-        validateUrlInRealTime(value);
-      }, 1000);
-      
-      return () => clearTimeout(timeoutId);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleAnalyze = async () => {
     if (!url.trim()) {
-      setValidationError('Please enter a URL');
       toast({
         title: "URL Required",
-        description: "Please enter a GitHub, LinkedIn, or portfolio URL",
-        variant: "destructive"
+        description: "Please enter a LinkedIn, GitHub, or portfolio URL",
+        variant: "destructive",
       });
       return;
     }
 
-    if (validationError) {
+    // Basic URL validation
+    try {
+      new URL(url);
+    } catch {
       toast({
-        title: "Fix Validation Errors",
-        description: "Please resolve the URL validation issues before proceeding",
-        variant: "destructive"
+        title: "Invalid URL",
+        description: "Please enter a valid URL starting with http:// or https://",
+        variant: "destructive",
       });
       return;
     }
+
+    setAnalyzing(true);
+    const type = detectUrlType(url);
 
     try {
-      const detectedType = type || detectUrlType(url);
-      await onAnalyze({ url: url.trim(), type: detectedType });
+      console.log('Starting analysis for:', url);
       
-    } catch (error) {
-      console.error('Analysis submission failed:', error);
-      setValidationError('Analysis failed. Please try again.');
-      
-      toast({
-        title: "Analysis Error",
-        description: "Analysis temporarily unavailable. Please try again or contact support.",
-        variant: "destructive"
+      const { data, error } = await supabase.functions.invoke('analyze', {
+        body: { link: url }
       });
+
+      if (error) {
+        console.error('Edge function error:', error);
+        throw error;
+      }
+
+      console.log('Analysis complete:', data);
+
+      toast({
+        title: "✨ Analysis Complete!",
+        description: `Your ${type} profile scored ${data.score}/100`,
+      });
+
+      // Pass data to parent component
+      onAnalyze({ url, type, ...data });
+
+    } catch (error: any) {
+      console.error('Analysis failed:', error);
+      
+      let errorMessage = 'Failed to analyze profile. Please try again.';
+      
+      if (error.message?.includes('429')) {
+        errorMessage = 'Rate limit exceeded. Please wait a moment and try again.';
+      } else if (error.message?.includes('402')) {
+        errorMessage = 'AI credits exhausted. Please add credits to continue.';
+      }
+
+      toast({
+        title: "Analysis Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setAnalyzing(false);
     }
   };
 
-  const companies = [
-    'Google', 'Meta', 'Amazon', 'Apple', 'Netflix', 'Tesla', 'Stripe', 'Uber', 'Airbnb', 'Microsoft'
-  ];
-
-  const exampleUrls = [
-    { type: 'github', url: 'https://github.com/username', icon: Github, label: 'GitHub Profile' },
-    { type: 'linkedin', url: 'https://linkedin.com/in/username', icon: Linkedin, label: 'LinkedIn Profile' },
-    { type: 'portfolio', url: 'https://yourportfolio.com', icon: Globe, label: 'Portfolio Website' }
-  ];
+  const urlType = url ? detectUrlType(url) : null;
 
   return (
-    <Card className="glass border-border/20 hover:border-brand-500/30 transition-all duration-500">
-      <CardContent className="p-4 sm:p-8">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            {/* Enhanced URL Input with Real-time Validation */}
-            <div>
-              <label htmlFor="url" className="block text-sm font-medium mb-3 text-foreground">
-                Professional Profile URL
-              </label>
-              <div className="relative">
-                <Input
-                  id="url"
-                  type="url"
-                  placeholder="https://github.com/username or https://linkedin.com/in/username"
-                  value={url}
-                  onChange={(e) => handleUrlChange(e.target.value)}
-                  className={`h-12 text-base pr-10 ${
-                    validationError ? 'border-red-500' : 
-                    validationSuccess ? 'border-green-500' : ''
-                  }`}
-                  disabled={isLoading}
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  {isValidating && (
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-500" />
-                  )}
-                  {validationError && (
-                    <AlertCircle className="h-5 w-5 text-red-500" />
-                  )}
-                  {validationSuccess && (
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                  )}
-                </div>
-              </div>
-              {validationError && (
-                <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4" />
-                  {validationError}
-                </p>
-              )}
-              {validationSuccess && (
-                <p className="mt-2 text-sm text-green-500 flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4" />
-                  Profile validated and ready for analysis
-                </p>
-              )}
-            </div>
-
-            {/* Profile Type Selection */}
-            <div>
-              <label htmlFor="type" className="block text-sm font-medium mb-3 text-foreground">
-                Profile Type <span className="text-muted-foreground">(Auto-detected)</span>
-              </label>
-              <Select value={type} onValueChange={setType} disabled={isLoading}>
-                <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Auto-detect from URL" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="github">
-                    <div className="flex items-center gap-2">
-                      <Github className="h-4 w-4" />
-                      GitHub Repository
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="linkedin">
-                    <div className="flex items-center gap-2">
-                      <Linkedin className="h-4 w-4" />
-                      LinkedIn Profile
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="portfolio">
-                    <div className="flex items-center gap-2">
-                      <Globe className="h-4 w-4" />
-                      Portfolio Website
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Target Company (Optional) */}
-            <div>
-              <label htmlFor="company" className="block text-sm font-medium mb-3 text-foreground">
-                Target Company <span className="text-muted-foreground">(Optional - for personalized insights)</span>
-              </label>
-              <Select value={targetCompany} onValueChange={setTargetCompany} disabled={isLoading}>
-                <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Select target company for personalized analysis" />
-                </SelectTrigger>
-                <SelectContent>
-                  {companies.map((company) => (
-                    <SelectItem key={company.toLowerCase()} value={company.toLowerCase()}>
-                      {company}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+    <Card className="p-8 glass border-primary/20 backdrop-blur-xl">
+      <div className="space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30">
+            <Sparkles className="w-6 h-6 text-primary" />
           </div>
-
-          <Button
-            type="submit"
-            disabled={isLoading || !url.trim() || !!validationError || isValidating}
-            className="w-full h-12 text-base bg-gradient-to-r from-brand-500 to-neon-purple hover:from-brand-600 hover:to-neon-purple/90 transition-all duration-300 hover:scale-105"
-          >
-            {isLoading ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3" />
-                Analyzing with Real AI...
-              </>
-            ) : (
-              <>
-                <Zap className="h-5 w-5 mr-3" />
-                Start Enhanced Analysis
-              </>
-            )}
-          </Button>
-
-          {/* Example URLs - Mobile Optimized */}
-          <div className="pt-6 border-t border-border/50">
-            <p className="text-sm text-muted-foreground mb-4 text-center">
-              Try these example formats:
+          <div>
+            <h3 className="text-xl font-bold">Quick Analysis</h3>
+            <p className="text-sm text-muted-foreground">
+              Paste your LinkedIn, GitHub, or portfolio URL
             </p>
-            <div className="space-y-2 sm:grid sm:grid-cols-1 lg:grid-cols-3 sm:gap-3 sm:space-y-0">
-              {exampleUrls.map((example, index) => {
-                const IconComponent = example.icon;
-                return (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => {
-                      setUrl(example.url);
-                      setType(example.type);
-                    }}
-                    className="w-full p-3 text-left bg-background/50 hover:bg-brand-500/10 border border-border/50 hover:border-brand-500/30 rounded-lg transition-all duration-200 group"
-                    disabled={isLoading}
-                  >
-                    <div className="flex items-center gap-3">
-                      <IconComponent className="h-4 w-4 text-muted-foreground group-hover:text-brand-500 transition-colors flex-shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <div className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors truncate">
-                          {example.label}
-                        </div>
-                        <div className="text-xs text-muted-foreground truncate">
-                          {example.url}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
           </div>
-        </form>
-      </CardContent>
+        </div>
+
+        <div className="relative">
+          <Input
+            type="url"
+            placeholder="https://linkedin.com/in/yourprofile or https://github.com/username"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && !analyzing && handleAnalyze()}
+            className="h-14 px-6 text-base bg-background/50 border-primary/30 focus:border-primary/50"
+            disabled={analyzing}
+          />
+          {urlType && (
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-muted-foreground">
+              {getIcon(urlType)}
+              <span className="text-sm capitalize">{urlType}</span>
+            </div>
+          )}
+        </div>
+
+        <Button
+          onClick={handleAnalyze}
+          disabled={!url.trim() || analyzing}
+          className="w-full h-12 text-base bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto] hover:bg-[position:100%] transition-all duration-500"
+        >
+          {analyzing ? (
+            <>
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              Analyzing with AI...
+            </>
+          ) : (
+            <>
+              <Sparkles className="w-5 h-5 mr-2" />
+              Analyze My Profile
+            </>
+          )}
+        </Button>
+
+        <div className="flex items-center justify-center gap-6 pt-4 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Linkedin className="w-4 h-4" />
+            LinkedIn
+          </div>
+          <div className="flex items-center gap-2">
+            <Github className="w-4 h-4" />
+            GitHub
+          </div>
+          <div className="flex items-center gap-2">
+            <Globe className="w-4 h-4" />
+            Portfolio
+          </div>
+        </div>
+      </div>
     </Card>
   );
 };
